@@ -5,11 +5,12 @@
 #include <TString.h>
 #include <TChain.h>
 #include <TROOT.h>
+#include <../../CutFlow/HiggsAnalysis.h>
 
 using namespace std;
 int CutFlow()
 {
-	gROOT->ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C");
+	#gROOT->ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C");
 	
 	ifstream dataFileName;
 	dataFileName.open("DataFiles/DataFileMC2012_NewGeo_Chain.txt");

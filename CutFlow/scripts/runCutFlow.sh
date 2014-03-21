@@ -1,10 +1,10 @@
-source computerSetup.sh
-source setupRootCore.sh
+#source computerSetup.sh
+#source setupRootCore.sh
 
 cd ../../
 
-$ROOTCOREDIR/scripts/find_packages.sh
-$ROOTCOREDIR/scripts/compile.sh
+#$ROOTCOREDIR/scripts/find_packages.sh
+#$ROOTCOREDIR/scripts/compile.sh
 
 cd CutFlow/src/main
 
