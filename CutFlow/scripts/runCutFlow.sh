@@ -1,9 +1,14 @@
+source computerSetup.sh
+source setupRootCore.sh
+
 cd ../../
 
 $ROOTCOREDIR/scripts/find_packages.sh
 $ROOTCOREDIR/scripts/compile.sh
 
-cd MyAnalysis/Run
+cd CutFlow/src/main
 
-root -l -b 'runAnalysisRoot.cxx'
-cd RunScript
+root -l -b 'CutFlow.cxx'
+
+cd ../../scripts/
+
