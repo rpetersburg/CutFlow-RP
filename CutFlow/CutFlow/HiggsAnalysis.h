@@ -29,5 +29,5 @@ class HiggsAnalysis
 		
 		TString m_outputFilePath;
 
-}
+};
 #endif
