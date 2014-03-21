@@ -10,8 +10,8 @@
 
 HiggsAnalysis::HiggsAnalysis(TTree *initPhysicsTree) : m_physicsTree(initPhysicsTree)
 {
-	m_event = new D3PDReader::Event();
-	m_event->ReadFrom(phyObject);
+	//m_event = new D3PDReader::Event();
+	//m_event->ReadFrom(phyObject);
 	
 }
 

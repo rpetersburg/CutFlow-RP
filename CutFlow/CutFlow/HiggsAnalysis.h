@@ -25,7 +25,7 @@ class HiggsAnalysis
 	private:	
 		TTree *m_physicsTree;
 		
-		D3PDReader::Event *m_event;
+		//D3PDReader::Event *m_event;
 		
 		TString m_outputFilePath;
 
