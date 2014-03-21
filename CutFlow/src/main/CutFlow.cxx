@@ -7,7 +7,7 @@
 #include <TROOT.h>
 
 using namespace std;
-int main(int argc, char *argv[])
+int CutFlow()
 {
 	gROOT->ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C");
 	
