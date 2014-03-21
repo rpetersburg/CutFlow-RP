@@ -8,7 +8,7 @@
 #include <../../CutFlow/HiggsAnalysis.h>
 
 using namespace std;
-int CutFlow()
+void CutFlow()
 {
 	//gROOT->ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C");
 	
