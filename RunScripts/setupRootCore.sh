@@ -9,5 +9,5 @@ cd ..
 
 source RootCore/scripts/setup.sh
 
-cd MyAnalysis/Run/RunScript
+cd RunScripts
 
