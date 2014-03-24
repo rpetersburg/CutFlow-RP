@@ -13,7 +13,7 @@
 HiggsAnalysis::HiggsAnalysis(TTree *tPhysicsTree) : m_physicsTree(tPhysicsTree)
 {
 	m_event = new D3PDReader::Event();
-	m_event->ReadFrom(tPhysicsTree);	
+	m_event->ReadFrom(m_physicsTree);	
 }
 
 HiggsAnalysis::~HiggsAnalysis()
