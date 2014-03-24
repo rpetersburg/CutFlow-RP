@@ -1,7 +1,6 @@
 // CutFlow.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
 #include <stdlib.h>
 #include <fstream>
 #include <iostream>
@@ -11,7 +10,7 @@
 #include <TChain.h>
 #include <TROOT.h>
 
-#include "../Root/HiggsAnalysis.h"
+#include "../CutFlow/HiggsAnalysis.h"
 
 using namespace std;
 void CutFlow()
