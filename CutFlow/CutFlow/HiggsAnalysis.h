@@ -1,5 +1,5 @@
-#ifndef HIGGANALYSIS_H
-#define HIGGANALYSIS_H
+#ifndef HIGGSANALYSIS_H
+#define HIGGSANALYSIS_H
 
 #include "../../D3PDReader/D3PDReader/Event.h"
 
@@ -15,7 +15,6 @@ using namespace std;
 class HiggsAnalysis
 {
 	public:
-		HiggsAnalysis();
 		HiggsAnalysis(TTree *tPhysicsTree);
 		~HiggsAnalysis();
 		

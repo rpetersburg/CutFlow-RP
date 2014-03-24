@@ -9,11 +9,6 @@
 
 #include "../CutFlow/HiggsAnalysis.h"
 
-HiggsAnalysis::HiggsAnalysis()
-{
-	m_event = new D3PDReader::Event();
-}
-
 HiggsAnalysis::HiggsAnalysis(TTree *tPhysicsTree) : m_physicsTree(tPhysicsTree)
 {
 	m_event = new D3PDReader::Event();
