@@ -15,6 +15,7 @@ using namespace std;
 class HiggsAnalysis
 {
 	public:
+		HiggsAnalysis();
 		HiggsAnalysis(TTree *tPhysicsTree);
 		~HiggsAnalysis();
 		
