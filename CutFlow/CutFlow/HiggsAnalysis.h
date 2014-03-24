@@ -1,7 +1,7 @@
 #ifndef HIGGANALYSIS_H
 #define HIGGANALYSIS_H
 
-#include <D3PDReader/Event.h>
+#include "../../D3PDReader/D3PDReader/Event.h"
 
 #include <vector>
 #include <string>

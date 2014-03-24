@@ -37,7 +37,7 @@ void HiggsAnalysis::AnalyzeTree()
 		{
 			event = chain->LoadTree(iEvent);
 		}
-		m_currFileName = chain->GetFile()->GetPath();
+		// m_currFileName = chain->GetFile()->GetPath();
 		AnalyzeTreeEvent(iEvent);
 	}
 
