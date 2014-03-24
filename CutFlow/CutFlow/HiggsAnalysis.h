@@ -35,4 +35,5 @@ class HiggsAnalysis
 		TString m_currFileName;
 
 };
+
 #endif

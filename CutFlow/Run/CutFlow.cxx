@@ -7,7 +7,7 @@
 #include <TChain.h>
 #include <TROOT.h>
 
-#include "../CutFlow/HiggsAnalysis.h"
+//#include "../CutFlow/HiggsAnalysis.h"
 
 using namespace std;
 void CutFlow()
@@ -31,7 +31,7 @@ void CutFlow()
 		phyData->Add(filePath.Data());
 	} while (dataFileName.good());
 	
-	// Instantiate the primary analysis object
+	// Instantiate the primary analysis object and its variables
 	HiggsAnalysis *cutFlow = new HiggsAnalysis(phyData);
 	
 	cutFlow->InitializeVar();
