@@ -22,60 +22,96 @@
     <Filter Include="Source Files\ChannelCutFlows">
       <UniqueIdentifier>{ada32864-09a2-466f-9cd3-2c6a48aeabca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ChannelCutFlows">
+      <UniqueIdentifier>{e0ff131b-a615-4b20-a1e3-53b126207b83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CutFlow.cpp">
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow2e2mu.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow2mu2e.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow4e.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow4l.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow4mu.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="Root\CutFlow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HiggsAnalysis.cpp">
+    <ClCompile Include="Root\HiggsAnalysis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="Root\OutputTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChargedLepton.cpp">
+    <ClCompile Include="Root\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Root\ParticleObjects\ChargedLepton.cpp">
       <Filter>Source Files\ParticleObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Electron.cpp">
+    <ClCompile Include="Root\ParticleObjects\DiLepton.cpp">
       <Filter>Source Files\ParticleObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Jets.cpp">
+    <ClCompile Include="Root\ParticleObjects\Electron.cpp">
       <Filter>Source Files\ParticleObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Muon.cpp">
+    <ClCompile Include="Root\ParticleObjects\Jets.cpp">
       <Filter>Source Files\ParticleObjects</Filter>
     </ClCompile>
-    <ClCompile Include="DiLepton.cpp">
+    <ClCompile Include="Root\ParticleObjects\Muon.cpp">
       <Filter>Source Files\ParticleObjects</Filter>
     </ClCompile>
-    <ClCompile Include="QuadLepton.cpp">
+    <ClCompile Include="Root\ParticleObjects\QuadLepton.cpp">
       <Filter>Source Files\ParticleObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="CutFlow4l.cpp">
-      <Filter>Source Files\ChannelCutFlows</Filter>
-    </ClCompile>
-    <ClCompile Include="CutFlow4mu.cpp">
-      <Filter>Source Files\ChannelCutFlows</Filter>
-    </ClCompile>
-    <ClCompile Include="CutFlow4e.cpp">
-      <Filter>Source Files\ChannelCutFlows</Filter>
-    </ClCompile>
-    <ClCompile Include="CutFlow2mu2e.cpp">
-      <Filter>Source Files\ChannelCutFlows</Filter>
-    </ClCompile>
-    <ClCompile Include="CutFlow2e2mu.cpp">
-      <Filter>Source Files\ChannelCutFlows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HiggsAnalysis.h">
+    <ClInclude Include="CutFlow\HiggsAnalysis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="CutFlow\OutputTree.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ChannelCutFlows\CutFlow4e.h">
+      <Filter>Header Files\ChannelCutFlows</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ChannelCutFlows\CutFlow4l.h">
+      <Filter>Header Files\ChannelCutFlows</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ChannelCutFlows\CutFlow4mu.h">
+      <Filter>Header Files\ChannelCutFlows</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ParticleObjects\ChargedLepton.h">
+      <Filter>Header Files\ParticleObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ParticleObjects\DiLepton.h">
+      <Filter>Header Files\ParticleObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ParticleObjects\Electron.h">
+      <Filter>Header Files\ParticleObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ParticleObjects\Jets.h">
+      <Filter>Header Files\ParticleObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ParticleObjects\Muon.h">
+      <Filter>Header Files\ParticleObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CutFlow\ParticleObjects\QuadLepton.h">
+      <Filter>Header Files\ParticleObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

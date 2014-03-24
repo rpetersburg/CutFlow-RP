@@ -82,24 +82,35 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChargedLepton.cpp" />
-    <ClCompile Include="CutFlow.cpp" />
-    <ClCompile Include="CutFlow2e2mu.cpp" />
-    <ClCompile Include="CutFlow2mu2e.cpp" />
-    <ClCompile Include="CutFlow4e.cpp" />
-    <ClCompile Include="CutFlow4l.cpp" />
-    <ClCompile Include="CutFlow4mu.cpp" />
-    <ClCompile Include="DiLepton.cpp" />
-    <ClCompile Include="Electron.cpp" />
-    <ClCompile Include="HiggsAnalysis.cpp" />
-    <ClCompile Include="Jets.cpp" />
-    <ClCompile Include="Muon.cpp" />
-    <ClCompile Include="QuadLepton.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Root\ParticleObjects\ChargedLepton.cpp" />
+    <ClCompile Include="Root\CutFlow.cpp" />
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow2e2mu.cpp" />
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow2mu2e.cpp" />
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow4e.cpp" />
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow4l.cpp" />
+    <ClCompile Include="Root\ChannelCutFlows\CutFlow4mu.cpp" />
+    <ClCompile Include="Root\ParticleObjects\DiLepton.cpp" />
+    <ClCompile Include="Root\ParticleObjects\Electron.cpp" />
+    <ClCompile Include="Root\HiggsAnalysis.cpp" />
+    <ClCompile Include="Root\ParticleObjects\Jets.cpp" />
+    <ClCompile Include="Root\ParticleObjects\Muon.cpp" />
+    <ClCompile Include="Root\OutputTree.cpp" />
+    <ClCompile Include="Root\ParticleObjects\QuadLepton.cpp" />
+    <ClCompile Include="Root\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HiggsAnalysis.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="CutFlow\ParticleObjects\ChargedLepton.h" />
+    <ClInclude Include="CutFlow\ChannelCutFlows\CutFlow4e.h" />
+    <ClInclude Include="CutFlow\ChannelCutFlows\CutFlow4l.h" />
+    <ClInclude Include="CutFlow\ChannelCutFlows\CutFlow4mu.h" />
+    <ClInclude Include="CutFlow\ParticleObjects\DiLepton.h" />
+    <ClInclude Include="CutFlow\ParticleObjects\Electron.h" />
+    <ClInclude Include="CutFlow\HiggsAnalysis.h" />
+    <ClInclude Include="CutFlow\ParticleObjects\Jets.h" />
+    <ClInclude Include="CutFlow\ParticleObjects\Muon.h" />
+    <ClInclude Include="CutFlow\OutputTree.h" />
+    <ClInclude Include="CutFlow\ParticleObjects\QuadLepton.h" />
+    <ClInclude Include="CutFlow\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
