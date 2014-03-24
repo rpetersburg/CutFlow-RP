@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ParticleObjects">
+      <UniqueIdentifier>{2ae780a1-ea83-4a23-b7ec-8ad38bcc91a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ParticleObjects">
+      <UniqueIdentifier>{1a64ee9a-962d-4b8c-97fd-5c46c29f24b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ChannelCutFlows">
+      <UniqueIdentifier>{ada32864-09a2-466f-9cd3-2c6a48aeabca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CutFlow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HiggsAnalysis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChargedLepton.cpp">
+      <Filter>Source Files\ParticleObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Electron.cpp">
+      <Filter>Source Files\ParticleObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Jets.cpp">
+      <Filter>Source Files\ParticleObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Muon.cpp">
+      <Filter>Source Files\ParticleObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="DiLepton.cpp">
+      <Filter>Source Files\ParticleObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadLepton.cpp">
+      <Filter>Source Files\ParticleObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="CutFlow4l.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="CutFlow4mu.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="CutFlow4e.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="CutFlow2mu2e.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+    <ClCompile Include="CutFlow2e2mu.cpp">
+      <Filter>Source Files\ChannelCutFlows</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HiggsAnalysis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
