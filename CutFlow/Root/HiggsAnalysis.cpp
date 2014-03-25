@@ -7,7 +7,7 @@
 #include <TChain.h>
 #include <TString.h>
 
-#include "HiggsAnalysis.h"
+#include "CutFlow/HiggsAnalysis.h"
 
 HiggsAnalysis::HiggsAnalysis(TTree *tPhysicsTree) : m_physicsTree(tPhysicsTree)
 {
@@ -38,7 +38,7 @@ void HiggsAnalysis::AnalyzeTree()
 			event = chain->LoadTree(iEvent);
 		}
 		// m_currFileName = chain->GetFile()->GetPath();
-		AnalyzeTreeEvent(iEvent);
+		//AnalyzeTreeEvent(iEvent);
 	}
 
 
