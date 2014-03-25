@@ -45,16 +45,10 @@
     <ClCompile Include="Root\ChannelCutFlows\CutFlow4mu.cpp">
       <Filter>Source Files\ChannelCutFlows</Filter>
     </ClCompile>
-    <ClCompile Include="Root\CutFlow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Root\HiggsAnalysis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Root\OutputTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Root\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Root\ParticleObjects\ChargedLepton.cpp">
@@ -75,15 +69,18 @@
     <ClCompile Include="Root\ParticleObjects\QuadLepton.cpp">
       <Filter>Source Files\ParticleObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Run\CutFlow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Run\CutFlow.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CutFlow\HiggsAnalysis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CutFlow\OutputTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutFlow\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CutFlow\ChannelCutFlows\CutFlow4e.h">
@@ -104,14 +101,17 @@
     <ClInclude Include="CutFlow\ParticleObjects\Electron.h">
       <Filter>Header Files\ParticleObjects</Filter>
     </ClInclude>
-    <ClInclude Include="CutFlow\ParticleObjects\Jets.h">
-      <Filter>Header Files\ParticleObjects</Filter>
-    </ClInclude>
     <ClInclude Include="CutFlow\ParticleObjects\Muon.h">
       <Filter>Header Files\ParticleObjects</Filter>
     </ClInclude>
     <ClInclude Include="CutFlow\ParticleObjects\QuadLepton.h">
       <Filter>Header Files\ParticleObjects</Filter>
     </ClInclude>
+    <ClInclude Include="CutFlow\ParticleObjects\Jets.h">
+      <Filter>Header Files\ParticleObjects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

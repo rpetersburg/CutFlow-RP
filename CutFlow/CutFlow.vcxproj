@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);C:\root\include;</IncludePath>
-    <LibraryPath>$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);C:\root\lib;</LibraryPath>
+    <LibraryPath>$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);C:\root\lib;C:\Users\ryanrp\Documents\CERN\analysis\CutFlow-RP\D3PDReader;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,6 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ryanrp\Documents\CERN\analysis\CutFlow-RP\CutFlow;C:\Users\ryanrp\Documents\CERN\analysis\CutFlow-RP\D3PDReader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -83,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Root\ParticleObjects\ChargedLepton.cpp" />
-    <ClCompile Include="Root\CutFlow.cpp" />
+    <ClCompile Include="Run\CutFlow.cpp" />
     <ClCompile Include="Root\ChannelCutFlows\CutFlow2e2mu.cpp" />
     <ClCompile Include="Root\ChannelCutFlows\CutFlow2mu2e.cpp" />
     <ClCompile Include="Root\ChannelCutFlows\CutFlow4e.cpp" />
@@ -96,7 +97,7 @@
     <ClCompile Include="Root\ParticleObjects\Muon.cpp" />
     <ClCompile Include="Root\OutputTree.cpp" />
     <ClCompile Include="Root\ParticleObjects\QuadLepton.cpp" />
-    <ClCompile Include="Root\stdafx.cpp" />
+    <ClCompile Include="Run\CutFlow.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CutFlow\ParticleObjects\ChargedLepton.h" />
@@ -110,7 +111,9 @@
     <ClInclude Include="CutFlow\ParticleObjects\Muon.h" />
     <ClInclude Include="CutFlow\OutputTree.h" />
     <ClInclude Include="CutFlow\ParticleObjects\QuadLepton.h" />
-    <ClInclude Include="CutFlow\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

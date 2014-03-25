@@ -8,7 +8,7 @@
 
 using namespace CLHEP;
 
-class Electron : public ChargedLepton
+class Muon : public ChargedLepton
 {
 	public:
 		Muon();
@@ -22,6 +22,6 @@ class Electron : public ChargedLepton
 	private:
 
 
-}
+};
 
 #endif

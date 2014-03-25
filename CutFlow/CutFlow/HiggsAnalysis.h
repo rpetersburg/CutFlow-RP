@@ -1,7 +1,12 @@
 #ifndef HIGGSANALYSIS_H
 #define HIGGSANALYSIS_H
 
-#include "../../D3PDReader/D3PDReader/Event.h"
+#include "D3PDReader/Event.h"
+#include "CutFlow/ParticleObjects/Jets.h"
+#include "CutFlow/ParticleObjects/Muon.h"
+#include "CutFlow/ParticleObjects/Electron.h"
+#include "CutFlow/ParticleObjects/QuadLepton.h"
+#include "CutFlow/OutputTree.h"
 
 #include <vector>
 #include <string>
@@ -23,7 +28,40 @@ class HiggsAnalysis
 		
 		void InitializeVar();
 		
-		void SetOutputFilePath(string newFilePath);		
+		void SetOutputFilePath(string newFilePath);	
+
+		Muon *muon;
+		Electron *electron;
+		Electron *electronLoose;
+		Jets *jets;
+		Jets *jetsTruth;
+		Jets *jets_Fid;
+		Jets *jetsTruth_Fid;
+
+		QuadLepton *higgsCandidate4Mu;
+		QuadLepton *higgsCandidate4El;
+		QuadLepton *higgsCandidate2L2L;
+
+		OutputTree *outputTree;
+		OutputTree *outputTreeCR;
+		OutputTree *outputTreelleeCR;
+
+		// Variables that store the final physics objects
+		vector<ChargedLepton *> muEvent;
+		vector<ChargedLepton *> elEvent;
+		vector<ChargedLepton *> elLooseEvent;
+		vector<ChargedLepton *> jetsEvent;
+		vector<ChargedLepton *> jetsTruthEvent;
+		vector<ChargedLepton *> jetsEvent_Fid;
+		vector<ChargedLepton *> jetsTruthEvent_Fid;
+	
+		// Physics objects before final overlap removal
+		vector<ChargedLepton *> muOverlap;
+		vector<ChargedLepton *> elOverlap;
+		vector<ChargedLepton *> elLooseOverlap;
+		vector<ChargedLepton *> jetsOverlap;
+		vector<ChargedLepton *> jetsOverlap_Fid;
+
 	
 	private:	
 		TTree *m_physicsTree;
@@ -33,6 +71,10 @@ class HiggsAnalysis
 		TString m_outputFilePath;
 
 		TString m_currFileName;
+
+
+
+		TString outputFilePath;
 
 };
 

@@ -15,6 +15,14 @@ class ChargedLepton
 
 
 	protected:
+		Int_t flavor;
+		Int_t type;
+		Int_t charge;
+		Int_t index;
+
+		TLorentzVector *m_momentum_main;
+		TLorentzVector m_momentum;
+
 		Double_t lepEff;
 		Double_t lepMass;
 		Double_t smearVar;
@@ -23,6 +31,6 @@ class ChargedLepton
 	private:
 
 
-}
+};
 
 #endif

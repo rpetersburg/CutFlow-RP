@@ -22,6 +22,6 @@ class Electron : public ChargedLepton
 	private:
 
 
-}
+};
 
 #endif
