@@ -7,7 +7,7 @@
 #include <TChain.h>
 #include <TROOT.h>
 
-//#include "CutFlow/HiggsAnalysis.h"
+#include "../CutFlow/HiggsAnalysis.h"
 
 using namespace std;
 void CutFlow()
@@ -15,7 +15,7 @@ void CutFlow()
 //int main(int argc, _TCHAR* argv[])
 //{
 	// Load the libraries that ROOT core compiled...
-	gROOT->ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C");
+	//gROOT->ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C");
 	
 	// Open the relevant D3PD files contained in the specified .txt
 	ifstream dataFileName;
