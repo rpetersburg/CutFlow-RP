@@ -10,10 +10,6 @@
 #pragma link off all functions;
 #pragma link C++ nestedclass;
 
-#endif
-
-#ifdef __CINT__
-
 #pragma link C++ class HiggsAnalysis+;
 
 #endif
