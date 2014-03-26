@@ -7,9 +7,11 @@
 #include "CutFlow/ParticleObjects/Electron.h"
 #include "CutFlow/ParticleObjects/QuadLepton.h"
 #include "CutFlow/Output/OutputTree.h"
+
 #include <vector>
 #include <string>
 #include "math.h"
+
 #include <TTree.h>
 #include <TChain.h>
 #include <TString.h>
@@ -28,37 +30,37 @@ class HiggsAnalysis
 		
 		void SetOutputFilePath(string newFilePath);	
 
-		Muon *muon;
-		Electron *electron;
-		Electron *electronLoose;
-		Jets *jets;
-		Jets *jetsTruth;
-		Jets *jets_Fid;
-		Jets *jetsTruth_Fid;
+		//Muon *muon;
+		//Electron *electron;
+		//Electron *electronLoose;
+		//Jets *jets;
+		//Jets *jetsTruth;
+		//Jets *jets_Fid;
+		//Jets *jetsTruth_Fid;
 
-		QuadLepton *higgsCandidate4Mu;
-		QuadLepton *higgsCandidate4El;
-		QuadLepton *higgsCandidate2L2L;
+		//QuadLepton *higgsCandidate4Mu;
+		//QuadLepton *higgsCandidate4El;
+		//QuadLepton *higgsCandidate2L2L;
 
-		OutputTree *outputTree;
-		OutputTree *outputTreeCR;
-		OutputTree *outputTreelleeCR;
+		//OutputTree *outputTree;
+		//OutputTree *outputTreeCR;
+		//OutputTree *outputTreelleeCR;
 
-		// Variables that store the final physics objects
-		vector<ChargedLepton *> muEvent;
-		vector<ChargedLepton *> elEvent;
-		vector<ChargedLepton *> elLooseEvent;
-		vector<ChargedLepton *> jetsEvent;
-		vector<ChargedLepton *> jetsTruthEvent;
-		vector<ChargedLepton *> jetsEvent_Fid;
-		vector<ChargedLepton *> jetsTruthEvent_Fid;
+		//// Variables that store the final physics objects
+		//vector<ChargedLepton *> muEvent;
+		//vector<ChargedLepton *> elEvent;
+		//vector<ChargedLepton *> elLooseEvent;
+		//vector<ChargedLepton *> jetsEvent;
+		//vector<ChargedLepton *> jetsTruthEvent;
+		//vector<ChargedLepton *> jetsEvent_Fid;
+		//vector<ChargedLepton *> jetsTruthEvent_Fid;
 	
-		// Physics objects before final overlap removal
-		vector<ChargedLepton *> muOverlap;
-		vector<ChargedLepton *> elOverlap;
-		vector<ChargedLepton *> elLooseOverlap;
-		vector<ChargedLepton *> jetsOverlap;
-		vector<ChargedLepton *> jetsOverlap_Fid;
+		//// Physics objects before final overlap removal
+		//vector<ChargedLepton *> muOverlap;
+		//vector<ChargedLepton *> elOverlap;
+		//vector<ChargedLepton *> elLooseOverlap;
+		//vector<ChargedLepton *> jetsOverlap;
+		//vector<ChargedLepton *> jetsOverlap_Fid;
 
 	
 	private:	
