@@ -5,7 +5,7 @@
 # for full documentation check:
 # https://twiki.cern.ch/twiki/bin/viewauth/Atlas/RootCore#Package_Makefile
 
-PACKAGE          = CutFlow
+PACKAGE          = CutFlow4Lep
 PACKAGE_PRELOAD  = 
 PACKAGE_CXXFLAGS = -Wall -g 
 PACKAGE_OBJFLAGS = 
