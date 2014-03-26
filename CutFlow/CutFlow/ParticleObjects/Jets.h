@@ -5,7 +5,7 @@
 #include <TString.h>
 #include <TLorentzVector.h>
 
-using namespace CLHEP;
+using namespace std;
 
 class Jets
 {

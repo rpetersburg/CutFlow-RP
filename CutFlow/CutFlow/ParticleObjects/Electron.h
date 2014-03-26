@@ -6,7 +6,7 @@
 #include <TLorentzVector.h>
 #include "ChargedLepton.h"
 
-using namespace CLHEP;
+using namespace std;
 
 class Electron : public ChargedLepton
 {

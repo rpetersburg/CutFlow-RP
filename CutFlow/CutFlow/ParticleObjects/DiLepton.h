@@ -7,7 +7,7 @@
 
 #include "ChargedLepton.h"
 
-using namespace CLHEP;
+using namespace std;
 
 class DiLepton
 {

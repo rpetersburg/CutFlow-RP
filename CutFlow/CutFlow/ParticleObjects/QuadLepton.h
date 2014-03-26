@@ -7,7 +7,7 @@
 
 #include "DiLepton.h"
 
-using namespace CLHEP;
+using namespace std;
 
 class QuadLepton
 {
