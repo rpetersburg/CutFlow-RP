@@ -7,11 +7,9 @@
 #include "CutFlow/ParticleObjects/Electron.h"
 #include "CutFlow/ParticleObjects/QuadLepton.h"
 #include "CutFlow/Output/OutputTree.h"
-
 #include <vector>
 #include <string>
 #include "math.h"
-
 #include <TTree.h>
 #include <TChain.h>
 #include <TString.h>

@@ -9,4 +9,4 @@ cd CutFlow/Run
 
 root -l -b 'CutFlow.cxx'
 
-cd ../../RunScript
+cd ../../RunScripts
