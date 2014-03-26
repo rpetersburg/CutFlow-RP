@@ -2,9 +2,11 @@
 #include <iostream>
 #include <string>
 #include <math.h>
+
 #include <TTree.h>
 #include <TChain.h>
 #include <TString.h>
+
 #include "CutFlow/HiggsAnalysis.h"
 
 HiggsAnalysis::HiggsAnalysis(TTree *tPhysicsTree) : m_physicsTree(tPhysicsTree)
@@ -22,32 +24,32 @@ HiggsAnalysis::~HiggsAnalysis()
 
 void HiggsAnalysis::AnalyzeTree()
 {
-	//Int_t eventNum = 0;
-	//Int_t numPassed = 0;
+	Int_t eventNum = 0;
+	Int_t numPassed = 0;
 
-	//Int_t totNumEvents = m_physicsTree->GetEntries();
+	Int_t totNumEvents = m_physicsTree->GetEntries();
 
-	//for (Long64_t iEvent = 0; iEvent < totNumEvents; iEvent++)
-	//{
-	//	Long64_t event = iEvent;
-	//	TChain* chain = dynamic_cast<TChain*> (m_physicsTree);
-	//	if (chain)
-	//	{
-	//		event = chain->LoadTree(iEvent);
-	//	}
-	//	// m_currFileName = chain->GetFile()->GetPath();
-	//	AnalyzeTreeEvent(iEvent);
-	//}
+	for (Long64_t iEvent = 0; iEvent < totNumEvents; iEvent++)
+	{
+		Long64_t event = iEvent;
+		TChain* chain = dynamic_cast<TChain*> (m_physicsTree);
+		if (chain)
+		{
+			event = chain->LoadTree(iEvent);
+		}
+		// m_currFileName = chain->GetFile()->GetPath();
+		AnalyzeTreeEvent(iEvent);
+	}
 
 	cout << "Tree was analyzed..." << endl;
 }
 
 void HiggsAnalysis::AnalyzeTreeEvent(Long64_t eventNumber)
 {
-	//if(eventNumber >= 0) m_event->GetEntry(eventNumber);
+	if(eventNumber >= 0) m_event->GetEntry(eventNumber);
 
-	//// Getting the initial event weight
-	//Double_t eventWeight = 1.0;
+	// Getting the initial event weight
+	Double_t eventWeight = 1.0;
 
 	cout << "Tree event was analyzed..." << endl;
 
