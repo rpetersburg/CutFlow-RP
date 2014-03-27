@@ -7,7 +7,7 @@
 #include <TChain.h>
 #include <TROOT.h>
 
-//#include "CutFlow4Lep/HiggsAnalysis.h"
+#include "CutFlow4Lep/HiggsAnalysis.h"
 
 using namespace std;
 void CutFlow4Lep()
