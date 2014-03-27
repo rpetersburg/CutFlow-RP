@@ -20,7 +20,7 @@ using namespace std;
 class HiggsAnalysis
 {
 	public:
-		HiggsAnalysis(TTree *tPhysicsTree);
+		HiggsAnalysis(TChain *tPhysicsTree);
 		~HiggsAnalysis();
 		
 		void AnalyzeTree();
