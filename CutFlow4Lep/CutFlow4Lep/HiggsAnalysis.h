@@ -12,16 +12,16 @@
 //#include <string>
 //#include "math.h"
 //
-//#include <TTree.h>
+#include <TTree.h>
 //#include <TChain.h>
 //#include <TString.h>
 //
 using namespace std;
 class HiggsAnalysis
 {
-	//public:
-	//	HiggsAnalysis(TTree *tPhysicsTree);
-	//	~HiggsAnalysis();
+	public:
+		HiggsAnalysis(TTree *tPhysicsTree);
+		~HiggsAnalysis();
 	//	
 	//	void AnalyzeTree();
 	//	void AnalyzeTreeEvent(Long64_t eventNumber);
