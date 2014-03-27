@@ -1,7 +1,7 @@
 #ifndef __CUTFLOW__
 #define __CUTFLOW__
 
-#include "CutFlow4Lep/HiggsAnalysis.h"
+#include <CutFlow4Lep/HiggsAnalysis.h>
 
 #ifdef __CINT__
 
