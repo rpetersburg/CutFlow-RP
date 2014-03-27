@@ -9,8 +9,14 @@
 
 #include "CutFlow4Lep/HiggsAnalysis.h"
 
+HiggsAnalysis::HiggsAnalysis()
+{
+	cout << "You reached the empty constructor" << endl;
+}
+
 HiggsAnalysis::HiggsAnalysis(TChain *tPhysicsTree) : m_physicsTree(tPhysicsTree)
 {
+	cout << "You reached the helpful constructor" << endl;
 	m_event = new D3PDReader::Event();
 	m_event->ReadFrom(m_physicsTree);	
 

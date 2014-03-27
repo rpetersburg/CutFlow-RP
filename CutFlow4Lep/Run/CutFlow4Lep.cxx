@@ -30,7 +30,7 @@ void CutFlow4Lep()
 	} while (dataFileName.good());
 	
 	// Instantiate the primary analysis object and its variables
-	HiggsAnalysis *cutFlow = new HiggsAnalysis(phyData);
+	HiggsAnalysis *cutFlow = new HiggsAnalysis();
 	
 	cutFlow->InitializeVar();
 	cutFlow->SetOutputFilePath("Output/mc12c_VBFH125.root");
