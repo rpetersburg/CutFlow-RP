@@ -15,8 +15,8 @@ class DiLepton
 		DiLepton();
 		~DiLepton();
 
-		ChargedLepton getLepton1() {return lepton1};
-		ChargedLepton getLepton2() {return lepton2};
+		ChargedLepton getLepton1();
+		ChargedLepton getLepton2();
 
 
 	protected:
