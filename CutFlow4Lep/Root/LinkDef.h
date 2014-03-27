@@ -10,7 +10,7 @@
 #pragma link off all functions;
 #pragma link C++ nestedclass;
 
-#pragma link C++ class HiggsAnalysis::HiggsAnalysis+;
+#pragma link C++ class HiggsAnalysis;
 
 #endif
 
