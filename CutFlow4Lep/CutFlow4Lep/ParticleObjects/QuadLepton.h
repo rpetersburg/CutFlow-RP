@@ -11,20 +11,20 @@ using namespace std;
 
 class QuadLepton
 {
-	public:
-		QuadLepton();
-		~QuadLepton();
+	//public:
+	//	QuadLepton();
+	//	~QuadLepton();
 
-		//DiLepton getDiLepton1();
-		//DiLepton getDiLepton2();
-
-
-	protected:
-		DiLepton diLepton1;
-		DiLepton diLepton2;
+	//	//DiLepton getDiLepton1();
+	//	//DiLepton getDiLepton2();
 
 
-	private:
+	//protected:
+	//	DiLepton diLepton1;
+	//	DiLepton diLepton2;
+
+
+	//private:
 
 
 };
