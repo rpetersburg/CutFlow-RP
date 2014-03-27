@@ -1,7 +1,7 @@
 #ifndef HIGGSANALYSIS_H
 #define HIGGSANALYSIS_H
 
-//#include "D3PDReader/Event.h"
+#include "D3PDReader/Event.h"
 //#include "CutFlow4Lep/ParticleObjects/Jets.h"
 //#include "CutFlow4Lep/ParticleObjects/Muon.h"
 //#include "CutFlow4Lep/ParticleObjects/Electron.h"
