@@ -8,27 +8,27 @@
 //#include "CutFlow4Lep/ParticleObjects/QuadLepton.h"
 //#include "CutFlow4Lep/Output/OutputTree.h"
 //
-#include <vector>
-#include <string>
-#include "math.h"
-
-#include <TTree.h>
-#include <TChain.h>
-#include <TString.h>
-
+//#include <vector>
+//#include <string>
+//#include "math.h"
+//
+//#include <TTree.h>
+//#include <TChain.h>
+//#include <TString.h>
+//
 using namespace std;
 class HiggsAnalysis
 {
-	public:
-		HiggsAnalysis(TTree *tPhysicsTree);
-		~HiggsAnalysis();
-		
-		void AnalyzeTree();
-		void AnalyzeTreeEvent(Long64_t eventNumber);
-		
-		void InitializeVar();
-		
-		void SetOutputFilePath(string newFilePath);	
+	//public:
+	//	HiggsAnalysis(TTree *tPhysicsTree);
+	//	~HiggsAnalysis();
+	//	
+	//	void AnalyzeTree();
+	//	void AnalyzeTreeEvent(Long64_t eventNumber);
+	//	
+	//	void InitializeVar();
+	//	
+	//	void SetOutputFilePath(string newFilePath);	
 
 	//	Muon *muon;
 	//	Electron *electron;
@@ -63,16 +63,16 @@ class HiggsAnalysis
 	//	vector<ChargedLepton *> jetsOverlap_Fid;
 
 	
-	private:	
-		TTree *m_physicsTree;
-		
-		D3PDReader::Event *m_event;
-		
-		TString m_outputFilePath;
+	//private:	
+	//	TTree *m_physicsTree;
+	//	
+	//	D3PDReader::Event *m_event;
+	//	
+	//	TString m_outputFilePath;
 
-		TString m_currFileName;
+	//	TString m_currFileName;
 
-		TString outputFilePath;
+	//	TString outputFilePath;
 
 };
 
