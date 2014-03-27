@@ -15,8 +15,8 @@ class QuadLepton
 		QuadLepton();
 		~QuadLepton();
 
-		DiLepton getDiLepton1();
-		DiLepton getDiLepton2();
+		//DiLepton getDiLepton1();
+		//DiLepton getDiLepton2();
 
 
 	protected:
