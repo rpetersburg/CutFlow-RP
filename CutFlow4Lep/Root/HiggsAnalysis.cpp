@@ -7,9 +7,9 @@
 #include <TChain.h>
 #include <TString.h>
 
-#include "CutFlow/HiggsAnalysis.h"
+#include "CutFlow4Lep/HiggsAnalysis.h"
 
-HiggsAnalysis::HiggsAnalysis(TTree *tPhysicsTree) : m_physicsTree(tPhysicsTree)
+HiggsAnalysis::HiggsAnalysis(TChain *tPhysicsTree) : m_physicsTree(tPhysicsTree)
 {
 	m_event = new D3PDReader::Event();
 	m_event->ReadFrom(m_physicsTree);	
