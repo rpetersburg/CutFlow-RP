@@ -1,5 +1,5 @@
-//#ifndef __CUTFLOW__
-//#define __CUTFLOW__
+#ifndef __CUTFLOW__
+#define __CUTFLOW__
 
 #include <CutFlow4Lep/HiggsAnalysis.h>
 
@@ -14,4 +14,4 @@
 
 #endif
 
-//#endif
+#endif
