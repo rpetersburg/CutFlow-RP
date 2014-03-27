@@ -28,7 +28,7 @@ HiggsAnalysis::~HiggsAnalysis()
 	delete m_event;	
 }
 
-void HiggsAnalysis::AnalyzeTree()
+void HiggsAnalysis::analyzeTree()
 {
 	Int_t eventNum = 0;
 	Int_t numPassed = 0;
@@ -43,21 +43,42 @@ void HiggsAnalysis::AnalyzeTree()
 		{
 			event = chain->LoadTree(iEvent);
 		}
-		// m_currFileName = chain->GetFile()->GetPath();
-		AnalyzeTreeEvent(iEvent);
+		m_currFileName = chain->GetFile()->GetPath();
+		higgsMass = getMCHiggsMass();
+		analyzeTreeEvent(iEvent);
 	}
 
 	cout << "Tree was analyzed..." << endl;
 }
 
-void HiggsAnalysis::AnalyzeTreeEvent(Long64_t eventNumber)
+void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 {
 	if(eventNumber >= 0) m_event->GetEntry(eventNumber);
 
 	// Getting the initial event weight
 	Double_t eventWeight = 1.0;
 
-	cout << "Tree event was analyzed..." << endl;
+
+
+
+	// Checking if MC or Data
+	if(m_event->eventinfo.isSimulation()) m_isMC = true;
+	else m_isMC = false;
+
+	
+
+	// 2012 defaults to GSF electrons; 2011 does not
+	if (m_dataYear == 2011) {m_currElectron = &(m_event->el_GSF);}
+	else if (m_dataYear == 2012) {m_currElectron = &(m_event->el);}
+
+	setEventYear();
+	setCalibrationType();
+
+	
+	
+	
+
+
 
 	//// Initializing the event Specific Variables
 	//InitializeEventVar();
@@ -341,4 +362,109 @@ void HiggsAnalysis::SetOutputFilePath(string newFilePath)
 {
 	m_outputFilePath = newFilePath;
 	cout << "Output file set..." << endl;
+}
+
+void HiggsAnalysis::setEventYear()
+{
+	// Setting the event year and CM Energy of the data
+	Long64_t runNumber = m_event->eventinfo.RunNumber();
+	if ( (runNumber >= 177531) && (runNumber <= 191933) ) {
+		m_dataYear = 2011;
+		m_cmEnergy = 7.0;
+		m_is2012 = false;
+	}
+	else if ( runNumber > 191933 ) {
+		m_dataYear = 2012;
+		m_cmEnergy = 8.0;
+		m_is2012 = true;
+	}
+	else{
+		cout<<"Event number not recognized: "<< runNumber <<endl;
+	}
+}
+
+void HiggsAnalysis::setCalibrationType()
+{
+	// Determining Data or MC Collection Calibration Type
+	if (!m_isMC) {
+		m_currMCCollection = -1;
+		if (m_dataYear == 2011) m_currDataCollection = dataCalibType::y2011d;
+		else if (m_dataYear == 2012) m_currDataCollection = dataCalibType::y2012c;
+	}
+	// Specific issue if the sample production type is ggF_ZpZp
+	else if (m_sampleProdType == sampleType::ggF_ZpZp){
+			if (m_dataYear == 2011) m_currMCCollection = MCCollection::MC11c;
+			else if (m_dataYear == 2012) {
+				if (m_event->eventinfo.RunNumber() == 195847) {m_currMCCollection = MCCollection::MC12a;}
+				else if (m_event->eventinfo.RunNumber() == 195848) { m_currMCCollection = MCCollection::MC21b;}
+				else {cout<< "Error: AnalyzeTreeEvent: MC12ab run number not recognized" << endl;}
+			}
+		}
+	// Use the production type from the name to determine the calibration type for Data
+	else {
+		m_currDataCollection = -1;
+		Int_t mc11c[] 	= {1272,1273,1274,1299,1300,1309,1310,1349,1350,1351,1352,1353,1370,1372,1378,1571};
+		Int_t mc11d[] 	= {1786};
+		Int_t mc12ab[] 	= {1468,1469,1470,1472,1479,1482,1484,1485,1486,1499,1504,1581,1586,1589,1599,1609,1610,1611,1716,1773,1773,1776};	
+		Int_t mc12c[] 	= {1737,1741,1746,1748,1771,1798,1799,1831,1832};
+
+		TString name = m_currFileName;
+
+		TObjArray *parts = name.Tokenize(".");
+		vector<TString> partName;
+		if (parts->GetEntriesFast()) {
+			TIter iString(parts);
+			TObjString *os = 0;
+			while ((os=(TObjString*)iString())) {
+				partName.push_back(os->GetString());
+			}
+		}
+		for (Int_t i = 0; i < (Int_t) partName.size(); i++) {
+			if (partName[i].Contains("_s")) {
+				TObjArray *parts = partName[i].Tokenize("_");
+				vector<TString> prodTag;
+				if (parts->GetEntriesFast()) {
+					TIter iString(parts);
+					TObjString* os = 0;
+					while ((os=(TObjString*)iString())) {
+						prodTag.push_back(os->GetString());
+					}
+				}
+
+				TString sProdTag = prodTag[1];
+				sProdTag = sProdTag(1,4);
+				Int_t prodTagNum = sProdTag.Atoi();
+
+				Int_t nMC11c  =	(sizeof(mc11c)/sizeof(*mc11c));
+				Int_t nMC11d  =	(sizeof(mc11d)/sizeof(*mc11d));
+				Int_t nMC12ab =	(sizeof(mc12ab)/sizeof(*mc12ab));
+				Int_t nMC12c  =	(sizeof(mc12c)/sizeof(*mc12c));
+
+				// Checking what sample it is in
+				if(find(mc11c,mc11c+nMC11c,prodTagNum) != mc11c+nMC11c)
+				{
+					m_currMCCollection = MCCollection::MC11c;
+				}
+				else if(find(mc11d,mc11d+nMC11d,prodTagNum) != mc11d+nMC11d)
+				{
+					m_currMCCollection = MCCollection::MC11d;
+				}
+				else if(find(mc12ab,mc12ab+nMC12ab,prodTagNum) != mc12ab+nMC12ab)
+				{
+					if(runNumber == 195847) {m_currMCCollection = MCCollection::MC12a;}
+					else if(runNumber == 195848) {m_currMCCollection = MCCollection::MC12b;}
+					else{cout<<"Error: AnalyzeTreeEvent: Mc12ab run number not recognized"<<endl;}
+				}
+				else if(find(mc12c,mc12c+nMC12c,prodTagNum) != mc12c+nMC12c)
+				{
+					m_currMCCollection = MCCollection::MC12c;
+				}
+				else
+				{
+					cout<<"Error: AnalyzeTreeEvent: production tag not recognized"<<endl;
+				}
+			}
+		}
+	}
+
 }

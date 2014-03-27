@@ -8,6 +8,8 @@
 #include "CutFlow4Lep/ParticleObjects/QuadLepton.h"
 #include "CutFlow4Lep/Output/OutputTree.h"
 
+#include "NamespaceDef.h"
+
 #include <vector>
 #include <string>
 #include "math.h"
@@ -24,56 +26,70 @@ class HiggsAnalysis
 		HiggsAnalysis(TChain *tPhysicsTree);
 		~HiggsAnalysis();
 		
-		void AnalyzeTree();
-		void AnalyzeTreeEvent(Long64_t eventNumber);
+		void analyzeTree();
+		void analyzeTreeEvent(Long64_t eventNumber);
+
+		void setCalibrationType();
+		void setEventYear();
 		
 		void InitializeVar();
 		
 		void SetOutputFilePath(string newFilePath);	
 
-		//Muon *muon;
-		//Electron *electron;
-		//Electron *electronLoose;
-		//Jets *jets;
-		//Jets *jetsTruth;
-		//Jets *jets_Fid;
-		//Jets *jetsTruth_Fid;
 
-		//QuadLepton *higgsCandidate4Mu;
-		//QuadLepton *higgsCandidate4El;
-		//QuadLepton *higgsCandidate2L2L;
 
-		//OutputTree *outputTree;
-		//OutputTree *outputTreeCR;
-		//OutputTree *outputTreelleeCR;
+		
 
-		//// Variables that store the final physics objects
-		//vector<ChargedLepton *> muEvent;
-		//vector<ChargedLepton *> elEvent;
-		//vector<ChargedLepton *> elLooseEvent;
-		//vector<ChargedLepton *> jetsEvent;
-		//vector<ChargedLepton *> jetsTruthEvent;
-		//vector<ChargedLepton *> jetsEvent_Fid;
-		//vector<ChargedLepton *> jetsTruthEvent_Fid;
+
+		Muon *muon;
+		Electron *electron;
+		Electron *electronLoose;
+		Jets *jets;
+		Jets *jetsTruth;
+		Jets *jets_Fid;
+		Jets *jetsTruth_Fid;
+
+		QuadLepton *higgsCandidate4Mu;
+		QuadLepton *higgsCandidate4El;
+		QuadLepton *higgsCandidate2L2L;
+
+		OutputTree *outputTree;
+		OutputTree *outputTreeCR;
+		OutputTree *outputTreelleeCR;
+
+		// Variables that store the final physics objects
+		vector<ChargedLepton *> muEvent;
+		vector<ChargedLepton *> elEvent;
+		vector<ChargedLepton *> elLooseEvent;
+		vector<ChargedLepton *> jetsEvent;
+		vector<ChargedLepton *> jetsTruthEvent;
+		vector<ChargedLepton *> jetsEvent_Fid;
+		vector<ChargedLepton *> jetsTruthEvent_Fid;
 	
-		//// Physics objects before final overlap removal
-		//vector<ChargedLepton *> muOverlap;
-		//vector<ChargedLepton *> elOverlap;
-		//vector<ChargedLepton *> elLooseOverlap;
-		//vector<ChargedLepton *> jetsOverlap;
-		//vector<ChargedLepton *> jetsOverlap_Fid;
+		// Physics objects before final overlap removal
+		vector<ChargedLepton *> muOverlap;
+		vector<ChargedLepton *> elOverlap;
+		vector<ChargedLepton *> elLooseOverlap;
+		vector<ChargedLepton *> jetsOverlap;
+		vector<ChargedLepton *> jetsOverlap_Fid;
 
 	
-	private:	
+	private:
+		// Constructor
 		TTree *m_physicsTree;
-		
 		D3PDReader::Event *m_event;
-		
 		TString m_outputFilePath;
-
 		TString m_currFileName;
 
-		TString outputFilePath;
+		// AnalysisTreeEvent
+		Bool_t m_isMC;
+		Int_t m_dataYear;
+		Double_t m_cmEnergy;
+		Bool_t m_is2012;
+		D3PDReader::ElectronD3PDObject *m_currElectron;
+		Int_t m_currMCCollection;
+		Int_t m_currDataCollection;
+		Int_t m_sampleProdType;
 
 };
 
