@@ -17,7 +17,7 @@
 #define pdgMuMass 105.6583715
 #define pdgElMass 0.510998928
 
-namespace doAnalysis{
+struct DoAnalysis{
 	enum{
 		StdHZZllll,
 		trigeff4l,
@@ -25,7 +25,7 @@ namespace doAnalysis{
 	};
 };
 
-namespace  MCCollection{
+struct  MCCollection{
 	enum {
 		MC11c,
 		MC11d,
@@ -34,7 +34,7 @@ namespace  MCCollection{
 		MC12c
 	};
 }
-namespace cutFlow {
+struct CutFlow {
 	enum {
 		Total,
 		DataPreselection,
@@ -44,7 +44,7 @@ namespace cutFlow {
 		Trigger4e
 	};
 }
-namespace cutFlowCH {
+struct CutFlowCH {
 	enum {
 		Total,
 		Trigger,
@@ -62,7 +62,7 @@ namespace cutFlowCH {
 	};
 }
 
-namespace cutElFlow {
+struct CutElFlow {
 	enum {
 		Total,
 		DataPreselection,
@@ -80,7 +80,7 @@ namespace cutElFlow {
 	};
 }
 
-namespace cutMuFlow {
+struct CutMuFlow {
 	enum {
 		Total,
 		DataPreselection,
@@ -99,7 +99,7 @@ namespace cutMuFlow {
 	};
 }
 
-namespace cutJetsFlow {
+struct CutJetsFlow {
 	enum {
 		Total,
 		DataPreselection,
@@ -113,7 +113,7 @@ namespace cutJetsFlow {
 	};
 }
 
-namespace flavor {
+struct Flavor {
 	enum {
 		Muon,
 		Electron,
@@ -121,7 +121,7 @@ namespace flavor {
 	};
 }
 
-namespace leptonType{
+struct LeptonType{
 	enum {
 		MuonStaco,
 		MuonCalo,
@@ -129,7 +129,7 @@ namespace leptonType{
 		ElectronGSF
 	};
 }
-namespace jetsType{
+struct JetsType{
 	enum {
 		AntiKt4TopoEM,
 		AntiKt4TopoEMTruth,
@@ -138,7 +138,7 @@ namespace jetsType{
 	};
 }
 
-namespace quadType{
+struct QuadType{
 	enum {
 		Mu4,
 		El4,
@@ -147,7 +147,7 @@ namespace quadType{
 	};
 }
 
-namespace analysisType{
+struct AnalysisType{
 	enum {
 		Mu4,
 		El4,
@@ -156,20 +156,20 @@ namespace analysisType{
 	};
 }
 
-namespace electronCollection{
+struct ElectronCollection{
 	enum {
 		LoosePlusPlus,
 		MultiLepton,
 		Likelihood
 	};
 }
-namespace muonCollection{
+struct MuonCollection{
 	enum {
 		Loose
 	};
 }
 
-namespace productionChannel{
+struct ProductionChannel{
 	enum {
 		VBF,
 		VHLep,
@@ -179,7 +179,7 @@ namespace productionChannel{
 	};
 }
 
-namespace sampleType{
+struct SampleType{
 	enum {
 		ggF,
 		VBF,
@@ -192,7 +192,7 @@ namespace sampleType{
 	};
 }
 
-namespace streamContainer{
+struct StreamContainer{
 	enum {
 		eGamma,
 		Muon,
@@ -200,7 +200,7 @@ namespace streamContainer{
 	};
 }
 
-namespace truthTypeQuad{
+struct TruthTypeQuad{
 	enum {
 		_4mu,
 		_2mu2e,
@@ -212,7 +212,7 @@ namespace truthTypeQuad{
 	};
 }
 
-namespace leptonIDType{
+struct LeptonIDType{
 	enum {
 		// what we use
 		mu_staco_cb,
@@ -244,14 +244,14 @@ namespace leptonIDType{
 	};
 }
 
-namespace MCGeneratorName{
+struct MCGeneratorName{
 	enum {
 		Pythia,
 		other
 	};
 }
 
-namespace calibrationType{
+struct CalibrationType{
 	enum {
 		stdCalib,
 		stdCalibEp,
@@ -260,7 +260,7 @@ namespace calibrationType{
 		noCalib
 	};
 }
-namespace fsrType{
+struct FSRType{
 	enum {
 		collFSRZ1mumu,
 		farFSRZ1,
@@ -269,7 +269,7 @@ namespace fsrType{
 	};
 }
 
-namespace dataCalibType{
+struct DataCalibType{
 	enum {
 		y2011c,
 		y2011d,
@@ -278,14 +278,14 @@ namespace dataCalibType{
 	};
 }
 
-namespace diLeptonType{
+struct DiLeptonType{
 	enum {
 		_2e, 
 		_2mu
 	};
 }
 
-namespace muonType{
+struct MuonType{
 	enum
 	{
 		CB, 
@@ -294,7 +294,7 @@ namespace muonType{
 	};
 }
 
-namespace doSys{
+struct DoSys{
 	enum
 	{
 		ZeeStatUp,
@@ -346,7 +346,7 @@ namespace doSys{
 }
 
 // For category
-namespace VHLeptonType{
+struct VHLeptonType{
 	enum {
 		electronPlus,
 		electronMinus,
@@ -355,7 +355,7 @@ namespace VHLeptonType{
 		unknown
 	};
 }
-namespace VHTruthType{
+struct VHTruthType{
 	enum {
 		ZnoHiggs,
 		WnoHiggs,
