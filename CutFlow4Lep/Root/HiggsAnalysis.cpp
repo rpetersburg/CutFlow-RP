@@ -411,20 +411,100 @@ void HiggsAnalysis::setSampleType()
 {
 	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
 	{
-	// Using only the first part of file name
-	if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
-	{
-		// Getting run number
-		Int_t runIndex = i + 1;
-		TString runString = m_currFileNameVec[runIndex];
-		Long64_t runNumber = runString.Atoi();
-			Int_t massIndex = i + 2;
-		// Finding the sample type
-		if (m_currFileNameVec[massIndex].Contains("_ZZp") || m_currFileNameVec[massIndex].Contains("_ZpZp") )
+		// Using only the first part of file name
+		if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
 		{
+			// Finding the sample type
+			Int_t sampleIndex = i + 2;
+			TString sampleName = m_currFileNameVec[sampleIndex];
 
+			if (sampleName.Contains("_ZZp") ||
+				sampleName.Contains("_ZpZp") )		m_sampleProdType = sampleType::ggF_ZpZp;
+			else if (sampleName.Contains("ggH"))	m_sampleProdType = sampleType::ggF;
+			else if (sampleName.Contains("VBF"))	m_sampleProdType = sampleType::VBF;
+			else if (sampleName.Contains("WH"))		m_sampleProdType = sampleType::WH;
+			else if (sampleName.Contains("ZH"))		m_sampleProdType = sampleType::ZH;
+			else if (sampleName.Contains("ttH"))	m_sampleProdType = sampleType::ttH;
+			else if (sampleName.Contains("qqH"))	m_sampleProdType = sampleType::qqF;
+			else									m_sampleProdType =	sampleType::Background;
+		}
+	}
 
+}
 
+void HiggsAnalysis::setMCRunNumber()
+{
+	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
+	{
+		// Finding the string before the run number
+		if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
+		{
+			// Getting run number
+			Int_t runIndex = i + 1;
+			TString runString = m_currFileNameVec[runIndex];
+			Long64_t m_mcRunNumber = runString.Atoi();
+			return;
+		}
+	}
+	cout << "Error: HiggsAnalysis::setMCRunNumber(): MC Run Number not found" << endl;
+	return;
+}
+
+Double_t HiggsAnalysis::getMCHiggsMass()
+{
+	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
+	{
+		// Using only MC file
+		if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
+		{
+			Int_t sampleIndex = i + 2;
+			Int_t massStartIndex = 0;
+			TString sampleName = m_currFileNameVec[sampleIndex];
+
+			if (sampleName.Contains("ggH"))			massStartIndex = sampleName.Index("ggH") + 3;
+			else if (sampleName.Contains("VBHF"))	massStartIndex = sampleName.Index("VBHF") + 4;
+			else if (sampleName.Contains("VBF"))	massStartIndex = sampleName.Index("VBF") + 3;
+			else if (sampleName.Contains("WH"))		massStartIndex = sampleName.Index("WH") + 2;
+			else if (sampleName.Contains("ZH"))		massStartIndex = sampleName.Index("ZH") + 2;
+			else if (sampleName.Contains("ttH"))	massStartIndex = sampleName.Index("ttH") + 3;
+			else if (sampleName.Contains("qqH"))	massStartIndex = sampleName.Index("qqH") + 3;
+			else									return -1;
+
+			// Find pre-decimal higgs mass
+			Int_t massEndIndex = massStartIndex;
+			Int_t massLength = 0;
+			TString character;
+			do {
+				massEndIndex++;
+				massLength++;
+				character = sampleName[massEndIndex];
+			} while (character.IsDec());
+			TString higgsMassStr = sampleName(massStartIndex, massLength);
+			Int_t higgsMass = higgsMassStr.Atoi();
+
+			// Find post-decimal higgs mass
+			Double_t decimal = 0;
+
+			if (sampleName[massEndIndex] == 'p')
+			{
+				Int_t decimalStartIndex = massEndIndex + 1;
+				Int_t decimalEndIndex = decimalStartIndex;
+				Int_t decimalLength = 0;
+				TString decimalCharacter;
+				do {
+					decimalEndIndex++;
+					decimalLength++;
+					decimalCharacter = sampleName[decimalEndIndex];
+				} while (decimalCharacter.IsDec());
+				TString decimalStr = sampleName(decimalStartIndex,decimalLength);
+				decimal = decimalStr.Atoi();
+				decimal = decimal/pow(10.0, decimalLength);
+			}
+
+			// Find total mass value
+			return higgsMass + decimal;
+		}
+	}
 }
 
 void HiggsAnalysis::setCurrFileNameVec()

@@ -33,6 +33,8 @@ class HiggsAnalysis
 		void setEventYear();
 		void setSampleType();
 		void setCurrFileNameVec();
+		void setMCRunNumber();
+		Double_t getMCHiggsMass();
 		
 		void initializeVar();
 		
