@@ -6,6 +6,7 @@
 #include <TTree.h>
 #include <TChain.h>
 #include <TString.h>
+#include <TFile.h>
 
 #include "CutFlow4Lep/HiggsAnalysis.h"
 
@@ -35,17 +36,17 @@ void HiggsAnalysis::analyzeTree()
 
 	Int_t totNumEvents = m_physicsTree->GetEntries();
 
-	for (Long64_t iEvent = 0; iEvent < totNumEvents; iEvent++)
+	for (Int_t iEvent = 0; iEvent < totNumEvents; iEvent++)
 	{
-		Long64_t event = iEvent;
+		Long64_t currEvent = iEvent;
 		TChain* chain = dynamic_cast<TChain*> (m_physicsTree);
 		if (chain)
 		{
-			event = chain->LoadTree(iEvent);
+			currEvent = chain->LoadTree(currEvent);
 		}
-		//m_currFileName = chain->GetFile()->GetPath();
+		m_currFileName = chain->GetFile()->GetPath();
 		//higgsMass = getMCHiggsMass();
-		analyzeTreeEvent(iEvent);
+		analyzeTreeEvent(currEvent);
 	}
 
 	cout << "Tree was analyzed..." << endl;
@@ -53,33 +54,56 @@ void HiggsAnalysis::analyzeTree()
 
 void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 {
+	// Initialize the D3PD event to get values for current event number
 	if(eventNumber >= 0) m_event->GetEntry(eventNumber);
 
 	// Getting the initial event weight
 	Double_t eventWeight = 1.0;
 
-
-
-
 	// Checking if MC or Data
 	if(m_event->eventinfo.isSimulation()) m_isMC = true;
 	else m_isMC = false;
 
-	
+	// Checking if tau sample
+	if (m_currFileName.Contains("noTau")) m_tauSample = false;
+	else m_tauSample = true;
+
+	// Get MC Channel Number
+	m_mcChannelNumber = m_event->eventinfo.mc_channel_number();
+
+	// Check mc generator name
+	if (m_currFileName.Contains("Pythia")) m_mcGenerator = MCGeneratorName::Pythia;
+
+	// Set tau sample boolean and mc generator based on channel number
+	if((m_mcChannelNumber>=169716 && m_mcChannelNumber<=169717) ||  // 2011 JHU
+       (m_mcChannelNumber>=167604 && m_mcChannelNumber<=167605) ||  // 2011 JHU
+       (m_mcChannelNumber>=167607 && m_mcChannelNumber<=167607) ||  // 2012 JHU
+       (m_mcChannelNumber>=169710 && m_mcChannelNumber<=169711) ||  // 2012 JHU
+       (m_mcChannelNumber>=167124 && m_mcChannelNumber<=167125) ||  // 2012 JHU
+       (m_mcChannelNumber>=167127 && m_mcChannelNumber<=167127) ||
+	   (m_mcChannelNumber>=167600 && m_mcChannelNumber<=167603) ||  // 2011 JHU
+       (m_mcChannelNumber>=167606 && m_mcChannelNumber<=167606) ||  // 2011 JHU
+       (m_mcChannelNumber>=167120 && m_mcChannelNumber<=167123) ||  // 2012 JHU
+       (m_mcChannelNumber>=167126 && m_mcChannelNumber<=167126) || 
+	   (m_mcChannelNumber>=181990 && m_mcChannelNumber<=181996)     // mc12c JHU
+	  ) 
+	{  		  
+		m_tauSample = false;
+		m_mcGenerator = MCGeneratorName::Pythia;
+	} 
+
+
 
 	// 2012 defaults to GSF electrons; 2011 does not
-	if (m_dataYear == 2011) {m_currElectron = &(m_event->el_GSF);}
-	else if (m_dataYear == 2012) {m_currElectron = &(m_event->el);}
+	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
+	else if (m_dataYear == 2012) m_currElectron = &(m_event->el);
+
+
 
 	setEventYear();
 	setCalibrationType();
 
 	
-	
-	
-
-
-
 	//// Initializing the event Specific Variables
 	//InitializeEventVar();
 	//getPeriodEvent();
@@ -368,33 +392,73 @@ void HiggsAnalysis::setEventYear()
 {
 	// Setting the event year and CM Energy of the data
 	Long64_t runNumber = m_event->eventinfo.RunNumber();
-	if ( (runNumber >= 177531) && (runNumber <= 191933) ) {
+	if ( (runNumber >= 177531) && (runNumber <= 191933) )
+	{
 		m_dataYear = 2011;
 		m_cmEnergy = 7.0;
 		m_is2012 = false;
 	}
-	else if ( runNumber > 191933 ) {
+	else if ( runNumber > 191933 )
+	{
 		m_dataYear = 2012;
 		m_cmEnergy = 8.0;
 		m_is2012 = true;
 	}
-	else{
-		cout<<"Event number not recognized: "<< runNumber <<endl;
+	else cout<<"Event number not recognized: "<< runNumber <<endl;
+}
+
+void HiggsAnalysis::setSampleType()
+{
+	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
+	{
+	// Using only the first part of file name
+	if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
+	{
+		// Getting run number
+		Int_t runIndex = i + 1;
+		TString runString = m_currFileNameVec[runIndex];
+		Long64_t runNumber = runString.Atoi();
+			Int_t massIndex = i + 2;
+		// Finding the sample type
+		if (m_currFileNameVec[massIndex].Contains("_ZZp") || m_currFileNameVec[massIndex].Contains("_ZpZp") )
+		{
+
+
+
+}
+
+void HiggsAnalysis::setCurrFileNameVec()
+{
+	// Splitting the file path
+	TObjArray *splitFileName = m_currFileName.Tokenize(".");
+	m_currFileNameVec;
+	if (splitFileName->GetEntriesFast())
+	{
+		TIter iString(splitFileName);
+		TObjString* objString = 0;
+		while ( objString = (TObjString*)iString() )
+		{
+			m_currFileNameVec.push_back( objString->GetString() );
+		}
 	}
 }
+
 
 void HiggsAnalysis::setCalibrationType()
 {
 	// Determining Data or MC Collection Calibration Type
-	if (!m_isMC) {
+	if (!m_isMC)
+	{
 		m_currMCCollection = -1;
 		if (m_dataYear == 2011) m_currDataCollection = dataCalibType::y2011d;
 		else if (m_dataYear == 2012) m_currDataCollection = dataCalibType::y2012c;
 	}
 	// Specific issue if the sample production type is ggF_ZpZp
-	else if (m_sampleProdType == sampleType::ggF_ZpZp){
+	else if (m_sampleProdType == sampleType::ggF_ZpZp)
+	{
 			if (m_dataYear == 2011) m_currMCCollection = MCCollection::MC11c;
-			else if (m_dataYear == 2012) {
+			else if (m_dataYear == 2012)
+			{
 				if (m_event->eventinfo.RunNumber() == 195847) {m_currMCCollection = MCCollection::MC12a;}
 				else if (m_event->eventinfo.RunNumber() == 195848) { m_currMCCollection = MCCollection::MC21b;}
 				else {cout<< "Error: AnalyzeTreeEvent: MC12ab run number not recognized" << endl;}
@@ -412,22 +476,28 @@ void HiggsAnalysis::setCalibrationType()
 
 		TObjArray *parts = name.Tokenize(".");
 		vector<TString> partName;
-		if (parts->GetEntriesFast()) {
+		if (parts->GetEntriesFast())
+		{
 			TIter iString(parts);
-			TObjString *os = 0;
-			while ((os=(TObjString*)iString())) {
-				partName.push_back(os->GetString());
+			TObjString *objString = 0;
+			while (objString=(TObjString*)iString())
+			{
+				partName.push_back(objString->GetString());
 			}
 		}
+
 		Long64_t runNumber = m_event->eventinfo.RunNumber();
+
 		for (Int_t i = 0; i < (Int_t) partName.size(); i++) {
 			if (partName[i].Contains("_s")) {
 				TObjArray *parts = partName[i].Tokenize("_");
 				vector<TString> prodTag;
-				if (parts->GetEntriesFast()) {
+				if (parts->GetEntriesFast())
+				{
 					TIter iString(parts);
 					TObjString* os = 0;
-					while ((os=(TObjString*)iString())) {
+					while ((os=(TObjString*)iString()))
+					{
 						prodTag.push_back(os->GetString());
 					}
 				}
@@ -460,10 +530,7 @@ void HiggsAnalysis::setCalibrationType()
 				{
 					m_currMCCollection = MCCollection::MC12c;
 				}
-				else
-				{
-					cout<<"Error: AnalyzeTreeEvent: production tag not recognized"<<endl;
-				}
+				else cout<<"Error: AnalyzeTreeEvent: production tag not recognized"<<endl;
 			}
 		}
 	}

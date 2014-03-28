@@ -31,6 +31,8 @@ class HiggsAnalysis
 
 		void setCalibrationType();
 		void setEventYear();
+		void setSampleType();
+		void setCurrFileNameVec();
 		
 		void initializeVar();
 		
@@ -80,13 +82,17 @@ class HiggsAnalysis
 		D3PDReader::Event *m_event;
 		TString m_outputFilePath;
 		TString m_currFileName;
+		vector<TString> m_currFileNameVec;
 
 		// AnalysisTreeEvent
 		Bool_t m_isMC;
+		Int_t m_mcChannelNumber;
+		Bool_t m_tauSample;
 		Int_t m_dataYear;
 		Double_t m_cmEnergy;
 		Bool_t m_is2012;
 		D3PDReader::ElectronD3PDObject *m_currElectron;
+		Int_t m_mcGenerator;
 		Int_t m_currMCCollection;
 		Int_t m_currDataCollection;
 		Int_t m_sampleProdType;
