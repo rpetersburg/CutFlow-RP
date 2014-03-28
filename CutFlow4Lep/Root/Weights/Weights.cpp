@@ -1,5 +1,5 @@
 #include "CutFlow4Lep\Weights\Weights.h"
-#include "CutFlow4Lep\NamespaceDef.h"
+#include "CutFlow4Lep\StructDef.h"
 
 #include <ggFReweighting\ggFReweighting.h>
 
@@ -25,8 +25,8 @@ Double_t Weights::getggFWeight()
 {
 	Double_t weight = 1;
 
+	// Determining True Higgs transverse momentum
 	Double_t trueHiggsPt = 0;
-
 	for (Int_t i = 0; i < m_event->mc.n(); i++)
 	{
 		Int_t pdgID = TMath::Abs(m_event->mc[i].pdgId());
@@ -35,13 +35,16 @@ Double_t Weights::getggFWeight()
 		if (pdgID == 25 && (status == 2 || status == 10902 || status == 62))
 			trueHiggsPt = m_event->mc[i].pt()/1000;
 	}
+	
+	// Using ggF Reweighting to return proper weight
 	pair<double, double> result;
-
-	if (m_sampleType == sampleType::ggF || m_sampleType == sampleType::ggF_ZpZp)
+	if (m_sampleType == SampleType::ggF || m_sampleType == SampleType::ggF_ZpZp)
 	{
-		result = ggF
+		result = ggFReweight->getWeightAndStatError(trueHiggsPt);
+		weight = result.first;
+	}
 
-
+	return weight;
 }
 
 Double_t Weights::getHiggsWeight()

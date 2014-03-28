@@ -10,6 +10,8 @@ class Weights
 		Weights(D3PDReader::Event *tEvent, Int_t tSampleType);
 		~Weights();
 
+		Double_t getWeight() {return weight;};
+
 		Double_t getEventWeight();
 		Double_t getggFWeight();
 		Double_t getHiggsWeight();
@@ -20,8 +22,10 @@ class Weights
 		Double_t getZVertexWeight();
 
 	protected:
+		void setWeight();
+		Double_t weight;
 
-	private:
+	private:		
 		void setggFWeight();
 		void setHiggsWeight();
 		void setJHUWeight();
