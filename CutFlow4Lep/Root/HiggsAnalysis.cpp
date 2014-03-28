@@ -11,7 +11,7 @@
 
 HiggsAnalysis::HiggsAnalysis()
 {
-	cout << "You reached the empty constructor" << endl;
+	cout << "You reached the unused constructor" << endl;
 }
 
 HiggsAnalysis::HiggsAnalysis(TChain *tPhysicsTree) : m_physicsTree(tPhysicsTree)
@@ -43,8 +43,8 @@ void HiggsAnalysis::analyzeTree()
 		{
 			event = chain->LoadTree(iEvent);
 		}
-		m_currFileName = chain->GetFile()->GetPath();
-		higgsMass = getMCHiggsMass();
+		//m_currFileName = chain->GetFile()->GetPath();
+		//higgsMass = getMCHiggsMass();
 		analyzeTreeEvent(iEvent);
 	}
 
@@ -353,12 +353,12 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 }
 
-void HiggsAnalysis::InitializeVar()
+void HiggsAnalysis::initializeVar()
 {
 	cout << "Variables were initialized..." << endl;
 }
 
-void HiggsAnalysis::SetOutputFilePath(string newFilePath)
+void HiggsAnalysis::setOutputFilePath(string newFilePath)
 {
 	m_outputFilePath = newFilePath;
 	cout << "Output file set..." << endl;
@@ -419,6 +419,7 @@ void HiggsAnalysis::setCalibrationType()
 				partName.push_back(os->GetString());
 			}
 		}
+		Long64_t runNumber = m_event->eventinfo.RunNumber();
 		for (Int_t i = 0; i < (Int_t) partName.size(); i++) {
 			if (partName[i].Contains("_s")) {
 				TObjArray *parts = partName[i].Tokenize("_");
