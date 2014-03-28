@@ -1,5 +1,5 @@
-#ifndef __CUTFLOW__
-#define __CUTFLOW__
+//#ifndef __CUTFLOW__
+//#define __CUTFLOW__
 
 #include <CutFlow4Lep/HiggsAnalysis.h>
 
@@ -10,8 +10,9 @@
 #pragma link off all functions;
 #pragma link C++ nestedclass;
 
-#pragma link C++ class HiggsAnalysis+;
+#pragma link C++ namespace std;
+#pragma link C++ class std::HiggsAnalysis+;
 
 #endif
 
-#endif
+//#endif
