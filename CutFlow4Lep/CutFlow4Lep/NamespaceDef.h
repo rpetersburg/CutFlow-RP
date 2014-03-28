@@ -23,7 +23,7 @@ namespace doAnalysis{
 		trigeff4l,
 		Zllll
 	};
-}
+};
 
 namespace  MCCollection{
 	enum {

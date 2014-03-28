@@ -60,6 +60,9 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Getting the initial event weight
 	Double_t eventWeight = 1.0;
 
+	// Getting the mass of the higgs if MC
+	Double_t higgsMass = getMCHiggsMass();
+
 	// Checking if MC or Data
 	if(m_event->eventinfo.isSimulation()) m_isMC = true;
 	else m_isMC = false;
