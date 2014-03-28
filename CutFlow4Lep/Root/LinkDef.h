@@ -12,6 +12,9 @@
 
 #pragma link C++ class HiggsAnalysis+;
 
+#pragma link C++ function HiggsAnalysis::HiggsAnalysis();
+#pragma link C++ function HiggsAnalysis::HiggsAnalysis(TChain *tPhysicsTree);
+
 #endif
 
 //#endif
