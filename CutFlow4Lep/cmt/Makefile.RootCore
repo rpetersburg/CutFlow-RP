@@ -6,7 +6,7 @@
 # https://twiki.cern.ch/twiki/bin/viewauth/Atlas/RootCore#Package_Makefile
 
 PACKAGE          = CutFlow4Lep
-PACKAGE_PRELOAD  = TreePlayer MathMore PyROOT Minuit RooFitCore RooFit TMVA
+PACKAGE_PRELOAD  = TreePlayer MathMore PyROOT
 PACKAGE_CXXFLAGS = -Wall -g 
 PACKAGE_OBJFLAGS = 
 PACKAGE_LDFLAGS  = 
