@@ -8,7 +8,7 @@
 #include "CutFlow4Lep/ParticleObjects/QuadLepton.h"
 #include "CutFlow4Lep/Output/OutputTree.h"
 
-#include "CutFlow4Lep/NamespaceDef.h"
+#include "CutFlow4Lep/StructDef.h"
 
 #include <vector>
 #include <string>
