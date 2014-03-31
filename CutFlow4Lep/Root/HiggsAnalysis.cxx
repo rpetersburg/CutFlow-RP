@@ -514,7 +514,6 @@ void HiggsAnalysis::setCurrFileNameVec()
 {
 	// Splitting the file path
 	TObjArray *splitFileName = m_currFileName.Tokenize(".");
-	m_currFileNameVec;
 	if (splitFileName->GetEntriesFast())
 	{
 		TIter iString(splitFileName);

@@ -7,7 +7,7 @@
 #include <TChain.h>
 #include <TROOT.h>
 
-//#include "../CutFlow4Lep/HiggsAnalysis.h"
+#include "../CutFlow4Lep/HiggsAnalysis.h"
 
 using namespace std;
 void CutFlow4Lep()
@@ -32,8 +32,8 @@ void CutFlow4Lep()
 	// Instantiate the primary analysis object and its variables
 	HiggsAnalysis *cutFlow = new HiggsAnalysis(phyData);
 	
-	cutFlow->InitializeVar();
-	cutFlow->SetOutputFilePath("Output/mc12c_VBFH125.root");
+	cutFlow->initializeVar();
+	cutFlow->setOutputFilePath("Output/mc12c_VBFH125.root");
 	
 	// Run the cut flow
 	cutFlow->analyzeTree();
