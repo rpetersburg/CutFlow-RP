@@ -485,7 +485,7 @@ void HiggsAnalysis::setCalibrationType()
 			{
 				if (m_event->eventinfo.RunNumber() == 195847) {m_currMCCollection = MCCollection::MC12a;}
 				else if (m_event->eventinfo.RunNumber() == 195848) { m_currMCCollection = MCCollection::MC12b;}
-				else {cout<< "Error: AnalyzeTreeEvent: MC12ab run number not recognized" << endl;}
+				else {cout<< "Error: HiggsAnalysis::AnalyzeTreeEvent: MC12ab run number not recognized" << endl;}
 			}
 		}
 	// Use the production type from the name to determine the calibration type for Data

@@ -1,8 +1,9 @@
 #include "CutFlow4Lep\Weights\Weights.h"
 
-Weights::Weights(D3PDReader::Event *tEvent, Int_t tSampleType, TString tDataYear) : m_event(tEvent), m_sampleType(tSampleType), m_dataYear(tDataYear)
+Weights::Weights(D3PDReader::Event *tEvent, TString tDataYear) 
+	: m_event(tEvent), m_dataYear(tDataYear), m_weight(1)
 {
-	m_weight = 1;
+
 }
 
 Weights::~Weights()
@@ -26,27 +27,6 @@ Double_t Weights::getHiggsWeight()
 	return weight;
 }
 
-Double_t Weights::getJHUWeight()
-{
-	Double_t weight = 1;
-
-	// if (isMC);
-
-	// Determining True Higgs transverse momentum
-	Double_t trueHiggsPt = 0;
-	for (Int_t i = 0; i < m_event->mc.n(); i++)
-	{
-		Int_t pdgID = TMath::Abs(m_event->mc[i].pdgId());
-		Int_t status = m_event->mc[i].status();
-
-		if ( (pdgID == 25 || pdgID == 39) && (status == 1 || status == 10902 || status == 62) )
-			trueHiggsPt = m_event->mc[i].pt();
-	}
-
-	weight = ptJHUReweighting->GetJHUWeight(m_event->eventinfo.mc_channel_number(), trueHiggsPt/1000, 0);
-
-	return weight;
-}
 
 Double_t Weights::getLepEffWeight()
 {

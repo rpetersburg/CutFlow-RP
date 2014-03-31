@@ -5,20 +5,17 @@
 
 using namespace std;
 
-class ggFWeight : public Weights
+class JHUWeight : public Weights
 {
 	public:
-		ggFWeight(D3PDReader::Event *tEvent, Int_t tSampleType, TString tDataYear, Double_t tHiggsMass);
-		~ggFWeight();
-
-		void setWeight();
+		JHUWeight(D3PDReader::Event *tEvent, TString tDataYear);
+		~JHUWeight();
 
 	protected:
 
 	private:
 		void initializeReweight();
+		void setWeight();
 
 		JHUPtReweighting *m_reweight;
-		Double_t m_higgsMass;
-
 };

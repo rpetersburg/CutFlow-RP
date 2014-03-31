@@ -1,5 +1,6 @@
 #include <CutFlow4Lep/Weights/Weights.h>
 #include <CutFlow4Lep/Calculations/MCHiggsMass.h>
+#include <CutFlow4Lep/StructDef.h>
 
 #include <ggFReweighting/ggFReweighting.h>
 
@@ -8,17 +9,17 @@ using namespace std;
 class ggFWeight : public Weights
 {
 	public:
-		ggFWeight(D3PDReader::Event *tEvent, Int_t tSampleType, TString tDataYear, Double_t tHiggsMass);
+		ggFWeight(D3PDReader::Event *tEvent, TString tDataYear, Double_t tHiggsMass, Int_t tSampleType);
 		~ggFWeight();
-
-		void setWeight();
 
 	protected:
 
 	private:
 		void initializeReweight();
+		void setWeight();
 
 		ggFReweighting *m_reweight;
 		Double_t m_higgsMass;
+		Int_t m_sampleType;
 
 };
