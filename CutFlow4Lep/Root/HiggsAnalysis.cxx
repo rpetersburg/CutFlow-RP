@@ -60,12 +60,12 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Getting the initial event weight
 	Double_t eventWeight = 1.0;
 
-	// Getting the mass of the higgs if MC
-	Double_t higgsMass = getMCHiggsMass();
-
 	// Checking if MC or Data
 	if(m_event->eventinfo.isSimulation()) m_isMC = true;
 	else m_isMC = false;
+
+	// Getting the mass of MC Higgs using Calculation object
+	if (m_isMC) Double_t higgsMass = (new MCHiggsMass(m_event, m_currFileNameVec))->getMass();
 
 	// Checking if tau sample
 	if (m_currFileName.Contains("noTau")) m_tauSample = false;
@@ -453,63 +453,6 @@ void HiggsAnalysis::setMCRunNumber()
 	return;
 }
 
-Double_t HiggsAnalysis::getMCHiggsMass()
-{
-	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
-	{
-		// Using only MC file
-		if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
-		{
-			Int_t sampleIndex = i + 2;
-			Int_t massStartIndex = 0;
-			TString sampleName = m_currFileNameVec[sampleIndex];
-
-			if (sampleName.Contains("ggH"))			massStartIndex = sampleName.Index("ggH") + 3;
-			else if (sampleName.Contains("VBHF"))	massStartIndex = sampleName.Index("VBHF") + 4;
-			else if (sampleName.Contains("VBF"))	massStartIndex = sampleName.Index("VBF") + 3;
-			else if (sampleName.Contains("WH"))		massStartIndex = sampleName.Index("WH") + 2;
-			else if (sampleName.Contains("ZH"))		massStartIndex = sampleName.Index("ZH") + 2;
-			else if (sampleName.Contains("ttH"))	massStartIndex = sampleName.Index("ttH") + 3;
-			else if (sampleName.Contains("qqH"))	massStartIndex = sampleName.Index("qqH") + 3;
-			else									return -1;
-
-			// Find pre-decimal higgs mass
-			Int_t massEndIndex = massStartIndex;
-			Int_t massLength = 0;
-			TString character;
-			do {
-				massEndIndex++;
-				massLength++;
-				character = sampleName[massEndIndex];
-			} while (character.IsDec());
-			TString higgsMassStr = sampleName(massStartIndex, massLength);
-			Int_t higgsMass = higgsMassStr.Atoi();
-
-			// Find post-decimal higgs mass
-			Double_t decimal = 0;
-
-			if (sampleName[massEndIndex] == 'p')
-			{
-				Int_t decimalStartIndex = massEndIndex + 1;
-				Int_t decimalEndIndex = decimalStartIndex;
-				Int_t decimalLength = 0;
-				TString decimalCharacter;
-				do {
-					decimalEndIndex++;
-					decimalLength++;
-					decimalCharacter = sampleName[decimalEndIndex];
-				} while (decimalCharacter.IsDec());
-				TString decimalStr = sampleName(decimalStartIndex,decimalLength);
-				decimal = decimalStr.Atoi();
-				decimal = decimal/pow(10.0, decimalLength);
-			}
-
-			// Find total mass value
-			return higgsMass + decimal;
-		}
-	}
-}
-
 void HiggsAnalysis::setCurrFileNameVec()
 {
 	// Splitting the file path
@@ -524,7 +467,6 @@ void HiggsAnalysis::setCurrFileNameVec()
 		}
 	}
 }
-
 
 void HiggsAnalysis::setCalibrationType()
 {

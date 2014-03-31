@@ -1,15 +1,13 @@
-// This is only a test file if I eventually decide to implement inheritance with the weights
-
 #include "CutFlow4Lep\Weights\ggFWeight.h"
 
-ggFWeight::ggFWeight(D3PDReader::Event *tEvent, Int_t tSampleType, TString tDataYear) : Weights(tEvent, tSampleType, tDataYear)
+ggFWeight::ggFWeight(D3PDReader::Event *tEvent, Int_t tSampleType, TString tDataYear, Double_t tHiggsMass) :	Weights(tEvent, tSampleType, tDataYear), m_higgsMass(tHiggsMass), m_reweight(0)
 {
-	m_reweight = 0;
+
 }
 
 ggFWeight::~ggFWeight()
 {
-	delete m_event;
+
 }
 
 void ggFWeight::setWeight()
@@ -31,12 +29,31 @@ void ggFWeight::setWeight()
 	pair<double, double> result;
 	if (m_sampleType == SampleType::ggF || m_sampleType == SampleType::ggF_ZpZp)
 	{
-		result = ggFReweight->getWeightAndStatError(trueHiggsPt);
+		result = m_reweight->getWeightAndStatError(trueHiggsPt);
 		m_weight = result.first;
 	}
 }
 
 void ggFWeight::initializeReweight()
 {
-	
+	// Possible PowHeg masses
+	Double_t powhegMass[] = { 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155,
+                         160, 165, 170, 175, 180, 185, 190, 195, 200, 210, 220, 240,
+                         260, 280, 300, 320, 340, 360, 380, 400, 420, 440, 460, 480,
+                         500, 520, 540, 560, 580, 600, 650, 700, 750, 800, 850, 900 };
+	// Minimizing the delta mass to obtain approx PowHeg mass
+	Double_t minDeltaMass = 9999;
+	Double_t tmpDeltaMass = 0;
+	Double_t ggFHiggsMass = m_higgsMass;
+	for (Int_t i = 0; i < (Int_t) sizeof(powhegMass)/sizeof(powhegMass[0]); i++)
+	{
+		tmpDeltaMass = powhegMass[i] - m_higgsMass;
+		if ( fabs(tmpDeltaMass) < fabs(minDeltaMass) )
+		{
+			minDeltaMass = tmpDeltaMass;
+			ggFHiggsMass = powhegMass[i];
+		}
+	}
+	// Instantiating the reweight object based on the Higgs Mass
+	m_reweight = new ggFReweighting("PowHeg", ggFHiggsMass, "Mean", "../../../ggFReweighting/share/", "mc11");
 }

@@ -6,6 +6,7 @@
 #include "CutFlow4Lep/ParticleObjects/Muon.h"
 #include "CutFlow4Lep/ParticleObjects/Electron.h"
 #include "CutFlow4Lep/ParticleObjects/QuadLepton.h"
+#include "CutFlow4Lep/Calculations/MCHiggsMass.h"
 #include "CutFlow4Lep/Output/OutputTree.h"
 
 #include "CutFlow4Lep/StructDef.h"
@@ -99,6 +100,7 @@ class HiggsAnalysis
 		Int_t m_currDataCollection;
 		Int_t m_sampleProdType;
 		Long64_t m_mcRunNumber;
+		MCHiggsMass m_eventMCHiggsMassObj;
 
 };
 
