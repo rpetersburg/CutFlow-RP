@@ -2,15 +2,17 @@
 
 #include <D3PDReader/Event.h>
 
+#include "CutFlow4Lep\StructDef.h"
+
 using namespace std;
 
 class Weights
 {
 	public:
-		Weights(D3PDReader::Event *tEvent, Int_t tSampleType);
+		Weights(D3PDReader::Event *tEvent, Int_t tSampleType, TString tDataYear);
 		~Weights();
 
-		Double_t getWeight() {return weight;};
+		Double_t getWeight() {return m_weight;};
 
 		Double_t getEventWeight();
 		Double_t getggFWeight();
@@ -23,9 +25,14 @@ class Weights
 
 	protected:
 		void setWeight();
-		Double_t weight;
+		Double_t m_weight;
 
-	private:		
+		D3PDReader::Event *m_event;
+		Int_t m_sampleType;
+		TString m_dataYear;
+
+	private:
+
 		void setggFWeight();
 		void setHiggsWeight();
 		void setJHUWeight();
@@ -34,6 +41,5 @@ class Weights
 		void setTriggerWeight();
 		void setZVertexWeight();
 
-		D3PDReader::Event *m_event;
-		Int_t m_sampleType;
+
 };
