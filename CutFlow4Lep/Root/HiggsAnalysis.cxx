@@ -422,14 +422,14 @@ void HiggsAnalysis::setSampleType()
 			TString sampleName = m_currFileNameVec[sampleIndex];
 
 			if (sampleName.Contains("_ZZp") ||
-				sampleName.Contains("_ZpZp") )		m_sampleProdType = sampleType::ggF_ZpZp;
-			else if (sampleName.Contains("ggH"))	m_sampleProdType = sampleType::ggF;
-			else if (sampleName.Contains("VBF"))	m_sampleProdType = sampleType::VBF;
-			else if (sampleName.Contains("WH"))		m_sampleProdType = sampleType::WH;
-			else if (sampleName.Contains("ZH"))		m_sampleProdType = sampleType::ZH;
-			else if (sampleName.Contains("ttH"))	m_sampleProdType = sampleType::ttH;
-			else if (sampleName.Contains("qqH"))	m_sampleProdType = sampleType::qqF;
-			else									m_sampleProdType =	sampleType::Background;
+				sampleName.Contains("_ZpZp") )		m_sampleProdType = SampleType::ggF_ZpZp;
+			else if (sampleName.Contains("ggH"))	m_sampleProdType = SampleType::ggF;
+			else if (sampleName.Contains("VBF"))	m_sampleProdType = SampleType::VBF;
+			else if (sampleName.Contains("WH"))		m_sampleProdType = SampleType::WH;
+			else if (sampleName.Contains("ZH"))		m_sampleProdType = SampleType::ZH;
+			else if (sampleName.Contains("ttH"))	m_sampleProdType = SampleType::ttH;
+			else if (sampleName.Contains("qqH"))	m_sampleProdType = SampleType::qqF;
+			else									m_sampleProdType = SampleType::Background;
 		}
 	}
 
@@ -445,7 +445,7 @@ void HiggsAnalysis::setMCRunNumber()
 			// Getting run number
 			Int_t runIndex = i + 1;
 			TString runString = m_currFileNameVec[runIndex];
-			Long64_t m_mcRunNumber = runString.Atoi();
+			m_mcRunNumber = runString.Atoi();
 			return;
 		}
 	}
@@ -533,17 +533,17 @@ void HiggsAnalysis::setCalibrationType()
 	if (!m_isMC)
 	{
 		m_currMCCollection = -1;
-		if (m_dataYear == 2011) m_currDataCollection = dataCalibType::y2011d;
-		else if (m_dataYear == 2012) m_currDataCollection = dataCalibType::y2012c;
+		if (m_dataYear == 2011) m_currDataCollection = DataCalibType::y2011d;
+		else if (m_dataYear == 2012) m_currDataCollection = DataCalibType::y2012c;
 	}
 	// Specific issue if the sample production type is ggF_ZpZp
-	else if (m_sampleProdType == sampleType::ggF_ZpZp)
+	else if (m_sampleProdType == SampleType::ggF_ZpZp)
 	{
 			if (m_dataYear == 2011) m_currMCCollection = MCCollection::MC11c;
 			else if (m_dataYear == 2012)
 			{
 				if (m_event->eventinfo.RunNumber() == 195847) {m_currMCCollection = MCCollection::MC12a;}
-				else if (m_event->eventinfo.RunNumber() == 195848) { m_currMCCollection = MCCollection::MC21b;}
+				else if (m_event->eventinfo.RunNumber() == 195848) { m_currMCCollection = MCCollection::MC12b;}
 				else {cout<< "Error: AnalyzeTreeEvent: MC12ab run number not recognized" << endl;}
 			}
 		}

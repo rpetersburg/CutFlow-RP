@@ -98,6 +98,7 @@ class HiggsAnalysis
 		Int_t m_currMCCollection;
 		Int_t m_currDataCollection;
 		Int_t m_sampleProdType;
+		Long64_t m_mcRunNumber;
 
 };
 
