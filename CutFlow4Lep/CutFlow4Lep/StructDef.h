@@ -18,7 +18,7 @@
 #define pdgElMass 0.510998928
 
 struct DoAnalysis{
-	enum{
+	enum {
 		StdHZZllll,
 		trigeff4l,
 		Zllll
@@ -33,7 +33,8 @@ struct  MCCollection{
 		MC12b,
 		MC12c
 	};
-}
+};
+
 struct CutFlow {
 	enum {
 		Total,
@@ -43,7 +44,8 @@ struct CutFlow {
 		Trigger4Mu,
 		Trigger4e
 	};
-}
+};
+
 struct CutFlowCH {
 	enum {
 		Total,
@@ -60,7 +62,7 @@ struct CutFlowCH {
 		D0Sig,
 		Final
 	};
-}
+};
 
 struct CutElFlow {
 	enum {
@@ -78,7 +80,7 @@ struct CutElFlow {
 		OverLapClElEl,
 		OverLap
 	};
-}
+};
 
 struct CutMuFlow {
 	enum {
@@ -97,7 +99,7 @@ struct CutMuFlow {
 		D0,
 		OverLap
 	};
-}
+};
 
 struct CutJetsFlow {
 	enum {
@@ -111,7 +113,7 @@ struct CutJetsFlow {
 		Clean,
 		OverLap
 	};
-}
+};
 
 struct Flavor {
 	enum {
@@ -119,7 +121,7 @@ struct Flavor {
 		Electron,
 		Jet
 	};
-}
+};
 
 struct LeptonType{
 	enum {
@@ -128,7 +130,8 @@ struct LeptonType{
 		MuonStandAlone,
 		ElectronGSF
 	};
-}
+};
+
 struct JetsType{
 	enum {
 		AntiKt4TopoEM,
@@ -136,7 +139,7 @@ struct JetsType{
 		AntiKt4TopoEM_Fid,
 		AntiKt4TopoEMTruth_Fid
 	};
-}
+};
 
 struct QuadType{
 	enum {
@@ -145,7 +148,7 @@ struct QuadType{
 		Mu2El2,
 		El2Mu2
 	};
-}
+};
 
 struct AnalysisType{
 	enum {
@@ -154,7 +157,7 @@ struct AnalysisType{
 		Mu2El2,
 		El2Mu2
 	};
-}
+};
 
 struct ElectronCollection{
 	enum {
@@ -162,12 +165,13 @@ struct ElectronCollection{
 		MultiLepton,
 		Likelihood
 	};
-}
+};
+
 struct MuonCollection{
 	enum {
 		Loose
 	};
-}
+};
 
 struct ProductionChannel{
 	enum {
@@ -177,7 +181,7 @@ struct ProductionChannel{
 		ggF,
 		VH		
 	};
-}
+};
 
 struct SampleType{
 	enum {
@@ -190,7 +194,7 @@ struct SampleType{
 		Background,
 		ggF_ZpZp
 	};
-}
+};
 
 struct StreamContainer{
 	enum {
@@ -198,7 +202,7 @@ struct StreamContainer{
 		Muon,
 		Other
 	};
-}
+};
 
 struct TruthTypeQuad{
 	enum {
@@ -210,7 +214,7 @@ struct TruthTypeQuad{
 		_2tau2e,
 		noStatus
 	};
-}
+};
 
 struct LeptonIDType{
 	enum {
@@ -242,14 +246,14 @@ struct LeptonIDType{
 		el_likelihood_loose_relax,
 		unknown
 	};
-}
+};
 
 struct MCGeneratorName{
 	enum {
 		Pythia,
 		other
 	};
-}
+};
 
 struct CalibrationType{
 	enum {
@@ -259,7 +263,8 @@ struct CalibrationType{
 		MvaCalibEp,
 		noCalib
 	};
-}
+};
+
 struct FSRType{
 	enum {
 		collFSRZ1mumu,
@@ -267,7 +272,7 @@ struct FSRType{
 		farFSRZ2, 
 		noFSR
 	};
-}
+};
 
 struct DataCalibType{
 	enum {
@@ -276,14 +281,14 @@ struct DataCalibType{
 		y2012ab,
 		y2012c
 	};
-}
+};
 
 struct DiLeptonType{
 	enum {
 		_2e, 
 		_2mu
 	};
-}
+};
 
 struct MuonType{
 	enum
@@ -292,7 +297,7 @@ struct MuonType{
 		MS,
 		ID
 	};
-}
+};
 
 struct DoSys{
 	enum
@@ -343,7 +348,7 @@ struct DoSys{
 		PileUpDown,
 		Nom
 	};
-}
+};
 
 // For category
 struct VHLeptonType{
@@ -354,7 +359,8 @@ struct VHLeptonType{
 		muonMinus,
 		unknown
 	};
-}
+};
+
 struct VHTruthType{
 	enum {
 		ZnoHiggs,
@@ -363,5 +369,6 @@ struct VHTruthType{
 		Z2fromHiggs,
 		unknown
 	};
-}
+};
+
 #endif
