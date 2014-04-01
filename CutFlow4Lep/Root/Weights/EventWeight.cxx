@@ -1,6 +1,6 @@
 #include "CutFlow4Lep/Weights/EventWeight.h"
 
-EventWeight::EventWeight(D3PDReader::Event *tEvent, TString tDataYear, Double_t tHiggsMass,
+EventWeight::EventWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Double_t tHiggsMass,
 												 Int_t tSampleType, Int_t tMCCollection, Int_t tDataCollection)
 	:	Weights(tEvent, tDataYear)
 {

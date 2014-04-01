@@ -9,7 +9,7 @@ using namespace std;
 class ZVertexWeight : public Weights
 {
 	public:
-		ZVertexWeight(D3PDReader::Event *tEvent, TString tDataYear);
+		ZVertexWeight(D3PDReader::Event *tEvent, Int_t tDataYear);
 		~ZVertexWeight();
 
 	protected:

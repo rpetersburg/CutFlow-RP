@@ -1,6 +1,6 @@
 #include "CutFlow4Lep\Weights\ggFWeight.h"
 
-ggFWeight::ggFWeight(D3PDReader::Event *tEvent, TString tDataYear, Double_t tHiggsMass, Int_t tSampleType) 
+ggFWeight::ggFWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Double_t tHiggsMass, Int_t tSampleType) 
 	: Weights(tEvent, tDataYear), m_higgsMass(tHiggsMass), m_reweight(0), m_sampleType(tSampleType)
 {
 	initializeReweight();

@@ -1,6 +1,6 @@
 #include "CutFlow4Lep\Weights\JHUWeight.h"
 
-JHUWeight::JHUWeight(D3PDReader::Event *tEvent, TString tDataYear) 
+JHUWeight::JHUWeight(D3PDReader::Event *tEvent, Int_t tDataYear) 
 	:	Weights(tEvent, tDataYear)
 {
 	initializeReweight();

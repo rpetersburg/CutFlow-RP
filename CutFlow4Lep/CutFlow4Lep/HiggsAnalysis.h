@@ -2,13 +2,20 @@
 #define HIGGSANALYSIS_H
 
 #include "D3PDReader/Event.h"
+
 #include "CutFlow4Lep/ParticleObjects/Jets.h"
 #include "CutFlow4Lep/ParticleObjects/Muon.h"
 #include "CutFlow4Lep/ParticleObjects/Electron.h"
 #include "CutFlow4Lep/ParticleObjects/QuadLepton.h"
+
+#include "CutFlow4Lep/Weights/EventWeight.h"
+#include "CutFlow4Lep/Weights/ggFWeight.h"
+#include "CutFlow4Lep/Weights/JHUWeight.h"
+#include "CutFlow4Lep/Weights/PileupWeight.h"
+#include "CutFlow4Lep/Weights/ZVertexWeight.h"
+
 #include "CutFlow4Lep/Calculations/MCHiggsMass.h"
 #include "CutFlow4Lep/Output/OutputTree.h"
-
 #include "CutFlow4Lep/StructDef.h"
 
 #include <vector>
@@ -18,6 +25,7 @@
 #include <TTree.h>
 #include <TChain.h>
 #include <TString.h>
+#include <TH1F.h>
 
 using namespace std;
 class HiggsAnalysis
@@ -35,16 +43,10 @@ class HiggsAnalysis
 		void setSampleType();
 		void setCurrFileNameVec();
 		void setMCRunNumber();
-		Double_t getMCHiggsMass();
 		
 		void initializeVar();
 		
 		void setOutputFilePath(string newFilePath);	
-
-
-
-		
-
 
 		//Muon *muon;
 		//Electron *electron;
@@ -78,7 +80,6 @@ class HiggsAnalysis
 		//vector<ChargedLepton *> jetsOverlap;
 		//vector<ChargedLepton *> jetsOverlap_Fid;
 
-	
 	private:
 		// Constructor
 		TTree *m_physicsTree;
@@ -86,22 +87,25 @@ class HiggsAnalysis
 		TString m_outputFilePath;
 		TString m_currFileName;
 		vector<TString> m_currFileNameVec;
+		TH1F *m_countingHist;
 
 		// AnalysisTreeEvent
 		Bool_t m_isMC;
-		Int_t m_mcChannelNumber;
 		Bool_t m_tauSample;
-		Int_t m_dataYear;
-		Double_t m_cmEnergy;
 		Bool_t m_is2012;
-		D3PDReader::ElectronD3PDObject *m_currElectron;
+
+		Int_t m_mcChannelNumber;
+		Int_t m_dataYear;
 		Int_t m_mcGenerator;
 		Int_t m_currMCCollection;
 		Int_t m_currDataCollection;
-		Int_t m_sampleProdType;
-		Long64_t m_mcRunNumber;
-		MCHiggsMass m_eventMCHiggsMassObj;
+		Int_t m_sampleType;
 
+		Double_t m_cmEnergy;
+
+		D3PDReader::ElectronD3PDObject *m_currElectron;
+
+		Long64_t m_mcRunNumber;
 };
 
 #endif

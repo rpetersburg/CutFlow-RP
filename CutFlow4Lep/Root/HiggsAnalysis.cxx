@@ -19,8 +19,9 @@ HiggsAnalysis::HiggsAnalysis(TChain *tPhysicsTree) : m_physicsTree(tPhysicsTree)
 {
 	cout << "You reached the helpful constructor" << endl;
 	m_event = new D3PDReader::Event();
-	m_event->ReadFrom(m_physicsTree);	
+	m_event->ReadFrom(m_physicsTree);
 
+	m_countingHist = new TH1F("CountingHist", "CountingHist", 10, 0, 10);
 }
 
 HiggsAnalysis::~HiggsAnalysis()
@@ -45,7 +46,6 @@ void HiggsAnalysis::analyzeTree()
 			currEvent = chain->LoadTree(currEvent);
 		}
 		m_currFileName = chain->GetFile()->GetPath();
-		//higgsMass = getMCHiggsMass();
 		analyzeTreeEvent(currEvent);
 	}
 
@@ -57,37 +57,51 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Initialize the D3PD event to get values for current event number
 	if(eventNumber >= 0) m_event->GetEntry(eventNumber);
 
-	// Getting the initial event weight
-	Double_t eventWeight = 1.0;
-
 	// Checking if MC or Data
 	if(m_event->eventinfo.isSimulation()) m_isMC = true;
 	else m_isMC = false;
 
 	// Getting the mass of MC Higgs using Calculation object
-	if (m_isMC) Double_t higgsMass = (new MCHiggsMass(m_event, m_currFileNameVec))->getMass();
+	Double_t higgsMass = 0;
+	if (m_isMC) higgsMass = (new MCHiggsMass(m_event, m_currFileNameVec))->getMass();
+
+	// Setting the sample type
+	setSampleType();
+
+	// Getting the event's weight
+	EventWeight *eventWeightObj = new EventWeight(m_event, m_dataYear, higgsMass, m_sampleType, m_currMCCollection, m_currDataCollection);
+	Double_t eventWeight = eventWeightObj->getWeight();
+	Double_t eventJHUWeight = eventWeightObj->getJHUWeight();
+	Double_t eventggFWeight = eventWeightObj->getggFWeight();
+
+	// Filling the counting histogram with relevant weights)
+	m_countingHist->Fill(1);
+	m_countingHist->Fill(2, eventWeight);
+	m_countingHist->Fill(3, eventWeight);
+	m_countingHist->Fill(4, (eventWeight/eventggFWeight/eventJHUWeight);
+	m_countingHist->Fill(5, eventWeight/eventJHUWeight);
 
 	// Checking if tau sample
 	if (m_currFileName.Contains("noTau")) m_tauSample = false;
 	else m_tauSample = true;
 
 	// Get MC Channel Number
-	m_mcChannelNumber = m_event->eventinfo.mc_channel_number();
+	if (m_isMC) m_mcChannelNumber = m_event->eventinfo.mc_channel_number();
 
 	// Check mc generator name
 	if (m_currFileName.Contains("Pythia")) m_mcGenerator = MCGeneratorName::Pythia;
 
 	// Set tau sample boolean and mc generator based on channel number
 	if((m_mcChannelNumber>=169716 && m_mcChannelNumber<=169717) ||  // 2011 JHU
-       (m_mcChannelNumber>=167604 && m_mcChannelNumber<=167605) ||  // 2011 JHU
-       (m_mcChannelNumber>=167607 && m_mcChannelNumber<=167607) ||  // 2012 JHU
-       (m_mcChannelNumber>=169710 && m_mcChannelNumber<=169711) ||  // 2012 JHU
-       (m_mcChannelNumber>=167124 && m_mcChannelNumber<=167125) ||  // 2012 JHU
-       (m_mcChannelNumber>=167127 && m_mcChannelNumber<=167127) ||
-	   (m_mcChannelNumber>=167600 && m_mcChannelNumber<=167603) ||  // 2011 JHU
-       (m_mcChannelNumber>=167606 && m_mcChannelNumber<=167606) ||  // 2011 JHU
-       (m_mcChannelNumber>=167120 && m_mcChannelNumber<=167123) ||  // 2012 JHU
-       (m_mcChannelNumber>=167126 && m_mcChannelNumber<=167126) || 
+     (m_mcChannelNumber>=167604 && m_mcChannelNumber<=167605) ||  // 2011 JHU
+     (m_mcChannelNumber>=167607 && m_mcChannelNumber<=167607) ||  // 2012 JHU
+     (m_mcChannelNumber>=169710 && m_mcChannelNumber<=169711) ||  // 2012 JHU
+     (m_mcChannelNumber>=167124 && m_mcChannelNumber<=167125) ||  // 2012 JHU
+     (m_mcChannelNumber>=167127 && m_mcChannelNumber<=167127) ||
+		 (m_mcChannelNumber>=167600 && m_mcChannelNumber<=167603) ||  // 2011 JHU
+     (m_mcChannelNumber>=167606 && m_mcChannelNumber<=167606) ||  // 2011 JHU
+     (m_mcChannelNumber>=167120 && m_mcChannelNumber<=167123) ||  // 2012 JHU
+     (m_mcChannelNumber>=167126 && m_mcChannelNumber<=167126) || 
 	   (m_mcChannelNumber>=181990 && m_mcChannelNumber<=181996)     // mc12c JHU
 	  ) 
 	{  		  
@@ -422,14 +436,14 @@ void HiggsAnalysis::setSampleType()
 			TString sampleName = m_currFileNameVec[sampleIndex];
 
 			if (sampleName.Contains("_ZZp") ||
-				sampleName.Contains("_ZpZp") )		m_sampleProdType = SampleType::ggF_ZpZp;
-			else if (sampleName.Contains("ggH"))	m_sampleProdType = SampleType::ggF;
-			else if (sampleName.Contains("VBF"))	m_sampleProdType = SampleType::VBF;
-			else if (sampleName.Contains("WH"))		m_sampleProdType = SampleType::WH;
-			else if (sampleName.Contains("ZH"))		m_sampleProdType = SampleType::ZH;
-			else if (sampleName.Contains("ttH"))	m_sampleProdType = SampleType::ttH;
-			else if (sampleName.Contains("qqH"))	m_sampleProdType = SampleType::qqF;
-			else									m_sampleProdType = SampleType::Background;
+				sampleName.Contains("_ZpZp") )		m_sampleType = SampleType::ggF_ZpZp;
+			else if (sampleName.Contains("ggH"))	m_sampleType = SampleType::ggF;
+			else if (sampleName.Contains("VBF"))	m_sampleType = SampleType::VBF;
+			else if (sampleName.Contains("WH"))		m_sampleType = SampleType::WH;
+			else if (sampleName.Contains("ZH"))		m_sampleType = SampleType::ZH;
+			else if (sampleName.Contains("ttH"))	m_sampleType = SampleType::ttH;
+			else if (sampleName.Contains("qqH"))	m_sampleType = SampleType::qqF;
+			else									m_sampleType = SampleType::Background;
 		}
 	}
 
@@ -478,7 +492,7 @@ void HiggsAnalysis::setCalibrationType()
 		else if (m_dataYear == 2012) m_currDataCollection = DataCalibType::y2012c;
 	}
 	// Specific issue if the sample production type is ggF_ZpZp
-	else if (m_sampleProdType == SampleType::ggF_ZpZp)
+	else if (m_sampleType == SampleType::ggF_ZpZp)
 	{
 			if (m_dataYear == 2011) m_currMCCollection = MCCollection::MC11c;
 			else if (m_dataYear == 2012)

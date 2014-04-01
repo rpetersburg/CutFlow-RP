@@ -12,9 +12,14 @@ using namespace std;
 class EventWeight : public Weights
 {
 	public:
-		EventWeight(D3PDReader::Event *tEvent, TString tDataYear, Double_t tHiggsMass,
+		EventWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Double_t tHiggsMass,
 								Int_t tSampleType, Int_t tMCCollection, Int_t tDataCollection);
 		~EventWeight();
+
+		Double_t getggFWeight() {return m_ggFWeight;};
+		Double_t getJHUWeight() {return m_jhuWeight;};
+		Double_t getPileupWeight() {return m_pileupWeight;};
+		Double_t getZVertexWeight() {return m_zVertexWeight;};
 
 	protected:
 

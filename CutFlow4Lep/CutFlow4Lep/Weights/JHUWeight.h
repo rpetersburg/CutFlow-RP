@@ -8,7 +8,7 @@ using namespace std;
 class JHUWeight : public Weights
 {
 	public:
-		JHUWeight(D3PDReader::Event *tEvent, TString tDataYear);
+		JHUWeight(D3PDReader::Event *tEvent, Int_t tDataYear);
 		~JHUWeight();
 
 	protected:

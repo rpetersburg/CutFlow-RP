@@ -1,6 +1,6 @@
 #include "CutFlow4Lep/Weights/PileupWeight.h"
 
-PileupWeight::PileupWeight(D3PDReader::Event *tEvent, TString tDataYear, Int_t tMCCollection, Int_t tDataCollection) 
+PileupWeight::PileupWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Int_t tMCCollection, Int_t tDataCollection) 
 	:	Weights(tEvent, tDataYear), m_mcCollection(tMCCollection), m_dataCollection(tDataCollection)
 {
 	initializeReweight();
