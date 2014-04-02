@@ -16,7 +16,7 @@ void JHUWeight::initializeReweight()
 	else if (m_dataYear == 2012)
 		m_reweight = new JHUPtReweighting("mc12", "../../../JHUReweighting/share/");
 	else
-		cout << "JHUWeight::initializeReweight: Data Year not recognized" << endl;
+		cout << "JHUWeight::initializeReweight(): Data Year not recognized" << endl;
 }
 
 void JHUWeight::setWeight()

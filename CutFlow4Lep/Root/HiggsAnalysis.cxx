@@ -69,7 +69,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	setSampleType();
 
 	// Getting the event's weight
-	EventWeight *eventWeightObj = new EventWeight(m_event, m_dataYear, higgsMass, m_sampleType, m_currMCCollection, m_currDataCollection);
+	EventWeight *eventWeightObj = new EventWeight(m_event, m_dataYear, higgsMass, m_sampleType, m_currMCCollection, m_currDataCalibration);
 	Double_t eventWeight = eventWeightObj->getWeight();
 	Double_t eventJHUWeight = eventWeightObj->getJHUWeight();
 	Double_t eventggFWeight = eventWeightObj->getggFWeight();
@@ -78,7 +78,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	m_countingHist->Fill(1);
 	m_countingHist->Fill(2, eventWeight);
 	m_countingHist->Fill(3, eventWeight);
-	m_countingHist->Fill(4, (eventWeight/eventggFWeight/eventJHUWeight);
+	m_countingHist->Fill(4, eventWeight/eventggFWeight/eventJHUWeight);
 	m_countingHist->Fill(5, eventWeight/eventJHUWeight);
 
 	// Checking if tau sample
@@ -131,6 +131,13 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		if (!(new DataPreselection(m_event, m_dataYear))->passedCut()) return;
 	// Ends event analysis if Vertex Cut is not passed
 	if (!(new VertexCut(m_event)->passedCut)) return;
+
+	// Instantiate the Pileup Reweight Tool
+	Root::TPileupReweighting *pileupReweightingTool = (new PileupReweightTool(m_dataYear, m_currMCCollection, m_currDataCalibration))->getTool();
+
+
+
+
 
 	
 	
@@ -564,6 +571,22 @@ void HiggsAnalysis::setMCCollection()
 			else {cout << "Error: HiggsAnalysis::setMCCollection(): " << endl;}
 		}
 	}
+}
+
+void HiggsAnalysis::setDataPeriod()
+{
+	Int_t runNumber = m_event->eventinfo.RunNumber();
+
+	if (runNumber >= 177986 && runNumber <= 180481) 
+		m_dataPeriod = DataPeriod::run2011_BD;
+	else if (runNumber >= 180614 && runNumber <= 184169)
+		m_dataPeriod = DataPeriod::run2011_EH;
+	else if (runNumber >= 185353 && runNumber <= 187815)
+		m_dataPeriod = DataPeriod::run2011_IK;
+	else if (runNumber >= 188902 && runNumber <= 191933)
+		m_dataPeriod = DataPeriod::run2011_LM;
+	else if (runNumber >= 195847 && runNumber <= 999999)
+		m_dataPeriod = DataPeriod::run2012_All;
 }
 	
 

@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/PileupReweightTool.h"
 
-PileupReweightTool::PileupReweightTool(Int_t tDataYear, Int_t tMCCollection, Int_t tDataCollection) 
-	: m_dataYear(tDataYear), m_mcCollection(tMCCollection), m_dataCollection(tDataCollection)
+PileupReweightTool::PileupReweightTool(Int_t tDataYear, Int_t tMCCollection, Int_t tDataCalibration) 
+	: m_dataYear(tDataYear), m_mcCollection(tMCCollection), m_dataCalibration(tDataCalibration)
 {
 	initializeTool();
 }
@@ -28,7 +28,7 @@ void PileupReweightTool::initializeTool()
 	else if (m_dataYear == 2012)
 	{
 		string configFileName = "";
-		if (m_mcCollection == MCCollection::MC12a || m_dataCollection != -1)
+		if (m_mcCollection == MCCollection::MC12a || m_dataCalibration != -1)
 		{
 			configFileName = "InputFile/PileupConfigFile/MC12a.prw.root";
 			m_tool->SetDefaultChannel(160156);

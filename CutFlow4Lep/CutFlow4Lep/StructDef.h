@@ -1,16 +1,16 @@
 #ifndef STRUCTDEF_H
 #define STRUCTEDEF_H
 
-// Definition of macro for period
-#define period2011_BD "period2011_BD"
-#define period2011_EH "period2011_EH"
-#define period2011_IK "period2011_IK"
-#define period2011_I "period2011_I"
-#define period2011_J "period2011_J"
-#define period2011_K "period2011_K"
-#define period2011_LM "period2011_LM"
-
-#define period2012_All "period2012_All"
+//// Definition of macro for period
+//#define period2011_BD "period2011_BD"
+//#define period2011_EH "period2011_EH"
+//#define period2011_IK "period2011_IK"
+//#define period2011_I "period2011_I"
+//#define period2011_J "period2011_J"
+//#define period2011_K "period2011_K"
+//#define period2011_LM "period2011_LM"
+//
+//#define period2012_All "period2012_All"
 
 // Z mass
 #define pdgZMass  91187.6 
@@ -122,6 +122,19 @@ struct DataCalibType{
 		y2011d,
 		y2012ab,
 		y2012c
+	};
+};
+
+struct DataPeriod {
+	enum {
+		run2011_BD,
+		run2011_EH,
+		run2011_IK,
+		run2011_I,
+		run2011_J,
+		run2011_K,
+		run2011_LM,
+		run2012_All
 	};
 };
 

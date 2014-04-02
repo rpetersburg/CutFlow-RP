@@ -2,6 +2,7 @@
 #define HIGGSANALYSIS_H
 
 #include "D3PDReader/Event.h"
+#include "PileupReweighting/TPileupReweighting.h"
 
 #include "CutFlow4Lep/ParticleObjects/Jets.h"
 #include "CutFlow4Lep/ParticleObjects/Muon.h"
@@ -20,6 +21,7 @@
 #include "CutFlow4Lep/Calculations/MCHiggsMass.h"
 #include "CutFlow4Lep/Output/OutputTree.h"
 #include "CutFlow4Lep/StructDef.h"
+#include "CutFlow4Lep/PileupReweightTool.h"
 
 #include <vector>
 #include <string>
@@ -47,6 +49,7 @@ class HiggsAnalysis
 		void setSampleType();
 		void setCurrFileNameVec();
 		void setMCRunNumber();
+		void setDataPeriod();
 		
 		void setOutputFilePath(string newFilePath);	
 
@@ -102,12 +105,15 @@ class HiggsAnalysis
 		Int_t m_currMCCollection;
 		Int_t m_currDataCalibration;
 		Int_t m_sampleType;
+		Int_t m_dataPeriod;
 
 		Double_t m_cmEnergy;
 
 		D3PDReader::ElectronD3PDObject *m_currElectron;
 
 		Long64_t m_mcRunNumber;
+
+
 };
 
 #endif
