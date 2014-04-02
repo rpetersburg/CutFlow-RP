@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Weights/PileupWeight.h"
 
-PileupWeight::PileupWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Int_t tMCCollection, Int_t tDataCollection) 
-	:	Weights(tEvent, tDataYear), m_mcCollection(tMCCollection), m_dataCollection(tDataCollection)
+PileupWeight::PileupWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Root::TPileupReweighting *tPileupReweight) 
+	: Weights(tEvent, tDataYear), m_reweight(tPileupReweight)
 {
 	initializeReweight();
 	setWeight();
@@ -11,36 +11,8 @@ PileupWeight::~PileupWeight() {}
 
 void PileupWeight::initializeReweight()
 {
-	m_reweight = new Root::TPileupReweighting("PileupReweightingTool");
-
-	m_reweight->SetUnrepresentedDataAction(2);
-
-	if (m_dataYear == 2011)
-	{		
-		m_reweight->AddConfigFile("InputFile/PileupConfigFile/MC11c.prw.root");
-		m_reweight->AddLumiCalcFile("InputFile/PileupConfigFile/ilumicalc_2011_AllYear_All_Good.root");
-		m_reweight->SetDefaultChannel(109292);
-		m_reweight->UsePeriodConfig("MC11c");
-		m_reweight->Initialize();
-	}
-	else if (m_dataYear == 2012)
-	{
-		string configFileName = "";
-		if (m_mcCollection == MCCollection::MC12a || m_dataCollection != -1)
-		{
-			configFileName = "InputFile/PileupConfigFile/MC12a.prw.root";
-			m_reweight->SetDefaultChannel(160156);
-		}
-		else
-		{
-			configFileName = "InputFile/PileupConfigFile/MC12b.prw.root";
-			m_reweight->SetDefaultChannel(181341);
-		}
-		m_reweight->AddConfigFile(configFileName);
-		m_reweight->AddLumiCalcFile("InputFile/PileupConfigFile/ilumicalc_2012_AllYear_All_Good.root");
-		m_reweight->Initialize();
-	}
-	else cout << "Error: PileupWeight::initializeReweight(): Data Year not recognized" << endl;
+	// No initialization necessary since the reweight is included in the constructor
+	return;
 }
 
 void PileupWeight::setWeight()

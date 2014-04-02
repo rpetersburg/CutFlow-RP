@@ -108,18 +108,31 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		m_tauSample = false;
 		m_mcGenerator = MCGeneratorName::Pythia;
 	} 
-
-
-
+	
 	// 2012 defaults to GSF electrons; 2011 does not
 	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
 	else if (m_dataYear == 2012) m_currElectron = &(m_event->el);
 
-
-
 	setEventYear();
-	setCalibrationType();
 
+	if (m_isMC)
+	{
+		m_currDataCalibration = -1;
+		setMCCollection();
+	}
+	else
+	{
+		m_currMCCollection = -1;
+		setDataCalibration();
+	}
+
+	// Ends event analysis if Data Preselection Cut is not passed
+	if (!m_isMC)
+		if (!(new DataPreselection(m_event, m_dataYear))->passedCut()) return;
+	// Ends event analysis if Vertex Cut is not passed
+	if (!(new VertexCut(m_event)->passedCut)) return;
+
+	
 	
 	//// Initializing the event Specific Variables
 	//InitializeEventVar();
@@ -394,11 +407,6 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 }
 
-void HiggsAnalysis::initializeVar()
-{
-	cout << "Variables were initialized..." << endl;
-}
-
 void HiggsAnalysis::setOutputFilePath(string newFilePath)
 {
 	m_outputFilePath = newFilePath;
@@ -424,6 +432,7 @@ void HiggsAnalysis::setEventYear()
 	else cout<<"Event number not recognized: "<< runNumber <<endl;
 }
 
+// For MC simulations, sets the type of higgs sample
 void HiggsAnalysis::setSampleType()
 {
 	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
@@ -436,19 +445,20 @@ void HiggsAnalysis::setSampleType()
 			TString sampleName = m_currFileNameVec[sampleIndex];
 
 			if (sampleName.Contains("_ZZp") ||
-				sampleName.Contains("_ZpZp") )		m_sampleType = SampleType::ggF_ZpZp;
+				sampleName.Contains("_ZpZp") )			m_sampleType = SampleType::ggF_ZpZp;
 			else if (sampleName.Contains("ggH"))	m_sampleType = SampleType::ggF;
 			else if (sampleName.Contains("VBF"))	m_sampleType = SampleType::VBF;
 			else if (sampleName.Contains("WH"))		m_sampleType = SampleType::WH;
 			else if (sampleName.Contains("ZH"))		m_sampleType = SampleType::ZH;
 			else if (sampleName.Contains("ttH"))	m_sampleType = SampleType::ttH;
 			else if (sampleName.Contains("qqH"))	m_sampleType = SampleType::qqF;
-			else									m_sampleType = SampleType::Background;
+			else																	m_sampleType = SampleType::Background;
 		}
 	}
 
 }
 
+// Finds the MC Run Number within the file name
 void HiggsAnalysis::setMCRunNumber()
 {
 	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
@@ -456,7 +466,7 @@ void HiggsAnalysis::setMCRunNumber()
 		// Finding the string before the run number
 		if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
 		{
-			// Getting run number
+			// Finding the run number
 			Int_t runIndex = i + 1;
 			TString runString = m_currFileNameVec[runIndex];
 			m_mcRunNumber = runString.Atoi();
@@ -467,6 +477,7 @@ void HiggsAnalysis::setMCRunNumber()
 	return;
 }
 
+// Splits the file name by '.' and adds parts to a vector
 void HiggsAnalysis::setCurrFileNameVec()
 {
 	// Splitting the file path
@@ -476,101 +487,84 @@ void HiggsAnalysis::setCurrFileNameVec()
 		TIter iString(splitFileName);
 		TObjString* objString = 0;
 		while ( objString = (TObjString*)iString() )
-		{
 			m_currFileNameVec.push_back( objString->GetString() );
-		}
 	}
 }
 
-void HiggsAnalysis::setCalibrationType()
+void HiggsAnalysis::setDataCalibration()
 {
-	// Determining Data or MC Collection Calibration Type
-	if (!m_isMC)
-	{
-		m_currMCCollection = -1;
-		if (m_dataYear == 2011) m_currDataCollection = DataCalibType::y2011d;
-		else if (m_dataYear == 2012) m_currDataCollection = DataCalibType::y2012c;
-	}
+	if (m_dataYear == 2011) m_currDataCalibration = DataCalibType::y2011d;
+	else if (m_dataYear == 2012) m_currDataCalibration = DataCalibType::y2012c;
+
 	// Specific issue if the sample production type is ggF_ZpZp
-	else if (m_sampleType == SampleType::ggF_ZpZp)
+	if (m_sampleType == SampleType::ggF_ZpZp)
 	{
-			if (m_dataYear == 2011) m_currMCCollection = MCCollection::MC11c;
-			else if (m_dataYear == 2012)
-			{
-				if (m_event->eventinfo.RunNumber() == 195847) {m_currMCCollection = MCCollection::MC12a;}
-				else if (m_event->eventinfo.RunNumber() == 195848) { m_currMCCollection = MCCollection::MC12b;}
-				else {cout<< "Error: HiggsAnalysis::AnalyzeTreeEvent: MC12ab run number not recognized" << endl;}
-			}
-		}
-	// Use the production type from the name to determine the calibration type for Data
-	else {
-		m_currDataCollection = -1;
-		Int_t mc11c[] 	= {1272,1273,1274,1299,1300,1309,1310,1349,1350,1351,1352,1353,1370,1372,1378,1571};
-		Int_t mc11d[] 	= {1786};
-		Int_t mc12ab[] 	= {1468,1469,1470,1472,1479,1482,1484,1485,1486,1499,1504,1581,1586,1589,1599,1609,1610,1611,1716,1773,1773,1776};	
-		Int_t mc12c[] 	= {1737,1741,1746,1748,1771,1798,1799,1831,1832};
-
-		TString name = m_currFileName;
-
-		TObjArray *parts = name.Tokenize(".");
-		vector<TString> partName;
-		if (parts->GetEntriesFast())
+		if (m_dataYear == 2011) {m_currMCCollection = MCCollection::MC11c;}
+		else if (m_dataYear == 2012)
 		{
-			TIter iString(parts);
-			TObjString *objString = 0;
-			while (objString=(TObjString*)iString())
-			{
-				partName.push_back(objString->GetString());
-			}
-		}
-
-		Long64_t runNumber = m_event->eventinfo.RunNumber();
-
-		for (Int_t i = 0; i < (Int_t) partName.size(); i++) {
-			if (partName[i].Contains("_s")) {
-				TObjArray *parts = partName[i].Tokenize("_");
-				vector<TString> prodTag;
-				if (parts->GetEntriesFast())
-				{
-					TIter iString(parts);
-					TObjString* os = 0;
-					while ((os=(TObjString*)iString()))
-					{
-						prodTag.push_back(os->GetString());
-					}
-				}
-
-				TString sProdTag = prodTag[1];
-				sProdTag = sProdTag(1,4);
-				Int_t prodTagNum = sProdTag.Atoi();
-
-				Int_t nMC11c  =	(sizeof(mc11c)/sizeof(*mc11c));
-				Int_t nMC11d  =	(sizeof(mc11d)/sizeof(*mc11d));
-				Int_t nMC12ab =	(sizeof(mc12ab)/sizeof(*mc12ab));
-				Int_t nMC12c  =	(sizeof(mc12c)/sizeof(*mc12c));
-
-				// Checking what sample it is in
-				if(find(mc11c,mc11c+nMC11c,prodTagNum) != mc11c+nMC11c)
-				{
-					m_currMCCollection = MCCollection::MC11c;
-				}
-				else if(find(mc11d,mc11d+nMC11d,prodTagNum) != mc11d+nMC11d)
-				{
-					m_currMCCollection = MCCollection::MC11d;
-				}
-				else if(find(mc12ab,mc12ab+nMC12ab,prodTagNum) != mc12ab+nMC12ab)
-				{
-					if(runNumber == 195847) {m_currMCCollection = MCCollection::MC12a;}
-					else if(runNumber == 195848) {m_currMCCollection = MCCollection::MC12b;}
-					else{cout<<"Error: AnalyzeTreeEvent: Mc12ab run number not recognized"<<endl;}
-				}
-				else if(find(mc12c,mc12c+nMC12c,prodTagNum) != mc12c+nMC12c)
-				{
-					m_currMCCollection = MCCollection::MC12c;
-				}
-				else cout<<"Error: AnalyzeTreeEvent: production tag not recognized"<<endl;
-			}
+			if (m_event->eventinfo.RunNumber() == 195847) {m_currMCCollection = MCCollection::MC12a;}
+			else if (m_event->eventinfo.RunNumber() == 195848) { m_currMCCollection = MCCollection::MC12b;}
+			else {cout<< "Error: HiggsAnalysis::AnalyzeTreeEvent: MC12ab run number not recognized" << endl;}
 		}
 	}
-
 }
+
+// Needs good documentation and some self-alterations.... Not sure exactly what is going on
+void HiggsAnalysis::setMCCollection()
+{
+	Int_t mc11c[] 	= {1272,1273,1274,1299,1300,1309,1310,1349,1350,1351,1352,1353,1370,1372,1378,1571};
+	Int_t mc11d[] 	= {1786};
+	Int_t mc12ab[] 	= {1468,1469,1470,1472,1479,1482,1484,1485,1486,1499,1504,1581,1586,1589,1599,1609,1610,1611,1716,1773,1773,1776};	
+	Int_t mc12c[] 	= {1737,1741,1746,1748,1771,1798,1799,1831,1832};
+
+	TString name = m_currFileName;
+
+	TObjArray *parts = name.Tokenize(".");
+	vector<TString> partName;
+	if (parts->GetEntriesFast())
+	{
+		TIter iString(parts);
+		TObjString *objString = 0;
+		while (objString=(TObjString*)iString()) partName.push_back(objString->GetString());
+	}
+
+	Long64_t runNumber = m_event->eventinfo.RunNumber();
+
+	for (Int_t i = 0; i < (Int_t) partName.size(); i++)
+	{
+		if (partName[i].Contains("_s"))
+		{
+			TObjArray *parts = partName[i].Tokenize("_");
+			vector<TString> prodTag;
+			if (parts->GetEntriesFast())
+			{
+				TIter iString(parts);
+				TObjString* os = 0;
+				while ((os=(TObjString*)iString())) prodTag.push_back(os->GetString());
+			}
+			
+			TString sProdTag = prodTag[1];
+			sProdTag = sProdTag(1,4);
+			Int_t prodTagNum = sProdTag.Atoi();
+
+			Int_t nMC11c  =	(sizeof(mc11c)/sizeof(*mc11c));
+			Int_t nMC11d  =	(sizeof(mc11d)/sizeof(*mc11d));
+			Int_t nMC12ab =	(sizeof(mc12ab)/sizeof(*mc12ab));
+			Int_t nMC12c  =	(sizeof(mc12c)/sizeof(*mc12c));
+
+			if (find(mc11d, mc11d+nMC11d, prodTagNum) != mc11c + nMC11c) {m_currMCCollection = MCCollection::MC11c;}
+			else if (find(mc11d, mc11d+nMC11d, prodTagNum) != mc11d + nMC11d) {m_currMCCollection = MCCollection::MC11d;}
+			else if (find(mc12ab, mc12ab + nMC12ab, prodTagNum) != mc12ab + nMC12ab)
+			{
+				if (runNumber == 195847) m_currMCCollection = MCCollection::MC12a;
+				else if (runNumber == 195848) m_currMCCollection = MCCollection::MC12b;
+				else cout << "Error: AnalyzeTreeEvent: Mc12ab run number not recognized" << endl;
+			}
+			else if (find(mc12c, mc12c + nMC12c, prodTagNum) != mc12c + nMC12c) {m_currMCCollection = MCCollection::MC12c;}
+			else {cout << "Error: HiggsAnalysis::setMCCollection(): " << endl;}
+		}
+	}
+}
+	
+
+		

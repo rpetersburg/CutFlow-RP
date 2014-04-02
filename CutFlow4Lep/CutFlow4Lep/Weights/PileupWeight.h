@@ -9,7 +9,7 @@ using namespace std;
 class PileupWeight : public Weights
 {
 	public:
-		PileupWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Int_t tMCCollection, Int_t tDataCollection);
+		PileupWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Root::TPileupReweighting *tPileupReweight);
 		~PileupWeight();
 
 		Root::TPileupReweighting* getReweight() {return m_reweight;};

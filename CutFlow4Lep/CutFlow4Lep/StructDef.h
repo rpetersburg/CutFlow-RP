@@ -17,21 +17,40 @@
 #define pdgMuMass 105.6583715
 #define pdgElMass 0.510998928
 
-struct DoAnalysis{
+struct AnalysisType{
 	enum {
-		StdHZZllll,
-		trigeff4l,
-		Zllll
+		Mu4,
+		El4,
+		Mu2El2,
+		El2Mu2
 	};
 };
 
-struct  MCCollection{
+struct CalibrationType{
 	enum {
-		MC11c,
-		MC11d,
-		MC12a,
-		MC12b,
-		MC12c
+		stdCalib,
+		stdCalibEp,
+		MvaCalib,
+		MvaCalibEp,
+		noCalib
+	};
+};
+
+struct CutElFlow {
+	enum {
+		Total,
+		DataPreselection,
+		Preselection,
+		Trigger,
+		Author,
+		Loose,
+		Eta,
+		Et,
+		ObjectQuality,
+		Z0,
+		OverLapElEl,
+		OverLapClElEl,
+		OverLap
 	};
 };
 
@@ -64,20 +83,16 @@ struct CutFlowCH {
 	};
 };
 
-struct CutElFlow {
+struct CutJetsFlow {
 	enum {
 		Total,
 		DataPreselection,
 		Preselection,
 		Trigger,
-		Author,
-		Loose,
+		Pt,
 		Eta,
-		Et,
-		ObjectQuality,
-		Z0,
-		OverLapElEl,
-		OverLapClElEl,
+		Pileup,
+		Clean,
 		OverLap
 	};
 };
@@ -101,179 +116,6 @@ struct CutMuFlow {
 	};
 };
 
-struct CutJetsFlow {
-	enum {
-		Total,
-		DataPreselection,
-		Preselection,
-		Trigger,
-		Pt,
-		Eta,
-		Pileup,
-		Clean,
-		OverLap
-	};
-};
-
-struct Flavor {
-	enum {
-		Muon,
-		Electron,
-		Jet
-	};
-};
-
-struct LeptonType{
-	enum {
-		MuonStaco,
-		MuonCalo,
-		MuonStandAlone,
-		ElectronGSF
-	};
-};
-
-struct JetsType{
-	enum {
-		AntiKt4TopoEM,
-		AntiKt4TopoEMTruth,
-		AntiKt4TopoEM_Fid,
-		AntiKt4TopoEMTruth_Fid
-	};
-};
-
-struct QuadType{
-	enum {
-		Mu4,
-		El4,
-		Mu2El2,
-		El2Mu2
-	};
-};
-
-struct AnalysisType{
-	enum {
-		Mu4,
-		El4,
-		Mu2El2,
-		El2Mu2
-	};
-};
-
-struct ElectronCollection{
-	enum {
-		LoosePlusPlus,
-		MultiLepton,
-		Likelihood
-	};
-};
-
-struct MuonCollection{
-	enum {
-		Loose
-	};
-};
-
-struct ProductionChannel{
-	enum {
-		VBF,
-		VHLep,
-		VHHad,		
-		ggF,
-		VH		
-	};
-};
-
-struct SampleType{
-	enum {
-		ggF,
-		VBF,
-		WH,
-		ZH,
-		ttH,
-		qqF,
-		Background,
-		ggF_ZpZp
-	};
-};
-
-struct StreamContainer{
-	enum {
-		eGamma,
-		Muon,
-		Other
-	};
-};
-
-struct TruthTypeQuad{
-	enum {
-		_4mu,
-		_2mu2e,
-		_4e,
-		_4tau,
-		_2tau2mu,
-		_2tau2e,
-		noStatus
-	};
-};
-
-struct LeptonIDType{
-	enum {
-		// what we use
-		mu_staco_cb,
-		mu_staco_st,
-		mu_staco_sa,
-		// what we used to use
-		mu_muid_cb,
-		mu_muid_st,
-		mu_muid_sa,
-		// what we use
-		mu_calomuon,
-		// For future
-		mu_muon_cb,
-		mu_muon_st,
-		mu_muon_sa,
-		mu_muon_calomuon,
-		// Electrons 2011
-		el_loosepp_H4l,
-		el_loosepp_H4l_Ep_comb,
-		el_loosepp_H4l_relax,
-		// Electrons 2012
-		el_multilepton,
-		el_multilepton_Ep_comb,
-		el_multilepton_relax,
-		el_likelihood_loose,
-		el_likelihood_loose_Ep_comb,
-		el_likelihood_loose_relax,
-		unknown
-	};
-};
-
-struct MCGeneratorName{
-	enum {
-		Pythia,
-		other
-	};
-};
-
-struct CalibrationType{
-	enum {
-		stdCalib,
-		stdCalibEp,
-		MvaCalib,
-		MvaCalibEp,
-		noCalib
-	};
-};
-
-struct FSRType{
-	enum {
-		collFSRZ1mumu,
-		farFSRZ1,
-		farFSRZ2, 
-		noFSR
-	};
-};
-
 struct DataCalibType{
 	enum {
 		y2011c,
@@ -290,12 +132,11 @@ struct DiLeptonType{
 	};
 };
 
-struct MuonType{
-	enum
-	{
-		CB, 
-		MS,
-		ID
+struct DoAnalysis{
+	enum {
+		StdHZZllll,
+		trigeff4l,
+		Zllll
 	};
 };
 
@@ -347,6 +188,165 @@ struct DoSys{
 		PileUpUp,
 		PileUpDown,
 		Nom
+	};
+};
+
+struct ElectronCollection{
+	enum {
+		LoosePlusPlus,
+		MultiLepton,
+		Likelihood
+	};
+};
+
+struct Flavor {
+	enum {
+		Muon,
+		Electron,
+		Jet
+	};
+};
+
+struct FSRType{
+	enum {
+		collFSRZ1mumu,
+		farFSRZ1,
+		farFSRZ2, 
+		noFSR
+	};
+};
+
+struct JetsType{
+	enum {
+		AntiKt4TopoEM,
+		AntiKt4TopoEMTruth,
+		AntiKt4TopoEM_Fid,
+		AntiKt4TopoEMTruth_Fid
+	};
+};
+
+struct LeptonIDType{
+	enum {
+		// what we use
+		mu_staco_cb,
+		mu_staco_st,
+		mu_staco_sa,
+		// what we used to use
+		mu_muid_cb,
+		mu_muid_st,
+		mu_muid_sa,
+		// what we use
+		mu_calomuon,
+		// For future
+		mu_muon_cb,
+		mu_muon_st,
+		mu_muon_sa,
+		mu_muon_calomuon,
+		// Electrons 2011
+		el_loosepp_H4l,
+		el_loosepp_H4l_Ep_comb,
+		el_loosepp_H4l_relax,
+		// Electrons 2012
+		el_multilepton,
+		el_multilepton_Ep_comb,
+		el_multilepton_relax,
+		el_likelihood_loose,
+		el_likelihood_loose_Ep_comb,
+		el_likelihood_loose_relax,
+		unknown
+	};
+};
+
+struct LeptonType{
+	enum {
+		MuonStaco,
+		MuonCalo,
+		MuonStandAlone,
+		ElectronGSF
+	};
+};
+
+struct MCCollection{
+	enum {
+		MC11c,
+		MC11d,
+		MC12a,
+		MC12b,
+		MC12c
+	};
+};
+
+struct MCGeneratorName{
+	enum {
+		Pythia,
+		other
+	};
+};
+
+struct MuonCollection{
+	enum {
+		Loose
+	};
+};
+
+struct MuonType{
+	enum
+	{
+		CB, 
+		MS,
+		ID
+	};
+};
+
+struct ProductionChannel{
+	enum {
+		VBF,
+		VHLep,
+		VHHad,		
+		ggF,
+		VH		
+	};
+};
+
+struct QuadType{
+	enum {
+		Mu4,
+		El4,
+		Mu2El2,
+		El2Mu2
+	};
+};
+
+struct SampleType{
+	enum {
+		ggF,
+		VBF,
+		WH,
+		ZH,
+		ttH,
+		qqF,
+		Background,
+		ggF_ZpZp
+	};
+};
+
+struct StreamContainer{
+	enum {
+		eGamma,
+		Muon,
+		Other
+	};
+};
+
+struct TruthTypeQuad{
+	enum {
+		_4mu,
+		_2mu2e,
+		_4e,
+		_4tau,
+		_2tau2mu,
+		_2tau2e,
+		noStatus
 	};
 };
 

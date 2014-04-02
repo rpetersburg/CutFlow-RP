@@ -14,6 +14,9 @@
 #include "CutFlow4Lep/Weights/PileupWeight.h"
 #include "CutFlow4Lep/Weights/ZVertexWeight.h"
 
+#include "CutFlow4Lep/Cuts/DataPreselection.h"
+#include "CutFlow4Lep/Cuts/VertexCut.h"
+
 #include "CutFlow4Lep/Calculations/MCHiggsMass.h"
 #include "CutFlow4Lep/Output/OutputTree.h"
 #include "CutFlow4Lep/StructDef.h"
@@ -38,13 +41,12 @@ class HiggsAnalysis
 		void analyzeTree();
 		void analyzeTreeEvent(Long64_t eventNumber);
 
-		void setCalibrationType();
+		void setMCCollection();
+		void setDataCalibration();
 		void setEventYear();
 		void setSampleType();
 		void setCurrFileNameVec();
 		void setMCRunNumber();
-		
-		void initializeVar();
 		
 		void setOutputFilePath(string newFilePath);	
 
@@ -98,7 +100,7 @@ class HiggsAnalysis
 		Int_t m_dataYear;
 		Int_t m_mcGenerator;
 		Int_t m_currMCCollection;
-		Int_t m_currDataCollection;
+		Int_t m_currDataCalibration;
 		Int_t m_sampleType;
 
 		Double_t m_cmEnergy;
