@@ -15,6 +15,12 @@
 #include "CutFlow4Lep/Weights/PileupWeight.h"
 #include "CutFlow4Lep/Weights/ZVertexWeight.h"
 
+#include "CutFlow4Lep/Triggers/ElectronTrigger.h"
+#include "CutFlow4Lep/Triggers/MuonTrigger.h"
+#include "CutFlow4Lep/Triggers/DiElectronTrigger.h"
+#include "CutFlow4Lep/Triggers/DiMuonTrigger.h"
+#include "CutFlow4Lep/Triggers/ElectronMuonTrigger.h"
+
 #include "CutFlow4Lep/Cuts/DataPreselection.h"
 #include "CutFlow4Lep/Cuts/VertexCut.h"
 
@@ -106,6 +112,8 @@ class HiggsAnalysis
 		Int_t m_currDataCalibration;
 		Int_t m_sampleType;
 		Int_t m_dataPeriod;
+		Int_t m_runNumber;
+		Int_t m_lumiBlockNum;
 
 		Double_t m_cmEnergy;
 

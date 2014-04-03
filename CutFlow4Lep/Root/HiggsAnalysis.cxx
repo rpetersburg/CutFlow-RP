@@ -61,11 +61,14 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	if(m_event->eventinfo.isSimulation()) m_isMC = true;
 	else m_isMC = false;
 
+	// Set m_dataYear, m_cmEnergy, and m_is2012 for the event
+	setEventYear();
+
 	// Getting the mass of MC Higgs using Calculation object
 	Double_t higgsMass = 0;
 	if (m_isMC) higgsMass = (new MCHiggsMass(m_event, m_currFileNameVec))->getMass();
 
-	// Setting the sample type
+	// Setting the sample type (m_sampleType)
 	setSampleType();
 
 	// Getting the event's weight
@@ -74,7 +77,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	Double_t eventJHUWeight = eventWeightObj->getJHUWeight();
 	Double_t eventggFWeight = eventWeightObj->getggFWeight();
 
-	// Filling the counting histogram with relevant weights)
+	// Filling the counting histogram with relevant weights
 	m_countingHist->Fill(1);
 	m_countingHist->Fill(2, eventWeight);
 	m_countingHist->Fill(3, eventWeight);
@@ -113,8 +116,6 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
 	else if (m_dataYear == 2012) m_currElectron = &(m_event->el);
 
-	setEventYear();
-
 	if (m_isMC)
 	{
 		m_currDataCalibration = -1;
@@ -132,9 +133,30 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Ends event analysis if Vertex Cut is not passed
 	if (!(new VertexCut(m_event)->passedCut)) return;
 
-	// Instantiate the Pileup Reweight Tool
+	// Instantiate the Pileup Reweighting Tool
 	Root::TPileupReweighting *pileupReweightingTool = (new PileupReweightTool(m_dataYear, m_currMCCollection, m_currDataCalibration))->getTool();
 
+	// Setting the run number and luminosity block number
+	if (m_isMC)
+	{
+		// Set random run number and luminosity to mimic randomness of data
+		pileupReweightingTool->SetRandomSeed(314159 + m_event->eventinfo.mc_channel_number() * 2718 + m_event->eventinfo.EventNumber());
+		m_runNumber = pileupReweightingTool->GetRandomRunNumber(m_event->eventinfo.RunNumber());
+		m_lumiBlockNum = pileupReweightingTool->GetRandomLumiBlockNumber(m_runNumber);
+	}
+	else
+	{
+		m_runNumber = m_event->eventinfo.RunNumber();
+		m_lumiBlockNum = m_event->eventinfo.lbn();
+	}
+
+	// Ends event analysis if no leptons pass the trigger
+	if (!((new ElectronTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger() |
+				(new MuonTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger() |
+				(new DiElectronTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger() |
+				(new DiMuonTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger() |
+				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger()))
+		return;
 
 
 
@@ -436,7 +458,7 @@ void HiggsAnalysis::setEventYear()
 		m_cmEnergy = 8.0;
 		m_is2012 = true;
 	}
-	else cout<<"Event number not recognized: "<< runNumber <<endl;
+	else cout<<"Error: HiggsAnalysis::setOutputFilePath(): Event run number not recognized: "<< runNumber <<endl;
 }
 
 // For MC simulations, sets the type of higgs sample
