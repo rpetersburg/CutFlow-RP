@@ -1,17 +1,15 @@
-#include <D3PDReader/Event.h>
+#include "CutFlow4Lep/UsesEvent.h"
 
 using namespace std;
-
-class Cuts
+class Cuts : public UsesEvent
 {
 	public:
-		Cuts(D3PDReader::Event *tEvent) : m_event(tEvent) {};
+		Cuts(D3PDReader::Event *tEvent) : UsesEvent(tEvent) {};
 		~Cuts() {};
 
 		virtual Bool_t passedCut() = 0;
 
 	protected:
-		D3PDReader::Event *m_event;
 
 	private:
 

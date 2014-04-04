@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Triggers/MuonTrigger.h"
 
 MuonTrigger::MuonTrigger(D3PDReader::Event *tEvent, Int_t tDataPeriod, Int_t tRunNumber)
-	: Triggers(tEvent, tDataPeriod, tRunNumber)
+	: Triggers(tEvent)
 {
 
 }

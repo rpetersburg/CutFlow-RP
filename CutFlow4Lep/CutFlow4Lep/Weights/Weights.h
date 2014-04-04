@@ -1,15 +1,13 @@
-#include <iostream>
-
-#include <TString.h>
-
 #include <D3PDReader/Event.h>
+
+#include "CutFlow4Lep/UsesEvent.h"
 
 using namespace std;
 
-class Weights
+class Weights : public UsesEvent
 {
 	public:
-		Weights(D3PDReader::Event *tEvent, Int_t tDataYear) : m_event(tEvent), m_dataYear(tDataYear), m_weight(1.0) {};
+		Weights(D3PDReader::Event *tEvent) : UsesEvent(tEvent), m_weight(1.0) {};
 		~Weights() {}
 
 		Double_t getWeight() {return m_weight;};
@@ -17,9 +15,6 @@ class Weights
 
 	protected:
 		virtual void setWeight() = 0;
-
-		D3PDReader::Event *m_event;
-		Int_t m_dataYear;
 		Double_t m_weight;
 
 	private:

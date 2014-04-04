@@ -8,7 +8,7 @@ using namespace std;
 class DataPreselection : public Cuts
 {
 	public:
-		DataPreselection(D3PDReader::Event *tEvent, Int_t tDataYear);
+		DataPreselection(D3PDReader::Event *tEvent);
 		~DataPreselection() {};
 
 		Bool_t passedCut();

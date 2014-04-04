@@ -1,6 +1,6 @@
 #include "CutFlow4Lep/Cuts/DataPreselection.h"
 
-DataPreselection::DataPreselection(D3PDReader::Event *tEvent, Int_t tDataYear) : Cuts(tEvent), m_dataYear(tDataYear)
+DataPreselection::DataPreselection(D3PDReader::Event *tEvent) : Cuts(tEvent)
 {
 	initializeTileTripReader();
 	initializeGoodRunsList();

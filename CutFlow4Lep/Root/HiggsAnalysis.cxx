@@ -71,8 +71,11 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Setting the sample type (m_sampleType)
 	setSampleType();
 
+	// Instantiate the Pileup Reweighting Tool
+	Root::TPileupReweighting *pileupReweightingTool = (new PileupReweightTool(m_dataYear, m_currMCCollection, m_currDataCalibration))->getTool();
+
 	// Getting the event's weight
-	EventWeight *eventWeightObj = new EventWeight(m_event, m_dataYear, higgsMass, m_sampleType, m_currMCCollection, m_currDataCalibration);
+	EventWeight *eventWeightObj = new EventWeight(m_event, higgsMass, m_sampleType, pileupReweightingTool);
 	Double_t eventWeight = eventWeightObj->getWeight();
 	Double_t eventJHUWeight = eventWeightObj->getJHUWeight();
 	Double_t eventggFWeight = eventWeightObj->getggFWeight();
@@ -129,12 +132,9 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 	// Ends event analysis if Data Preselection Cut is not passed
 	if (!m_isMC)
-		if (!(new DataPreselection(m_event, m_dataYear))->passedCut()) return;
+		if (!(new DataPreselection(m_event))->passedCut()) return;
 	// Ends event analysis if Vertex Cut is not passed
 	if (!(new VertexCut(m_event)->passedCut)) return;
-
-	// Instantiate the Pileup Reweighting Tool
-	Root::TPileupReweighting *pileupReweightingTool = (new PileupReweightTool(m_dataYear, m_currMCCollection, m_currDataCalibration))->getTool();
 
 	// Setting the run number and luminosity block number
 	if (m_isMC)

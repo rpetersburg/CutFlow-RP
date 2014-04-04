@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Weights/PileupWeight.h"
 
-PileupWeight::PileupWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Root::TPileupReweighting *tPileupReweight) 
-	: Weights(tEvent, tDataYear), m_reweight(tPileupReweight)
+PileupWeight::PileupWeight(D3PDReader::Event *tEvent, Root::TPileupReweighting *tPileupReweight) 
+	: Weights(tEvent), m_reweight(tPileupReweight)
 {
 	initializeReweight();
 	setWeight();

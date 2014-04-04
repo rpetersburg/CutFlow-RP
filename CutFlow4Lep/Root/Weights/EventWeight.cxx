@@ -1,13 +1,13 @@
 #include "CutFlow4Lep/Weights/EventWeight.h"
 
-EventWeight::EventWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Double_t tHiggsMass,
-												 Int_t tSampleType, Int_t tMCCollection, Int_t tDataCollection)
-	:	Weights(tEvent, tDataYear)
+EventWeight::EventWeight(D3PDReader::Event *tEvent, Double_t tHiggsMass,
+												 Int_t tSampleType, Root::TPileupReweighting *tPileupReweight)
+	:	Weights(tEvent)
 {
-	m_ggFWeight = (new ggFWeight(m_event, m_dataYear, tHiggsMass, tSampleType))->getWeight();
-	m_jhuWeight = (new JHUWeight(m_event, m_dataYear))->getWeight();
-	m_pileupWeight = (new PileupWeight(m_event, m_dataYear, tMCCollection, tDataCollection))->getWeight();
-	m_zVertexWeight = (new ZVertexWeight(m_event, m_dataYear))->getWeight();
+	m_ggFWeight = (new ggFWeight(m_event, tHiggsMass, tSampleType))->getWeight();
+	m_jhuWeight = (new JHUWeight(m_event))->getWeight();
+	m_pileupWeight = (new PileupWeight(m_event, tPileupReweight))->getWeight();
+	m_zVertexWeight = (new ZVertexWeight(m_event))->getWeight();
 
 	setWeight();
 }

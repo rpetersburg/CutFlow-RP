@@ -4,6 +4,8 @@
 #include <CutFlow4Lep/Weights/PileupWeight.h>
 #include <CutFlow4Lep/Weights/ZVertexWeight.h>
 
+#include <PileupReweighting/TPileupReweighting.h>
+
 #include <CutFlow4Lep/Calculations/MCHiggsMass.h>
 #include <CutFlow4Lep/StructDef.h>
 
@@ -12,8 +14,8 @@ using namespace std;
 class EventWeight : public Weights
 {
 	public:
-		EventWeight(D3PDReader::Event *tEvent, Int_t tDataYear, Double_t tHiggsMass,
-								Int_t tSampleType, Int_t tMCCollection, Int_t tDataCollection);
+		EventWeight(D3PDReader::Event *tEvent, Double_t tHiggsMass,
+								Int_t tSampleType, Root::TPileupReweighting *tPileupReweight);
 		~EventWeight();
 
 		Double_t getggFWeight() {return m_ggFWeight;};

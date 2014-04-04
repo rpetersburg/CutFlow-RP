@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Weights/ZVertexWeight.h"
 
-ZVertexWeight::ZVertexWeight(D3PDReader::Event *tEvent, Int_t tDataYear)
-	:	Weights(tEvent, tDataYear)
+ZVertexWeight::ZVertexWeight(D3PDReader::Event *tEvent)
+	:	Weights(tEvent)
 {
 	initializeReweight();
 	setWeight();
