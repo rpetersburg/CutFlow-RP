@@ -141,21 +141,21 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	{
 		// Set random run number and luminosity to mimic randomness of data
 		pileupReweightingTool->SetRandomSeed(314159 + m_event->eventinfo.mc_channel_number() * 2718 + m_event->eventinfo.EventNumber());
-		m_runNumber = pileupReweightingTool->GetRandomRunNumber(m_event->eventinfo.RunNumber());
-		m_lumiBlockNum = pileupReweightingTool->GetRandomLumiBlockNumber(m_runNumber);
+		m_runNumber_sf = pileupReweightingTool->GetRandomRunNumber(m_event->eventinfo.RunNumber());
+		m_lbn_sf = pileupReweightingTool->GetRandomLumiBlockNumber(m_runNumber);
 	}
 	else
 	{
-		m_runNumber = m_event->eventinfo.RunNumber();
-		m_lumiBlockNum = m_event->eventinfo.lbn();
+		m_runNumber_sf = m_event->eventinfo.RunNumber();
+		m_lbn_sf = m_event->eventinfo.lbn();
 	}
 
 	// Ends event analysis if no leptons pass the trigger
-	if (!((new ElectronTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger() |
-				(new MuonTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger() |
-				(new DiElectronTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger() |
-				(new DiMuonTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger() |
-				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber))->passedTrigger()))
+	if (!((new ElectronTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
+				(new MuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
+				(new DiElectronTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
+				(new DiMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
+				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger()))
 		return;
 
 

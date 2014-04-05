@@ -22,7 +22,7 @@ void MuonCaloSmear::executeSmear()
 
 		Int_t isCaloMuonId = currMuon.isCaloMuonId();
 		Double_t phi = currMuon.phi();
-		Double_t energy = currMuon.E();
+		Double_t E = currMuon.E();
 		Double_t charge = currMuon.charge();
 		Double_t eta = currMuon.eta();
 		Double_t pT = currMuon.pt();
@@ -47,7 +47,7 @@ void MuonCaloSmear::executeSmear()
 				smear = smearedpTID / pT;
 				pT = smearedpTID;
 				p = pT * sin(currMuon.id_theta());
-				energy = energy * smear;
+				E = E * smear;
 
 				currMuon.id_pt = smearedpTID;
 				currMuon.me_pt = smearedpTID;
@@ -63,13 +63,34 @@ void MuonCaloSmear::executeSmear()
 			if (pT >= pTCutCalo && fabs(eta) <= 0.4)
 			{
 				TLorentzVector lorentzVector;
-				lorentzVector.SetPtEtaPhiE(pT, eta, phi, energy);
+				lorentzVector.SetPtEtaPhiE(pT, eta, phi, E);
 
 				if (isCaloMuonId && m_dataYear == 2011) muonEff = m_caloMuCSF->scaleFactor(lorentzVector);
 				else if (isCaloMuonId && m_dataYear == 2012) muonEff = m_caloMuCSF->scaleFactor(charge, lorentzVector);
 			}
-			muon
+			m_muonCaloEff.push_back(muonEff);
 		}
+		else if (!m_isMC)
+		{
+			Double_t scaleFactor = 1;
+			pT = pT * fabs(scaleFactor);
+			p = p * fabs(scaleFactor);
+			E = E * fabs(scaleFactor);
+		}
+		currMuon.pt() = pT;
+		currMuon.E() = E;
+
+		// Muon Uncertainty Correction
+		// muon type, =1 for combined muons, =2 for calorimeter and segment tagged muons, =3 for stand-alone muons 
+		Int_t type = 2;
+		TLorentzVector muLorentz;
+		phi = currMuon.phi();
+		E = currMuon.E();
+		eta = currMuon.eta();
+		pT = currMuon.pt();
+
+	}
+
 }
 
 void MuonCaloSmear::initializeMuonObj()

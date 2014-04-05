@@ -112,8 +112,8 @@ class HiggsAnalysis
 		Int_t m_currDataCalibration;
 		Int_t m_sampleType;
 		Int_t m_dataPeriod;
-		Int_t m_runNumber;
-		Int_t m_lumiBlockNum;
+		Int_t m_runNumber_sf;
+		Int_t m_lbn_sf;
 
 		Double_t m_cmEnergy;
 
