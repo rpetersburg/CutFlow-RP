@@ -2,6 +2,7 @@
 #define MUONSMEAR_H
 
 #include "CutFlow4Lep/Smear/Smear.h"
+#include "CutFlow4Lep/StructDef.h"
 
 #include <D3PDReader/MuonD3PDObject.h>
 
@@ -29,7 +30,7 @@ class MuonSmear4Lep : public Smear
 		void initializeResolutionAndMomentumScaleFactors();
 
 		D3PDReader::MuonD3PDObject *m_muon;
-		MuonSmear::SmearingClass *m_smearObj;
+		MuonSmear::SmearingClass *m_smearTool;
 
 		Analysis::MuonResolutionAndMomentumScaleFactors *m_muonResoMomScaleFactors;
 		Analysis::AnalysisMuonConfigurableScaleFactors *m_stacoCSF;
