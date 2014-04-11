@@ -3,6 +3,16 @@
 
 UsesEvent::UsesEvent(D3PDReader::Event *tEvent) : m_event(tEvent)
 {
+	initializeAll();
+}
+
+UsesEvent::~UsesEvent()
+{
+
+}
+
+void UsesEvent::initializeAll()
+{
 	setIsMC();
 	setRunNumber();
 	setDataYear();
@@ -10,9 +20,10 @@ UsesEvent::UsesEvent(D3PDReader::Event *tEvent) : m_event(tEvent)
 	setEventNumber();
 }
 
-UsesEvent::~UsesEvent()
+void UsesEvent::setEvent(D3PDReader::Event *tEvent)
 {
-
+	m_event = tEvent;
+	initializeAll();
 }
 
 void UsesEvent::setDataYear()
