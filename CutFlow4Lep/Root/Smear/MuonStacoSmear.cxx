@@ -3,7 +3,7 @@
 MuonStacoSmear::MuonStacoSmear(D3PDReader::Event *tEvent, Root::TPileupReweighting *tPileupReweighting)
 	: MuonSmear4Lep(tEvent, tPileupReweighting)
 {
-
+	initializeMuonObj();
 }
 
 MuonStacoSmear::~MuonStacoSmear()

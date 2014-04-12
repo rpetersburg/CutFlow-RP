@@ -142,7 +142,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		// Set random run number and luminosity to mimic randomness of data
 		pileupReweightingTool->SetRandomSeed(314159 + m_event->eventinfo.mc_channel_number() * 2718 + m_event->eventinfo.EventNumber());
 		m_runNumber_sf = pileupReweightingTool->GetRandomRunNumber(m_event->eventinfo.RunNumber());
-		m_lbn_sf = pileupReweightingTool->GetRandomLumiBlockNumber(m_runNumber);
+		m_lbn_sf = pileupReweightingTool->GetRandomLumiBlockNumber(m_runNumber_sf);
 	}
 	else
 	{
@@ -159,7 +159,10 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		return;
 
 
-
+	// Smearing
+	(new D0Z0Smear(m_event))->executeSmear();
+	(new MuonCaloSmear(m_event, pileupReweightingTool))->executeSmear();
+	(new MuonStacoSmear(m_event, pileupReweightingTool))->executeSmear();
 
 	
 	

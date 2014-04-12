@@ -3,7 +3,7 @@
 MuonCaloSmear::MuonCaloSmear(D3PDReader::Event *tEvent, Root::TPileupReweighting *tPileupReweighting)
 	: MuonSmear4Lep(tEvent, tPileupReweighting)
 {
-
+	initializeMuonObj();
 }
 
 MuonCaloSmear::~MuonCaloSmear()
@@ -125,12 +125,6 @@ void MuonCaloSmear::initializeMuonObj()
 {
 	m_muon = &(m_event->mu_calo);
 
-	Double_t pT;
-	Double_t phi;
-	Double_t eta;
-	Double_t pTID;
-	Double_t phiID;
-	Double_t etaID;
 	for (Int_t i = 0; i < m_muon->n(); i++)
 	{
 		D3PDReader::MuonD3PDObjectElement currMuon = (*m_muon)[i];

@@ -29,6 +29,9 @@ class MuonSmear4Lep : public Smear
 		void initializeScaleFactors();
 		void initializeResolutionAndMomentumScaleFactors();
 
+		// Executes muon uncertainty correction (reduces duplicated code in children)
+		void muonUncertaintyCorrection(D3PDReader::MuonD3PDObjectElement currMuon);
+
 		D3PDReader::MuonD3PDObject *m_muon;
 		MuonSmear::SmearingClass *m_smearTool;
 

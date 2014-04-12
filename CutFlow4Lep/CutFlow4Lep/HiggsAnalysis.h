@@ -21,6 +21,10 @@
 #include "CutFlow4Lep/Triggers/DiMuonTrigger.h"
 #include "CutFlow4Lep/Triggers/ElectronMuonTrigger.h"
 
+#include "CutFlow4Lep/Smear/D0Z0Smear.h"
+#include "CutFlow4Lep/Smear/MuonCaloSmear.h"
+#include "CutFlow4Lep/Smear/MuonStacoSmear.h"
+
 #include "CutFlow4Lep/Cuts/DataPreselection.h"
 #include "CutFlow4Lep/Cuts/VertexCut.h"
 
