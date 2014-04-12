@@ -166,58 +166,24 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 	
 	
-	//// Initializing the event Specific Variables
-	//InitializeEventVar();
-	//getPeriodEvent();
-	//Bool_t passCut = true;
-	//
-	//// Preselection cut for Data
-	//if(!isMC)
-	//{
-	//	passCut = DataPreselectionCut();
-	//	if(!passCut) return passCut;
-	//}
+
 	//cutPass[cutFlow::DataPreselection]++;
 	//cutMuPass[cutMuFlow::DataPreselection] += (event->mu_staco.n() + event->mu_calo.n());
 	//cutElPass[cutElFlow::DataPreselection] += (el_cur->n());
 	//cutJetsPass[cutJetsFlow::DataPreselection] += event->jet_akt4topoem.n();
 	//Hist->cutPassHistW->Fill(cutFlow::DataPreselection, eventWeight);	
 	//
-	////Rest of Preselection
-	//passCut = AllPreselectionCut();
-	//if(!passCut) return passCut;
 	//cutPass[cutFlow::Preselection]++;
 	//cutMuPass[cutMuFlow::Preselection] += (event->mu_staco.n() + event->mu_calo.n());
 	//cutElPass[cutElFlow::Preselection] += (el_cur->n());
 	//cutJetsPass[cutJetsFlow::Preselection] += event->jet_akt4topoem.n();
 	//Hist->cutPassHistW->Fill(cutFlow::Preselection, eventWeight);
 
-	//// Initial Trigger Cut
-	//if(isMC)
-	//{ 
-	//	pileupTool->SetRandomSeed(314159+event->eventinfo.mc_channel_number()*2718+event->eventinfo.EventNumber());
-	//	runNumber_sf = pileupTool->GetRandomRunNumber(event->eventinfo.RunNumber());
-	//}
-	//else runNumber_sf = event->eventinfo.RunNumber();
-	//
-	//// For Counting DiMuon Trigger
-	//Bool_t passCut4Mu = SingleMuonTrigger(runNumber_sf) | DiMuonTrigger() ;
 	//if(passCut4Mu) {cutPass[cutFlow::Trigger4Mu] ++; Hist->cutPassHistW->Fill(cutFlow::Trigger4Mu, eventWeight);}
-	//
-	//// for Counting electron trigger
-	//Bool_t passCut4e = SingleElectronTrigger(runNumber_sf)| DiElectronTrigger(runNumber_sf);
 	//if(passCut4e) {cutPass[cutFlow::Trigger4e] ++;; Hist->cutPassHistW->Fill(cutFlow::Trigger4e, eventWeight);}
-	//
-	//// If it passes any of the trigger, move ahead
-	//passCut = SingleElectronTrigger(runNumber_sf)| DiElectronTrigger(runNumber_sf) | 
-	//SingleMuonTrigger(runNumber_sf) | DiMuonTrigger() |
-	//ElectronMuonTrigger();
 	//
 	//// For Trig eff studies
 	//if(anaType == doAnalysis::trigeff4l) passCut = true;
-
-	//if(!passCut) return passCut;
-	//
 	//cutPass[cutFlow::Trigger]++;
 	//cutMuPass[cutMuFlow::Trigger] += (event->mu_staco.n() + event->mu_calo.n());
 	//cutElPass[cutElFlow::Trigger] += (el_cur->n());

@@ -16,7 +16,5 @@ class MuonCaloSmear : public MuonSmear4Lep
 
 	private:
 		void initializeMuonObj();
-
-		vector<Double_t> m_muonCaloEff;
 };
 #endif

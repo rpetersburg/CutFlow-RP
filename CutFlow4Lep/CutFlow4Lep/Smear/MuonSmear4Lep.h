@@ -22,9 +22,11 @@ class MuonSmear4Lep : public Smear
 		~MuonSmear4Lep() {};
 
 		virtual void executeSmear() = 0;
+		vector<Double_t> getEff() {return m_muonEff;};
 
 	protected:
 		virtual void initializeMuonObj() = 0;
+		// Initialize appropriate objects for child use
 		void initializeSmearObj();
 		void initializeScaleFactors();
 		void initializeResolutionAndMomentumScaleFactors();
@@ -33,6 +35,7 @@ class MuonSmear4Lep : public Smear
 		void muonUncertaintyCorrection(D3PDReader::MuonD3PDObjectElement currMuon);
 
 		D3PDReader::MuonD3PDObject *m_muon;
+		vector<Double_t> m_muonEff;
 		MuonSmear::SmearingClass *m_smearTool;
 
 		Analysis::MuonResolutionAndMomentumScaleFactors *m_muonResoMomScaleFactors;

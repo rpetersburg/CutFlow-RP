@@ -114,7 +114,7 @@ void MuonStacoSmear::executeSmear()
 					else if (m_dataYear == 2012) muEff = m_stacoSACSF->scaleFactor(charge, lorentzVector);
 				}
 			}
-			m_muonStacoEff.push_back(muEff);
+			m_muonEff.push_back(muEff);
 		}
 
 		// Scaling Data
@@ -125,49 +125,16 @@ void MuonStacoSmear::executeSmear()
 			p = p * fabs(scaleFactor);
 			E = E * fabs(scaleFactor);
 		}
-
 		currMuon.pt() = pT;
 		currMuon.E() = E;
+
 		smearVal.push_back(smear);
+
 		// Warning for non-physical smear values
 		if (pT < 1e-3 || pT > 1e7) cout << "MuonStacoSmear::executeSmear(): Muon Smear values are not physical" << endl;
 
-		// Muon Uncertainty Correction
-		// muon type, =1 for combined muons, =2 for calorimeter and segment tagged muons, =3 for stand-alone muons 
-		Int_t muonType = 2;
-		
-		TLorentzVector muLorentz;
-		muLorentz.SetPtEtaPhiE(currMuon.pt(), currMuon.eta(), currMuon.phi(), currMuon.E());
-
-		Double_t MuonErrSF = m_muonResoMomScaleFactors->getResolutionScaleFactor(muLorentz, muonType);
-
-		currMuon.cov_qoverp_exPV() *= MuonErrSF * MuonErrSF;
-		currMuon.cov_d0_qoverp_exPV() *= MuonErrSF;
-		currMuon.cov_z0_qoverp_exPV() *= MuonErrSF;
-		currMuon.cov_phi_qoverp_exPV() *= MuonErrSF;
-		currMuon.cov_theta_qoverp_exPV() *= MuonErrSF;
-
-		TLorentzVector muLorentzME;
-    muLorentzME.SetPtEtaPhiM(currMuon.me_pt, currMuon.me_eta, currMuon.me_phi(), pdgMuMass);
-
-		Double_t MuonErrSFME = m_muonResoMomScaleFactors->getResolutionScaleFactor(muLorentzME, muonType);
-
-		currMuon.me_cov_qoverp_exPV() *= MuonErrSFME * MuonErrSFME;
-		currMuon.me_cov_d0_qoverp_exPV() *= MuonErrSFME;
-		currMuon.me_cov_z0_qoverp_exPV() *= MuonErrSFME;
-		currMuon.me_cov_phi_qoverp_exPV() *= MuonErrSFME;
-		currMuon.me_cov_theta_qoverp_exPV() *= MuonErrSFME;
-
-		TLorentzVector muLorentzID;
-		muLorentzID.SetPtEtaPhiM(currMuon.id_pt, currMuon.id_eta, currMuon.id_phi(), pdgMuMass);
-
-		Double_t MuonErrSFID = m_muonResoMomScaleFactors->getResolutionScaleFactor(muLorentzID, muonType);
-
-		currMuon.id_cov_qoverp_exPV() *= MuonErrSFID * MuonErrSFID;
-		currMuon.id_cov_d0_qoverp_exPV() *= MuonErrSFID;
-		currMuon.id_cov_z0_qoverp_exPV() *= MuonErrSFID;
-		currMuon.id_cov_phi_qoverp_exPV() *= MuonErrSFID;
-		currMuon.id_cov_theta_qoverp_exPV() *= MuonErrSFID;
+		// Correct for uncertainties (found in muon parent class)
+		muonUncertaintyCorrection(currMuon);
 	}
 }
 
