@@ -12,7 +12,7 @@
 
 HiggsAnalysis::HiggsAnalysis()
 {
-	cout << "You reached the unused constructor" << endl;
+	cout << "You reached the empty constructor" << endl;
 }
 
 HiggsAnalysis::HiggsAnalysis(TChain *tPhysicsTree) : m_physicsTree(tPhysicsTree)
@@ -158,14 +158,62 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger()))
 		return;
 
+	// D0Z0 Smearing (both electrons and muons)
+	if (m_dataYear == 2012 && m_isMC) (new D0Z0Smear(m_event))->executeSmear();
 
-	// Smearing
-	(new D0Z0Smear(m_event))->executeSmear();
-	(new MuonCaloSmear(m_event, pileupReweightingTool))->executeSmear();
-	(new MuonStacoSmear(m_event, pileupReweightingTool))->executeSmear();
+	// Muon Smearing
+	MuonCaloSmear *muonCaloSmearObj = new MuonCaloSmear(m_event, pileupReweightingTool);
+	MuonStacoSmear *muonStacoSmearObj = new MuonStacoSmear(m_event, pileupReweightingTool);
+	muonStacoSmearObj->executeSmear();
+	muonCaloSmearObj->executeSmear();
 
-	
-	
+	vector<Double_t> muonStacoSmear = muonStacoSmearObj->getSmear();
+	vector<Double_t> muonCaloSmear = muonCaloSmearObj->getSmear();
+
+	// Setting the muon efficiency values when MC
+	vector<Double_t> muonStacoEff, muonCaloEff;
+	if (m_isMC)
+	{
+		muonStacoEff = muonStacoSmearObj->getEff();
+		muonCaloEff = muonCaloSmearObj->getEff();
+	}
+	// Otherwise the efficiencies are 1
+	else
+	{
+		for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
+			muonStacoEff.push_back(1);
+		for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
+			muonCaloEff.push_back(1);
+	}
+
+	// Electron Smearing
+	ElectronSmear *electronSmearObj = new ElectronSmear(m_event, m_currMCCollection, m_currDataCalibration, m_runNumber_sf);
+	electronSmearObj->executeSmear();
+
+	vector<Double_t> electronSmear = electronSmearObj->getSmear();
+
+	vector<Double_t> electronEff;
+	if (m_isMC) electronEff = electronSmearObj->getEff();
+	else
+	{
+		for (Int_t i = 0; i < m_currElectron->n(); i++)
+			electronEff.push_back(1);
+	}
+	vector<Double_t> electronResolution = electronSmearObj->getMomentumError();
+	if (electronResolution.size() == 0)
+	{
+		for (Int_t i = 0; i < m_currElectron->n(); i++)
+			electronResolution.push_back(-1);
+	}
+	vector<Double_t> electron_bfEP_clpT;
+	for (Int_t i = 0; i < m_currElectron->n(); i++)
+		electron_bfEP_clpT.push_back(electronSmearObj->getbfEP_cl_ET()[i]);
+
+	// Photon Smearing
+	PhotonSmear *photonSmearObj = new PhotonSmear(m_event, m_currMCCollection, m_currDataCalibration, m_runNumber_sf);
+	photonSmearObj->executeSmear();
+
+	vector<Double_t> photonSmear = photonSmearObj->getSmear();
 
 	//cutPass[cutFlow::DataPreselection]++;
 	//cutMuPass[cutMuFlow::DataPreselection] += (event->mu_staco.n() + event->mu_calo.n());
@@ -493,18 +541,6 @@ void HiggsAnalysis::setDataCalibration()
 {
 	if (m_dataYear == 2011) m_currDataCalibration = DataCalibType::y2011d;
 	else if (m_dataYear == 2012) m_currDataCalibration = DataCalibType::y2012c;
-
-	// Specific issue if the sample production type is ggF_ZpZp
-	if (m_sampleType == SampleType::ggF_ZpZp)
-	{
-		if (m_dataYear == 2011) {m_currMCCollection = MCCollection::MC11c;}
-		else if (m_dataYear == 2012)
-		{
-			if (m_event->eventinfo.RunNumber() == 195847) {m_currMCCollection = MCCollection::MC12a;}
-			else if (m_event->eventinfo.RunNumber() == 195848) { m_currMCCollection = MCCollection::MC12b;}
-			else {cout<< "Error: HiggsAnalysis::AnalyzeTreeEvent: MC12ab run number not recognized" << endl;}
-		}
-	}
 }
 
 // Needs good documentation and some self-alterations.... Not sure exactly what is going on
@@ -560,6 +596,18 @@ void HiggsAnalysis::setMCCollection()
 			}
 			else if (find(mc12c, mc12c + nMC12c, prodTagNum) != mc12c + nMC12c) {m_currMCCollection = MCCollection::MC12c;}
 			else {cout << "Error: HiggsAnalysis::setMCCollection(): " << endl;}
+		}
+	}
+
+	// Specific issue if the sample production type is ggF_ZpZp
+	if (m_sampleType == SampleType::ggF_ZpZp)
+	{
+		if (m_dataYear == 2011) m_currMCCollection = MCCollection::MC11c;
+		else if (m_dataYear == 2012)
+		{
+			if (m_event->eventinfo.RunNumber() == 195847) m_currMCCollection = MCCollection::MC12a;
+			else if (m_event->eventinfo.RunNumber() == 195848) m_currMCCollection = MCCollection::MC12b;
+			else cout << "Error: HiggsAnalysis::AnalyzeTreeEvent: MC12ab run number not recognized" << endl;
 		}
 	}
 }

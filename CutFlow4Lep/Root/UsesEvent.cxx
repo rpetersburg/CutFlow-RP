@@ -1,6 +1,11 @@
 #include "CutFlow4Lep/UsesEvent.h"
 #include "CutFlow4Lep/StructDef.h"
 
+UsesEvent::UsesEvent()
+{
+
+}
+
 UsesEvent::UsesEvent(D3PDReader::Event *tEvent) : m_event(tEvent)
 {
 	initializeAll();
@@ -11,6 +16,12 @@ UsesEvent::~UsesEvent()
 
 }
 
+void UsesEvent::setEvent(D3PDReader::Event *tEvent)
+{
+	m_event = tEvent;
+	initializeAll();
+}
+
 void UsesEvent::initializeAll()
 {
 	setIsMC();
@@ -18,19 +29,15 @@ void UsesEvent::initializeAll()
 	setDataYear();
 	setDataPeriod();
 	setEventNumber();
-}
-
-void UsesEvent::setEvent(D3PDReader::Event *tEvent)
-{
-	m_event = tEvent;
-	initializeAll();
+	setElectronCollection;
 }
 
 void UsesEvent::setDataYear()
 {
-	if ( (m_runNumber >= 177531) && (m_runNumber <= 191933) )
+	Long_t runNumber = m_event->eventinfo.RunNumber();
+	if ( (runNumber >= 177531) && (runNumber <= 191933) )
 		m_dataYear = 2011;
-	else if (m_runNumber > 191933 )
+	else if (runNumber > 191933 )
 		m_dataYear = 2012;
 }
 
@@ -53,13 +60,22 @@ void UsesEvent::setRunNumber()
 	m_runNumber = m_event->eventinfo.RunNumber();
 }
 
+void UsesEvent::setEventNumber()
+{
+	m_eventNumber = m_event->eventinfo.EventNumber();
+}
+
 void UsesEvent::setIsMC()
 {
 	if(m_event->eventinfo.isSimulation()) m_isMC = true;
 	else m_isMC = false;
 }
 
-void UsesEvent::setEventNumber()
+void UsesEvent::setElectronCollection()
 {
-	m_eventNumber = m_event->eventinfo.EventNumber();
+	if (m_dataYear == 2011) m_electronCollection = ElectronCollection::LoosePlusPlus;
+	else if (m_dataYear == 2012) m_electronCollection = ElectronCollection::Likelihood;
+	// Below are options in case Moriond Config is active... don't need for now
+	//else if(m_dataYear == 2012 && !useLikelihood) m_electronCollection = ElectronCollection::MultiLepton;
+	//else if(m_dataYear == 2012 && useLikelihood) m_electronCollection = ElectronCollection::Likelihood;
 }

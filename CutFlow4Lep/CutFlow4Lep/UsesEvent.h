@@ -1,12 +1,15 @@
 #ifndef USESEVENT_H
 #define USESEVENT_H
 
+#include <iostream>
+
 #include <D3PDReader/Event.h>
 
 using namespace std;
 class UsesEvent
 {
 	public:
+		UsesEvent();
 		UsesEvent(D3PDReader::Event *tEvent);
 		~UsesEvent();
 
@@ -16,6 +19,7 @@ class UsesEvent
 		Int_t m_dataPeriod;
 		Int_t m_runNumber;
 		Int_t m_eventNumber;
+		Int_t m_electronCollection;
 		Bool_t m_isMC;
 
 		void initializeAll();
@@ -25,6 +29,7 @@ class UsesEvent
 		void setRunNumber();
 		void setEventNumber();
 		void setIsMC();
+		void setElectronCollection();
 
 	private:
 

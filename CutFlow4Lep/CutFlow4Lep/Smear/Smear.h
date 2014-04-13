@@ -11,6 +11,7 @@ class Smear : public UsesEvent
 		~Smear() {};
 
 		virtual void executeSmear() = 0;
+		vector<Double_t> getSmear() {return m_smear;};
 
 	protected:
 		virtual void initializeSmearObj() = 0;

@@ -13,8 +13,6 @@ MuonCaloSmear::~MuonCaloSmear()
 
 void MuonCaloSmear::executeSmear()
 {
-	vector<Double_t> smearVal;
-
 	// Smear the calorimeter muons
 	for (Int_t i = 0; i < m_muon->n(); i++)
 	{
@@ -80,7 +78,7 @@ void MuonCaloSmear::executeSmear()
 		currMuon.pt() = pT;
 		currMuon.E() = E;
 
-		smearVal.push_back(smear);
+		m_smear.push_back(smear);
 
 		// Correct for uncertainties (found in muon parent class)
 		muonUncertaintyCorrection(currMuon);

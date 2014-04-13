@@ -24,6 +24,8 @@
 #include "CutFlow4Lep/Smear/D0Z0Smear.h"
 #include "CutFlow4Lep/Smear/MuonCaloSmear.h"
 #include "CutFlow4Lep/Smear/MuonStacoSmear.h"
+#include "CutFlow4Lep/Smear/ElectronSmear.h"
+#include "CutFlow4Lep/Smear/PhotonSmear.h"
 
 #include "CutFlow4Lep/Cuts/DataPreselection.h"
 #include "CutFlow4Lep/Cuts/VertexCut.h"
@@ -32,6 +34,7 @@
 #include "CutFlow4Lep/Output/OutputTree.h"
 #include "CutFlow4Lep/StructDef.h"
 #include "CutFlow4Lep/PileupReweightTool.h"
+#include "CutFlow4Lep/UsesEvent.h"
 
 #include <vector>
 #include <string>
@@ -43,7 +46,7 @@
 #include <TH1F.h>
 
 using namespace std;
-class HiggsAnalysis
+class HiggsAnalysis :public UsesEvent
 {
 	public:
 		HiggsAnalysis();
@@ -104,7 +107,7 @@ class HiggsAnalysis
 		vector<TString> m_currFileNameVec;
 		TH1F *m_countingHist;
 
-		// AnalysisTreeEvent
+		// Variables describing each event
 		Bool_t m_isMC;
 		Bool_t m_tauSample;
 		Bool_t m_is2012;
@@ -124,7 +127,6 @@ class HiggsAnalysis
 		D3PDReader::ElectronD3PDObject *m_currElectron;
 
 		Long64_t m_mcRunNumber;
-
 
 };
 

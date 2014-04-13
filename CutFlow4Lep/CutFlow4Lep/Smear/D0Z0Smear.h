@@ -15,16 +15,16 @@ class D0Z0Smear : public Smear
 		~D0Z0Smear();
 
 		void executeSmear();
+		void smearMuon();
+		void smearElectron();
 
 	protected:
 
 	private:
-		void initializeSmearObj();
-		void smearMuon();
+		void initializeSmearObj();		
 		void smearMuon(D3PDReader::MuonD3PDObject *muon);
 		void smearMuonCalo(D3PDReader::MuonD3PDObject *muon);
 		void smearMuonStaco(D3PDReader::MuonD3PDObject *muon);
-		void smearElectron();
 
 		Double_t getZ0SmearSigma(Int_t nBL, Double_t pT, Double_t eta, Int_t index);
 		Double_t getD0SmearSigma(Int_t nBL, Double_t pT, Double_t eta, Int_t index);

@@ -13,8 +13,6 @@ MuonStacoSmear::~MuonStacoSmear()
 
 void MuonStacoSmear::executeSmear()
 {
-	vector<Double_t> smearVal;
-
 	for (Int_t i = 0; i < m_muon->n(); i++)
 	{
 		D3PDReader::MuonD3PDObjectElement currMuon = (*m_muon)[i];
@@ -128,7 +126,7 @@ void MuonStacoSmear::executeSmear()
 		currMuon.pt() = pT;
 		currMuon.E() = E;
 
-		smearVal.push_back(smear);
+		m_smear.push_back(smear);
 
 		// Warning for non-physical smear values
 		if (pT < 1e-3 || pT > 1e7) cout << "MuonStacoSmear::executeSmear(): Muon Smear values are not physical" << endl;
