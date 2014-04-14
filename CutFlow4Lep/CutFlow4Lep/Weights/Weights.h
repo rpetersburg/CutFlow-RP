@@ -1,5 +1,5 @@
 #ifndef WEIGHTS_H
-#define WEIGHT_H
+#define WEIGHTS_H
 
 #include <D3PDReader/Event.h>
 
