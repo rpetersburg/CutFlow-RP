@@ -101,7 +101,8 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		if (!dataPreselectionObj->passedCut()) return;
 	}
 	// Ends event analysis if Vertex Cut is not passed
-	if (!(new VertexCut(m_event)->passedCut)) return;
+	VertexCut *vertexCutObj = new VertexCut(m_event);
+	if (!vertexCutObj->passedCut) return;
 
 	// Setting the run number and luminosity block number
 	if (m_isMC)
@@ -506,7 +507,7 @@ void HiggsAnalysis::setCurrFileNameVec()
 	{
 		TIter iString(splitFileName);
 		TObjString* objString = 0;
-		while ( objString = (TObjString*)iString() )
+		while ( (objString = (TObjString*)iString()) )
 			m_currFileNameVec.push_back( objString->GetString() );
 	}
 }
@@ -533,7 +534,7 @@ void HiggsAnalysis::setMCCollection()
 	{
 		TIter iString(parts);
 		TObjString *objString = 0;
-		while (objString=(TObjString*)iString()) partName.push_back(objString->GetString());
+		while ( (objString=(TObjString*)iString()) ) partName.push_back(objString->GetString());
 	}
 
 	Long64_t runNumber = m_event->eventinfo.RunNumber();
