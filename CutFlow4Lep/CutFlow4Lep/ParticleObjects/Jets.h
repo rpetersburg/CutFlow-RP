@@ -1,9 +1,5 @@
-#ifndef JET_H
-#define JET_H
-
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h>
+#ifndef JETS_H
+#define JETS_H
 
 using namespace std;
 
@@ -22,5 +18,4 @@ class Jets
 
 
 };
-
 #endif

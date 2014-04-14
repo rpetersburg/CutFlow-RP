@@ -3,7 +3,7 @@
 JetCalibration::JetCalibration(D3PDReader::Event *tEvent, Int_t tCurrMCCollection)
 	: Correction(tEvent), m_currMCCollection(tCurrMCCollection)
 {
-
+	initializeCorrectionTool();
 }
 
 JetCalibration::~JetCalibration()

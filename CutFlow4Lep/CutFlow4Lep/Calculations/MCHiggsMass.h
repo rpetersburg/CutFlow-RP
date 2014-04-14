@@ -1,5 +1,5 @@
 #include <TString.h>
-#include "D3PDReader\Event.h"
+#include "D3PDReader/Event.h"
 
 using namespace std;
 class MCHiggsMass
