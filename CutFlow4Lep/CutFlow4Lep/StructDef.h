@@ -1,5 +1,5 @@
 #ifndef STRUCTDEF_H
-#define STRUCTEDEF_H
+#define STRUCTDEF_H
 
 //// Definition of macro for period
 //#define period2011_BD "period2011_BD"
