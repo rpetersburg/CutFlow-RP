@@ -23,5 +23,5 @@ class JetCalibration : public Correction
 		Int_t m_currMCCollection;
 
 		JetAnalysisCalib::JetCalibrationTool *m_jetCalibrationTool;
-}
+};
 #endif

@@ -22,9 +22,6 @@ HiggsAnalysis::~HiggsAnalysis()
 
 void HiggsAnalysis::analyzeTree()
 {
-	Int_t eventNum = 0;
-	Int_t numPassed = 0;
-
 	Int_t totNumEvents = m_physicsTree->GetEntries();
 
 	for (Int_t iEvent = 0; iEvent < totNumEvents; iEvent++)
@@ -99,7 +96,10 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 	// Ends event analysis if Data Preselection Cut is not passed
 	if (!m_isMC)
-		if (!(new DataPreselection(m_event))->passedCut()) return;
+	{
+		DataPreselection *dataPreselectionObj = new DataPreselection(m_event);
+		if (!dataPreselectionObj->passedCut()) return;
+	}
 	// Ends event analysis if Vertex Cut is not passed
 	if (!(new VertexCut(m_event)->passedCut)) return;
 
@@ -455,7 +455,7 @@ void HiggsAnalysis::setEventYear()
 // For MC simulations, sets the type of higgs sample
 void HiggsAnalysis::setSampleType()
 {
-	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
+	for (vector<Int_t>::size_type i = 0; i != m_currFileNameVec.size(); i++)
 	{
 		// Using only the first part of file name
 		if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
@@ -481,7 +481,7 @@ void HiggsAnalysis::setSampleType()
 // Finds the MC Run Number within the file name
 void HiggsAnalysis::setMCRunNumber()
 {
-	for (Int_t i = 0; i < m_currFileNameVec.size(); i++)
+	for (vector<Int_t>::size_type i = 0; i != m_currFileNameVec.size(); i++)
 	{
 		// Finding the string before the run number
 		if (m_currFileNameVec[i].Contains("mc11_7TeV") || m_currFileNameVec[i].Contains("mc12_8TeV"))
