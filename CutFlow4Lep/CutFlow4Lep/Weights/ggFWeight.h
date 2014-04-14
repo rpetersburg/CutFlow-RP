@@ -1,3 +1,6 @@
+#ifndef GGFWEIGHT_H
+#define GGFWEIGHT_H
+
 #include <CutFlow4Lep/Weights/Weights.h>
 #include <CutFlow4Lep/Calculations/MCHiggsMass.h>
 #include <CutFlow4Lep/StructDef.h>
@@ -23,3 +26,4 @@ class ggFWeight : public Weights
 		Int_t m_sampleType;
 
 };
+#endif

@@ -1,3 +1,6 @@
+#ifndef VERTEXCUT_H
+#define VERTEXCUT_H
+
 #include "CutFlow4Lep/Cuts/Cuts.h"
 
 using namespace std;
@@ -13,3 +16,4 @@ class VertexCut : public Cuts
 
 	private:
 };
+#endif

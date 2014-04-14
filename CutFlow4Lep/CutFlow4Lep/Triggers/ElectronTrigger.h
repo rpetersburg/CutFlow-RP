@@ -1,3 +1,6 @@
+#ifndef ELECTRONTRIGGER_H
+#define ELECTRONTRIGGER_H
+
 #include "CutFlow4Lep/Triggers/Triggers.h"
 
 class ElectronTrigger : public Triggers
@@ -13,3 +16,4 @@ class ElectronTrigger : public Triggers
 	private:
 
 };
+#endif

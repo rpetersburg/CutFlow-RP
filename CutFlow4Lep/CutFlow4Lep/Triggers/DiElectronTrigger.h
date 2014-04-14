@@ -1,3 +1,6 @@
+#ifndef DIELECTRONTRIGGER_H
+#define DIELECTRONTRIGGER_H
+
 #include "CutFlow4Lep/Triggers/Triggers.h"
 
 class DiElectronTrigger : public Triggers
@@ -13,3 +16,4 @@ class DiElectronTrigger : public Triggers
 	private:
 
 };
+#endif

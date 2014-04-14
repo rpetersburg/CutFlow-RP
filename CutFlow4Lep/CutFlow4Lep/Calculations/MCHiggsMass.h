@@ -1,3 +1,6 @@
+#ifndef MCHIGGSMASS_H
+#define MCHIGGSMASS_H
+
 #include <TString.h>
 #include "D3PDReader/Event.h"
 
@@ -20,3 +23,4 @@ class MCHiggsMass
 		D3PDReader::Event *m_event;
 		vector<TString> m_fileNameVec;
 };
+#endif

@@ -1,3 +1,6 @@
+#ifndef MUONTRIGGER_H
+#define MUONTRIGGER_H
+
 #include "CutFlow4Lep/Triggers/Triggers.h"
 
 class MuonTrigger : public Triggers
@@ -13,3 +16,4 @@ class MuonTrigger : public Triggers
 	private:
 
 };
+#endif

@@ -1,3 +1,6 @@
+#ifndef WEIGHTS_H
+#define WEIGHT_H
+
 #include <D3PDReader/Event.h>
 
 #include "CutFlow4Lep/UsesEvent.h"
@@ -20,3 +23,4 @@ class Weights : public UsesEvent
 	private:
 
 };
+#endif

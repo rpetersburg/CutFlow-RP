@@ -1,3 +1,6 @@
+#ifndef CROSSSECTIONWEIGHT_H
+#define CROSSSECTIONWEIGHT_H
+
 #include "CutFlow4Lep/Weights/Weights.h"
 #include "CutFlow4Lep/Calculations/MCHiggsMass.h"
 #include "CutFlow4Lep/StructDef.h"
@@ -28,3 +31,4 @@ class CrossSectionWeight : public Weights
 		Double_t m_brCorrection;
 		Double_t m_luminosity;
 };
+#endif

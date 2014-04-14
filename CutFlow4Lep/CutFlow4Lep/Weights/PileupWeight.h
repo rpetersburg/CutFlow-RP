@@ -1,3 +1,6 @@
+#ifndef PILEUPWEIGHT_H
+#define PILEUPWEIGHT_H
+
 #include <CutFlow4Lep/Weights/Weights.h>
 #include <CutFlow4Lep/Calculations/MCHiggsMass.h>
 #include <CutFlow4Lep/StructDef.h>
@@ -24,3 +27,4 @@ class PileupWeight : public Weights
 		Int_t m_mcCollection;
 		Int_t m_dataCollection;
 };
+#endif

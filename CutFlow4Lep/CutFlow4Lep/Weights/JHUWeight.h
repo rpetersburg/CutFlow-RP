@@ -1,3 +1,6 @@
+#ifndef JHUWEIGHT_H
+#define JHUWEIGHT_H
+
 #include <CutFlow4Lep/Weights/Weights.h>
 #include <CutFlow4Lep/Calculations/MCHiggsMass.h>
 
@@ -19,3 +22,4 @@ class JHUWeight : public Weights
 
 		JHUPtReweighting *m_reweight;
 };
+#endif

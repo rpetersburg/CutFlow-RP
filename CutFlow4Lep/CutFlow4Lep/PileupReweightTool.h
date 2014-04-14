@@ -1,3 +1,6 @@
+#ifndef PILEUPREWEIGHTTOOL_H
+#define PILEUPREWEIGHTTOOL_H
+
 #include <PileupReweighting/TPileupReweighting.h>
 #include "CutFlow4Lep/StructDef.h"
 
@@ -21,3 +24,4 @@ class PileupReweightTool
 		Int_t m_dataCalibration;
 
 };
+#endif

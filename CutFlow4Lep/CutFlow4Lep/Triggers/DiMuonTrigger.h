@@ -1,3 +1,6 @@
+#ifndef DIMUONTRIGGER_H
+#define DIMUONTRIGGER_H
+
 #include "CutFlow4Lep/Triggers/Triggers.h"
 
 class DiMuonTrigger : public Triggers
@@ -13,3 +16,4 @@ class DiMuonTrigger : public Triggers
 	private:
 
 };
+#endif

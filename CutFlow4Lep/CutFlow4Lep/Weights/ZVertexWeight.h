@@ -1,3 +1,6 @@
+#ifndef ZVERTEXWEIGHT_H
+#define ZVERTEXWEIGHT_H
+
 #include <CutFlow4Lep/Weights/Weights.h>
 #include <CutFlow4Lep/Calculations/MCHiggsMass.h>
 #include <CutFlow4Lep/StructDef.h>
@@ -20,3 +23,4 @@ class ZVertexWeight : public Weights
 
 		VertexPositionReweightingTool *m_reweight;
 };
+#endif

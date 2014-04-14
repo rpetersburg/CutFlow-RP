@@ -1,3 +1,6 @@
+#ifndef DATAPRESELECTION_H
+#define DATAPRESELECTION_H
+
 #include "CutFlow4Lep/Cuts/Cuts.h"
 
 #include <TileTripReader/TTileTripReader.h>
@@ -23,3 +26,4 @@ class DataPreselection : public Cuts
 		Root::TGoodRunsList *m_goodRunsList;
 		Int_t m_dataYear;
 };
+#endif

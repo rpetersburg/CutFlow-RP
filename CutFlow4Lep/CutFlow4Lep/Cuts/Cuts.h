@@ -1,3 +1,6 @@
+#ifndef CUTS_H
+#define CUTS_H
+
 #include "CutFlow4Lep/UsesEvent.h"
 
 using namespace std;
@@ -12,5 +15,5 @@ class Cuts : public UsesEvent
 	protected:
 
 	private:
-
 };
+#endif

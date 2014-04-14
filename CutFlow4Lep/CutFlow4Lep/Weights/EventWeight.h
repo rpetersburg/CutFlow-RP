@@ -1,3 +1,6 @@
+#ifndef EVENTWEIGHT_H
+#define EVENTWEIGHT_H
+
 #include <CutFlow4Lep/Weights/Weights.h>
 #include <CutFlow4Lep/Weights/ggFWeight.h>
 #include <CutFlow4Lep/Weights/JHUWeight.h>
@@ -36,3 +39,4 @@ class EventWeight : public Weights
 
 		VertexPositionReweightingTool *m_reweight;
 };
+#endif

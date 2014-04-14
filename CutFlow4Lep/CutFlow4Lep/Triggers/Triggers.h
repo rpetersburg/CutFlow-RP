@@ -1,3 +1,6 @@
+#ifndef TRIGGERS_H
+#define TRIGGERS_H
+
 #include <PileupReweighting/TPileupReweighting.h>
 
 #include "CutFlow4Lep/UsesEvent.h"
@@ -17,3 +20,4 @@ class Triggers : public UsesEvent
 	private:
 
 };
+#endif
