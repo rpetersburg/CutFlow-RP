@@ -1,7 +1,7 @@
 #ifndef ELECTRONSMEAR_H
 #define ELECTRONSMEAR_H
 
-#include "CutFlow4Lep/Smear/Smear.h"
+#include "CutFlow4Lep/Smear/EGammaSmear.h"
 #include "CutFlow4Lep/StructDef.h"
 
 #include "PATCore/PATCoreEnums.h"
@@ -11,7 +11,7 @@
 #include "egammaFourMomentumError/egammaFourMomentumError.h"
 
 using namespace std;
-class ElectronSmear : public Smear
+class ElectronSmear : public EGammaSmear
 {
 	public:
 		ElectronSmear(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tCurrDataCalibration, Int_t tRunNumber_sf);
@@ -25,18 +25,12 @@ class ElectronSmear : public Smear
 	protected:
 
 	private:
-		void initializeSmearObj();
 		void initializeEfficiencyTool();
 		void initializeMomentumErrorTool();
 
-		AtlasRoot::egammaEnergyCorrectionTool *m_smearTool;
 		Root::TElectronEfficiencyCorrectionTool *m_idEffTool;
 		Root::TElectronEfficiencyCorrectionTool *m_recoEffTool;
 		egammaFourMomentumError *m_momentumErrorTool;
-
-		Int_t m_currMCCollection;
-		Int_t m_currDataCalibration;
-		Int_t m_runNumber_sf;
 
 		vector<Double_t> m_electronEff;
 		vector<Double_t> m_momentumErrorVec;

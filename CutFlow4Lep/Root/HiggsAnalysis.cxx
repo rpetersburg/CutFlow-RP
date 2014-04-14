@@ -1,13 +1,3 @@
-#include <stdlib.h>
-#include <iostream>
-#include <string>
-#include <math.h>
-
-#include <TTree.h>
-#include <TChain.h>
-#include <TString.h>
-#include <TFile.h>
-
 #include "CutFlow4Lep/HiggsAnalysis.h"
 
 HiggsAnalysis::HiggsAnalysis()
@@ -87,33 +77,10 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	m_countingHist->Fill(4, eventWeight/eventggFWeight/eventJHUWeight);
 	m_countingHist->Fill(5, eventWeight/eventJHUWeight);
 
-	// Checking if tau sample
-	if (m_currFileName.Contains("noTau")) m_tauSample = false;
-	else m_tauSample = true;
-
 	// Get MC Channel Number
 	if (m_isMC) m_mcChannelNumber = m_event->eventinfo.mc_channel_number();
 
-	// Check mc generator name
-	if (m_currFileName.Contains("Pythia")) m_mcGenerator = MCGeneratorName::Pythia;
-
-	// Set tau sample boolean and mc generator based on channel number
-	if((m_mcChannelNumber>=169716 && m_mcChannelNumber<=169717) ||  // 2011 JHU
-     (m_mcChannelNumber>=167604 && m_mcChannelNumber<=167605) ||  // 2011 JHU
-     (m_mcChannelNumber>=167607 && m_mcChannelNumber<=167607) ||  // 2012 JHU
-     (m_mcChannelNumber>=169710 && m_mcChannelNumber<=169711) ||  // 2012 JHU
-     (m_mcChannelNumber>=167124 && m_mcChannelNumber<=167125) ||  // 2012 JHU
-     (m_mcChannelNumber>=167127 && m_mcChannelNumber<=167127) ||
-		 (m_mcChannelNumber>=167600 && m_mcChannelNumber<=167603) ||  // 2011 JHU
-     (m_mcChannelNumber>=167606 && m_mcChannelNumber<=167606) ||  // 2011 JHU
-     (m_mcChannelNumber>=167120 && m_mcChannelNumber<=167123) ||  // 2012 JHU
-     (m_mcChannelNumber>=167126 && m_mcChannelNumber<=167126) || 
-	   (m_mcChannelNumber>=181990 && m_mcChannelNumber<=181996)     // mc12c JHU
-	  ) 
-	{  		  
-		m_tauSample = false;
-		m_mcGenerator = MCGeneratorName::Pythia;
-	} 
+	setTauSampleAndGenerator();
 	
 	// 2012 defaults to GSF electrons; 2011 does not
 	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
@@ -157,6 +124,8 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 				(new DiMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
 				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger()))
 		return;
+
+	// Smearing
 
 	// D0Z0 Smearing (both electrons and muons)
 	if (m_dataYear == 2012 && m_isMC) (new D0Z0Smear(m_event))->executeSmear();
@@ -214,6 +183,11 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	photonSmearObj->executeSmear();
 
 	vector<Double_t> photonSmear = photonSmearObj->getSmear();
+
+	// Jet Calibration
+	JetCalibration *jetCalibrationObj = new JetCalibration(m_event, m_currMCCollection);
+	jetCalibrationObj->executeCorrection();
+
 
 	//cutPass[cutFlow::DataPreselection]++;
 	//cutMuPass[cutMuFlow::DataPreselection] += (event->mu_staco.n() + event->mu_calo.n());
@@ -628,5 +602,30 @@ void HiggsAnalysis::setDataPeriod()
 		m_dataPeriod = DataPeriod::run2012_All;
 }
 	
+void HiggsAnalysis::setTauSampleAndGenerator()
+{
+	// Checking if tau sample
+	if (m_currFileName.Contains("noTau")) m_tauSample = false;
+	else m_tauSample = true;
 
-		
+	// Check mc generator name
+	if (m_currFileName.Contains("Pythia")) m_mcGenerator = MCGeneratorName::Pythia;
+
+	// Set tau sample boolean and mc generator based on channel number
+	if((m_mcChannelNumber>=169716 && m_mcChannelNumber<=169717) ||  // 2011 JHU
+     (m_mcChannelNumber>=167604 && m_mcChannelNumber<=167605) ||  // 2011 JHU
+     (m_mcChannelNumber>=167607 && m_mcChannelNumber<=167607) ||  // 2012 JHU
+     (m_mcChannelNumber>=169710 && m_mcChannelNumber<=169711) ||  // 2012 JHU
+     (m_mcChannelNumber>=167124 && m_mcChannelNumber<=167125) ||  // 2012 JHU
+     (m_mcChannelNumber>=167127 && m_mcChannelNumber<=167127) ||
+		 (m_mcChannelNumber>=167600 && m_mcChannelNumber<=167603) ||  // 2011 JHU
+     (m_mcChannelNumber>=167606 && m_mcChannelNumber<=167606) ||  // 2011 JHU
+     (m_mcChannelNumber>=167120 && m_mcChannelNumber<=167123) ||  // 2012 JHU
+     (m_mcChannelNumber>=167126 && m_mcChannelNumber<=167126) || 
+	   (m_mcChannelNumber>=181990 && m_mcChannelNumber<=181996)     // mc12c JHU
+	  ) 
+	{  		  
+		m_tauSample = false;
+		m_mcGenerator = MCGeneratorName::Pythia;
+	} 
+}

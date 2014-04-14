@@ -3,7 +3,7 @@
 EGammaSmear::EGammaSmear(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tCurrDataCalibration, Int_t tRunNumber_sf) 
 	: Smear(tEvent), m_currMCCollection(tCurrMCCollection), m_currDataCalibration(tCurrDataCalibration), m_runNumber_sf(tRunNumber_sf)
 {
-
+	initializeSmearObj();
 }
 
 EGammaSmear::~EGammaSmear()

@@ -27,6 +27,8 @@
 #include "CutFlow4Lep/Smear/ElectronSmear.h"
 #include "CutFlow4Lep/Smear/PhotonSmear.h"
 
+#include "CutFlow4Lep/Corrections/JetCalibration.h"
+
 #include "CutFlow4Lep/Cuts/DataPreselection.h"
 #include "CutFlow4Lep/Cuts/VertexCut.h"
 
@@ -36,14 +38,17 @@
 #include "CutFlow4Lep/PileupReweightTool.h"
 #include "CutFlow4Lep/UsesEvent.h"
 
+#include <stdlib.h>
+#include <iostream>
 #include <vector>
 #include <string>
-#include "math.h"
+#include <math.h>
 
 #include <TTree.h>
 #include <TChain.h>
 #include <TString.h>
 #include <TH1F.h>
+#include <TFile.h>
 
 using namespace std;
 class HiggsAnalysis :public UsesEvent
@@ -63,6 +68,7 @@ class HiggsAnalysis :public UsesEvent
 		void setCurrFileNameVec();
 		void setMCRunNumber();
 		void setDataPeriod();
+		void setTauSampleAndGenerator();
 		
 		void setOutputFilePath(string newFilePath);	
 
