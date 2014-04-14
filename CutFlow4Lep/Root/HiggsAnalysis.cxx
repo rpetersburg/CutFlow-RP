@@ -102,7 +102,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	}
 	// Ends event analysis if Vertex Cut is not passed
 	VertexCut *vertexCutObj = new VertexCut(m_event);
-	if (!vertexCutObj->passedCut) return;
+	if (!vertexCutObj->passedCut()) return;
 
 	// Setting the run number and luminosity block number
 	if (m_isMC)
