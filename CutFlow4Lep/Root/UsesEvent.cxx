@@ -29,7 +29,7 @@ void UsesEvent::initializeAll()
 	setDataYear();
 	setDataPeriod();
 	setEventNumber();
-	setElectronCollection;
+	setElectronCollection();
 }
 
 void UsesEvent::setDataYear()
