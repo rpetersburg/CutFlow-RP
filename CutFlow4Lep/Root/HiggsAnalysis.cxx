@@ -115,6 +115,18 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger()))
 		return;
 
+	// Setting the Particle Objects
+	vector<Muon*> muonStacoVec;
+	vector<Muon*> muonCaloVec;
+	vector<Electron*> electronVec;
+	vector<Jets*> jetsVec;
+	
+	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
+		muonStacoVec.push_back(new Muon(m_event, &(m_event->mu_staco[i])));
+	for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
+		muonCaloVec.push_back(new Muon(m_event, &(m_event->mu_calo[i])));
+	for (Int_t i = 0; i < m_event->el.n(); i++)
+		electronVec.push_back(new Electron(m_event, &(m_event->el[i])));
 
 	// Smearing
 
@@ -127,31 +139,21 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	muonStacoSmearObj->executeSmear();
 	muonCaloSmearObj->executeSmear();
 
-	vector<Double_t> muonStacoSmear = muonStacoSmearObj->getSmear();
-	vector<Double_t> muonCaloSmear = muonCaloSmearObj->getSmear();
-
-	// Setting the muon efficiency values when MC
+	// Setting the smear and efficiency values from smear object to muon vector
 	vector<Double_t> muonStacoEff, muonCaloEff;
-	if (m_isMC)
+	for (vector<Muon*>::size_type i = 0; i != muonStacoVec.size(); i++)
 	{
-		muonStacoEff = muonStacoSmearObj->getEff();
-		muonCaloEff = muonCaloSmearObj->getEff();
-	}
-	// Otherwise the efficiencies are 1
-	else
-	{
-		for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
-			muonStacoEff.push_back(1);
-		for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
-			muonCaloEff.push_back(1);
-	}
+		muonStacoVec[i]->setSmear(muonStacoSmearObj->getSmear()[i]);
+		if (m_isMC)	muonStacoVec[i]->setEff(muonStacoSmearObj->getEff()[i]);
+		else muonStacoVec[i]->setEff(1); 
 
-	// Creating the vector of muon objects grouping together relevant data (possibly not necessary)
-	vector<Muon*> muonVec;
-	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
-		muonVec.push_back(new Muon(&(m_event->mu_staco[i]), muonStacoEff[i], muonStacoSmear[i]));
-	for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
-		muonVec.push_back(new Muon(&(m_event->mu_calo[i]), muonStacoEff[i], muonStacoSmear[i]));
+	}
+	for (vector<Muon*>::size_type i = 0; i != muonCaloVec.size(); i++)
+	{
+		muonCaloVec[i]->setSmear(muonCaloSmearObj->getSmear()[i]);
+		if (m_isMC) muonCaloVec[i]->setEff(muonCaloSmearObj->getEff()[i]);
+		else muonCaloVec[i]->setEff(1);
+	}
 
 	// Electron Smearing
 	ElectronSmear *electronSmearObj = new ElectronSmear(m_event, m_currMCCollection, m_currDataCalibration, m_runNumber_sf);

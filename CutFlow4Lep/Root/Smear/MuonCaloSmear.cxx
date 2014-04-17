@@ -8,15 +8,16 @@ MuonCaloSmear::MuonCaloSmear(D3PDReader::Event *tEvent, Root::TPileupReweighting
 
 MuonCaloSmear::~MuonCaloSmear()
 {
-
+	
 }
 
 void MuonCaloSmear::executeSmear()
 {
+	D3PDReader::MuonD3PDObjectElement *currMuon;
 	// Smear the calorimeter muons
 	for (Int_t i = 0; i < m_muon->n(); i++)
 	{
-		D3PDReader::MuonD3PDObjectElement *currMuon = &(*m_muon)[i];
+		currMuon = &(*m_muon)[i];
 
 		Int_t isCaloMuonId = currMuon->isCaloMuonId();
 		Double_t phi = currMuon->phi();
