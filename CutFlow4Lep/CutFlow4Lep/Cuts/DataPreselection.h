@@ -24,6 +24,5 @@ class DataPreselection : public Cuts
 
 		Root::TTileTripReader *m_tileTripReader;
 		Root::TGoodRunsList *m_goodRunsList;
-		Int_t m_dataYear;
 };
 #endif

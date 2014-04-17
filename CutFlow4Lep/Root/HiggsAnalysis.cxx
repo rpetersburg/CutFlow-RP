@@ -33,6 +33,7 @@ void HiggsAnalysis::analyzeTree()
 			currEvent = chain->LoadTree(currEvent);
 		}
 		m_currFileName = chain->GetFile()->GetPath();
+		setCurrFileNameVec(); // Set m_currFileNameVec a vector of the file name string
 		analyzeTreeEvent(currEvent);
 	}
 
@@ -48,18 +49,34 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	if(m_event->eventinfo.isSimulation()) m_isMC = true;
 	else m_isMC = false;
 
-	// Set m_dataYear, m_cmEnergy, and m_is2012 for the event
-	setEventYear();
+	if (m_isMC)
+	{
+		m_currDataCalibration = -1;
+		setMCCollection();
+	}
+	else
+	{
+		m_currMCCollection = -1;
+		setDataCalibration();
+	}
+	
+	// Instantiate the Pileup Reweighting Tool
+	Root::TPileupReweighting *pileupReweightingTool = (new PileupReweightTool(m_dataYear, m_currMCCollection, m_currDataCalibration))->getTool();
+
+	setEventYear(); // Set m_dataYear, m_cmEnergy, and m_is2012 for the event
+	setIsTauSampleAndMCGenerator(); // Set m_isTauSample and m_mcGenerator
+	setRunNumberSfAndLbnSf(pileupReweightingTool); // Set m_runNumber_sf and m_lbn_sf	
+	setCurrElectron(); // Set m_currElectron
+	setSampleType(); // Set m_sampleType
+	if (m_isMC) setMCChannelNumber(); // Set m_mcChannelNumber
+	if (m_isMC) setMCRunNumber(); // Set m_mcRunNumber
 
 	// Getting the mass of MC Higgs using Calculation object
 	Double_t higgsMass = 0;
 	if (m_isMC) higgsMass = (new MCHiggsMass(m_event, m_currFileNameVec))->getMass();
 
-	// Setting the sample type (m_sampleType)
-	setSampleType();
 
-	// Instantiate the Pileup Reweighting Tool
-	Root::TPileupReweighting *pileupReweightingTool = (new PileupReweightTool(m_dataYear, m_currMCCollection, m_currDataCalibration))->getTool();
+	// Weights
 
 	// Getting the event's weight
 	EventWeight *eventWeightObj = new EventWeight(m_event, higgsMass, m_sampleType, pileupReweightingTool);
@@ -74,25 +91,8 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	m_countingHist->Fill(4, eventWeight/eventggFWeight/eventJHUWeight);
 	m_countingHist->Fill(5, eventWeight/eventJHUWeight);
 
-	// Get MC Channel Number
-	if (m_isMC) m_mcChannelNumber = m_event->eventinfo.mc_channel_number();
 
-	setTauSampleAndGenerator();
-	
-	// 2012 defaults to GSF electrons; 2011 does not
-	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
-	else if (m_dataYear == 2012) m_currElectron = &(m_event->el);
-
-	if (m_isMC)
-	{
-		m_currDataCalibration = -1;
-		setMCCollection();
-	}
-	else
-	{
-		m_currMCCollection = -1;
-		setDataCalibration();
-	}
+	// Preselection Cuts
 
 	// Ends event analysis if Data Preselection Cut is not passed
 	if (!m_isMC)
@@ -104,19 +104,8 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	VertexCut *vertexCutObj = new VertexCut(m_event);
 	if (!vertexCutObj->passedCut()) return;
 
-	// Setting the run number and luminosity block number
-	if (m_isMC)
-	{
-		// Set random run number and luminosity to mimic randomness of data
-		pileupReweightingTool->SetRandomSeed(314159 + m_event->eventinfo.mc_channel_number() * 2718 + m_event->eventinfo.EventNumber());
-		m_runNumber_sf = pileupReweightingTool->GetRandomRunNumber(m_event->eventinfo.RunNumber());
-		m_lbn_sf = pileupReweightingTool->GetRandomLumiBlockNumber(m_runNumber_sf);
-	}
-	else
-	{
-		m_runNumber_sf = m_event->eventinfo.RunNumber();
-		m_lbn_sf = m_event->eventinfo.lbn();
-	}
+
+	// Triggers
 
 	// Ends event analysis if no leptons pass the trigger
 	if (!((new ElectronTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
@@ -125,6 +114,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 				(new DiMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
 				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger()))
 		return;
+
 
 	// Smearing
 
@@ -155,6 +145,13 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
 			muonCaloEff.push_back(1);
 	}
+
+	// Creating the vector of muon objects grouping together relevant data (possibly not necessary)
+	vector<Muon*> muonVec;
+	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
+		muonVec.push_back(new Muon(&(m_event->mu_staco[i]), muonStacoEff[i], muonStacoSmear[i]));
+	for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
+		muonVec.push_back(new Muon(&(m_event->mu_calo[i]), muonStacoEff[i], muonStacoSmear[i]));
 
 	// Electron Smearing
 	ElectronSmear *electronSmearObj = new ElectronSmear(m_event, m_currMCCollection, m_currDataCalibration, m_runNumber_sf);
@@ -188,6 +185,13 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Jet Calibration
 	JetCalibration *jetCalibrationObj = new JetCalibration(m_event, m_currMCCollection);
 	jetCalibrationObj->executeCorrection();
+
+
+	// Particle Specific Cuts
+
+	//Muon Cut
+	MuonCut *muonCutTool = new MuonCut(m_event);
+	if (!muonCutTool->passedCut()) return;
 
 
 	//cutPass[cutFlow::DataPreselection]++;
@@ -603,11 +607,11 @@ void HiggsAnalysis::setDataPeriod()
 		m_dataPeriod = DataPeriod::run2012_All;
 }
 	
-void HiggsAnalysis::setTauSampleAndGenerator()
+void HiggsAnalysis::setIsTauSampleAndMCGenerator()
 {
 	// Checking if tau sample
-	if (m_currFileName.Contains("noTau")) m_tauSample = false;
-	else m_tauSample = true;
+	if (m_currFileName.Contains("noTau")) m_isTauSample = false;
+	else m_isTauSample = true;
 
 	// Check mc generator name
 	if (m_currFileName.Contains("Pythia")) m_mcGenerator = MCGeneratorName::Pythia;
@@ -626,7 +630,36 @@ void HiggsAnalysis::setTauSampleAndGenerator()
 	   (m_mcChannelNumber>=181990 && m_mcChannelNumber<=181996)     // mc12c JHU
 	  ) 
 	{  		  
-		m_tauSample = false;
+		m_isTauSample = false;
 		m_mcGenerator = MCGeneratorName::Pythia;
 	} 
+}
+
+void HiggsAnalysis::setRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupReweightingTool)
+{
+	// Setting the run number (sf) and luminosity block number
+	if (m_isMC)
+	{
+		// Set random run number and luminosity to mimic randomness of data
+		pileupReweightingTool->SetRandomSeed(314159 + m_event->eventinfo.mc_channel_number() * 2718 + m_event->eventinfo.EventNumber());
+		m_runNumber_sf = pileupReweightingTool->GetRandomRunNumber(m_event->eventinfo.RunNumber());
+		m_lbn_sf = pileupReweightingTool->GetRandomLumiBlockNumber(m_runNumber_sf);
+	}
+	else
+	{
+		m_runNumber_sf = m_event->eventinfo.RunNumber();
+		m_lbn_sf = m_event->eventinfo.lbn();
+	}
+}
+
+void HiggsAnalysis::setCurrElectron()
+{
+	// 2012 defaults to GSF electrons; 2011 does not
+	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
+	else if (m_dataYear == 2012) m_currElectron = &(m_event->el);
+}
+
+void HiggsAnalysis::setMCChannelNumber()
+{
+	m_mcChannelNumber = m_event->eventinfo.mc_channel_number();
 }

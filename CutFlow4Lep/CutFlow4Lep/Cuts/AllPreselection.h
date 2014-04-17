@@ -15,6 +15,5 @@ class AllPreselection : public Cuts
 	protected:
 
 	private:
-		Int_t m_dataYear;
 };
 #endif

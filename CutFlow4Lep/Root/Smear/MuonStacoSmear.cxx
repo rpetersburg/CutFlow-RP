@@ -13,25 +13,22 @@ MuonStacoSmear::~MuonStacoSmear()
 
 void MuonStacoSmear::executeSmear()
 {
+	D3PDReader::MuonD3PDObjectElement *currMuon;
 	for (Int_t i = 0; i < m_muon->n(); i++)
 	{
-		D3PDReader::MuonD3PDObjectElement currMuon = (*m_muon)[i];
-		
-		Int_t isCombined = currMuon.isCombinedMuon();
-		Int_t isStandAlone = currMuon.isStandAloneMuon();
-		Int_t isSegmentTagged = currMuon.isSegmentTaggedMuon();
+		currMuon = &(*m_muon)[i];
 
-		Double_t phi = currMuon.phi();
-		Double_t E = currMuon.E();
-		Double_t charge = currMuon.charge();
-		Double_t eta = currMuon.eta();
-		Double_t pT = currMuon.pt();
+		Double_t phi = currMuon->phi();
+		Double_t E = currMuon->E();
+		Double_t charge = currMuon->charge();
+		Double_t eta = currMuon->eta();
+		Double_t pT = currMuon->pt();
 		Double_t p = 0;
-		Double_t ptMs = sin(currMuon.me_theta()) / fabs(double(currMuon.me_qoverp()));
+		Double_t ptMs = sin(currMuon->me_theta()) / fabs(double(currMuon->me_qoverp()));
 
 		Double_t pTID;
-		if (isStandAlone) pTID = pT;
-		else pTID = sin(currMuon.id_theta()) / fabs(double(currMuon.id_qoverp()));
+		if (currMuon->isStandAloneMuon()) pTID = pT;
+		else pTID = sin(currMuon->id_theta()) / fabs(double(currMuon->id_qoverp()));
 
 		// Actual smearing occurs here
 		Double_t smear = 1;
@@ -39,7 +36,7 @@ void MuonStacoSmear::executeSmear()
 		{
 			m_smearTool->SetSeed(m_eventNumber, i);
 			
-			if (isCombined)
+			if (currMuon->isCombinedMuon())
 			{
 				Double_t pTCBSmeared = pT;
 				Double_t pTMSSmeared = pT;
@@ -52,15 +49,15 @@ void MuonStacoSmear::executeSmear()
 					pTMSSmeared = m_smearTool->pTMS();
 					pTIDSmeared = m_smearTool->pTID();
 
-					currMuon.me_pt = pTMSSmeared;
-					currMuon.id_pt = pTIDSmeared;
+					currMuon->me_pt = pTMSSmeared;
+					currMuon->id_pt = pTIDSmeared;
 				}
 
 				smear = pTCBSmeared / pT;
 				pT = pTCBSmeared;
 				E = E * smear;
 			}
-			else if (isStandAlone)
+			else if (currMuon->isStandAloneMuon())
 			{
 				Double_t pTMSSmeared = pT;
 				if (fabs(eta) <= 2.7)
@@ -72,10 +69,10 @@ void MuonStacoSmear::executeSmear()
 				pT = pTMSSmeared;
 				E = E * smear;
 
-				currMuon.id_pt = pTMSSmeared;
-				currMuon.me_pt = pTMSSmeared;
+				currMuon->id_pt = pTMSSmeared;
+				currMuon->me_pt = pTMSSmeared;
 			}
-			else if (isSegmentTagged)
+			else if (currMuon->isSegmentTaggedMuon())
 			{
 				Double_t pTIDSmeared = pT;
 				if (fabs(eta) <= 2.7)
@@ -87,8 +84,8 @@ void MuonStacoSmear::executeSmear()
 				pT = pTIDSmeared;
 				E = E * smear;
 
-				currMuon.id_pt = pTIDSmeared;
-				currMuon.me_pt = pTIDSmeared;
+				currMuon->id_pt = pTIDSmeared;
+				currMuon->me_pt = pTIDSmeared;
 			}
 			else {cout << "MuonStacoSmear::executeSmear(): Unrecognized muon type" << endl;}
 
@@ -105,7 +102,8 @@ void MuonStacoSmear::executeSmear()
 				TLorentzVector lorentzVector;
 				lorentzVector.SetPtEtaPhiE(pT, eta, phi, E);
 
-				if (!isStandAlone) muEff = m_stacoCSF->scaleFactor(charge, lorentzVector);
+				if (!currMuon->isStandAloneMuon())
+					muEff = m_stacoCSF->scaleFactor(charge, lorentzVector);
 				else if (fabs(eta) >= 2.5 && fabs(eta) <= 2.7)
 				{
 					if (m_dataYear == 2011) muEff = m_stacoSACSF->scaleFactor(lorentzVector);
@@ -123,8 +121,8 @@ void MuonStacoSmear::executeSmear()
 			p = p * fabs(scaleFactor);
 			E = E * fabs(scaleFactor);
 		}
-		currMuon.pt() = pT;
-		currMuon.E() = E;
+		currMuon->pt() = pT;
+		currMuon->E() = E;
 
 		m_smear.push_back(smear);
 
@@ -146,46 +144,47 @@ void MuonStacoSmear::initializeMuonObj()
 	Double_t pTID;
 	Double_t phiID;
 	Double_t etaID;
+	D3PDReader::MuonD3PDObjectElement *currMuon;
 	for (Int_t i = 0; i < m_muon->n(); i++)
 	{
-		D3PDReader::MuonD3PDObjectElement currMuon = (*m_muon)[i];
+		currMuon = &(*m_muon)[i];
 
-		if (currMuon.isStandAloneMuon())
+		if (currMuon->isStandAloneMuon())
 		{
-			pTID = currMuon.pt();
-			phiID = currMuon.phi();
-			etaID = currMuon.eta();
+			pTID = currMuon->pt();
+			phiID = currMuon->phi();
+			etaID = currMuon->eta();
 		}
 		else
 		{
-			pTID = sin(currMuon.me_theta()) / fabs(currMuon.id_qoverp());
-			phiID = currMuon.id_phi();
-			etaID = -TMath::Log(tan(currMuon.id_theta()/2));
+			pTID = sin(currMuon->me_theta()) / fabs(currMuon->id_qoverp());
+			phiID = currMuon->id_phi();
+			etaID = -TMath::Log(tan(currMuon->id_theta()/2));
 		}
 
-		if (currMuon.isSegmentTaggedMuon())
+		if (currMuon->isSegmentTaggedMuon())
 		{
-			pT = currMuon.pt();
-			phi = currMuon.phi();
-			eta = currMuon.eta();
+			pT = currMuon->pt();
+			phi = currMuon->phi();
+			eta = currMuon->eta();
 		}
 		else
 		{
-			pT = sin(currMuon.me_theta()) / fabs(currMuon.me_qoverp());
-			phi = currMuon.me_phi();
-			eta = -TMath::Log(tan(currMuon.me_theta()/2));
+			pT = sin(currMuon->me_theta()) / fabs(currMuon->me_qoverp());
+			phi = currMuon->me_phi();
+			eta = -TMath::Log(tan(currMuon->me_theta()/2));
 		}
 
-		currMuon.me_pt = pT;
-		currMuon.me_phi() = phi;
-		currMuon.me_eta = eta;
+		currMuon->me_pt = pT;
+		currMuon->me_phi() = phi;
+		currMuon->me_eta = eta;
 
-		currMuon.id_pt = pTID;
-		currMuon.id_phi() = phiID;
-		currMuon.id_eta = etaID;
+		currMuon->id_pt = pTID;
+		currMuon->id_phi() = phiID;
+		currMuon->id_eta = etaID;
 
-		currMuon.id_pt_unsmeared = currMuon.id_pt;
-		currMuon.me_pt_unsmeared = currMuon.me_pt;
-		currMuon.cb_pt_unsmeared = currMuon.pt();
+		currMuon->id_pt_unsmeared = currMuon->id_pt;
+		currMuon->me_pt_unsmeared = currMuon->me_pt;
+		currMuon->cb_pt_unsmeared = currMuon->pt();
 	}
 }

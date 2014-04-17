@@ -13,24 +13,35 @@ class ChargedLepton
 		ChargedLepton();
 		~ChargedLepton();
 
+		Double_t getSmear() {return m_smear;}
+		Double_t getEff() {return m_eff;}
+
+		TLorentzVector* getMomentumMain() {return m_momentumMain;}
+		TLorentzVector* getMomentumBDT() {return m_momentumBDT;}
+		TLorentzVector* getMomentumME() {return m_momentumME;}
+		TLorentzVector* getMomentumID() {return m_momentumID;}
 
 	protected:
-		Int_t flavor;
-		Int_t type;
-		Int_t charge;
-		Int_t index;
+		Int_t m_index;
+		Double_t m_mass;	
 
-		TLorentzVector *m_momentum_main;
-		TLorentzVector m_momentum;
+		Double_t m_smear;
+		Double_t m_eff;
 
-		Double_t lepEff;
-		Double_t lepMass;
-		Double_t smearVar;
+		TLorentzVector *m_momentumMain;
+		TLorentzVector *m_momentumBDT;
+		TLorentzVector *m_momentumME;
+		TLorentzVector *m_momentumID;
+
+		Double_t m_ptCone20Correction;
 
 
+		Float_t sysE[DoSys::Nom + 1];
+		Float_t nomE;
+
+		Int_t m_vhLeptonType;
+		Int_t m_truthParentType;
 	private:
-
-
 };
 
 #endif

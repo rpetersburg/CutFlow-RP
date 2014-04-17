@@ -31,6 +31,7 @@
 
 #include "CutFlow4Lep/Cuts/DataPreselection.h"
 #include "CutFlow4Lep/Cuts/VertexCut.h"
+#include "CutFlow4Lep/Cuts/MuonCut.h"
 
 #include "CutFlow4Lep/Calculations/MCHiggsMass.h"
 #include "CutFlow4Lep/Output/OutputTree.h"
@@ -68,7 +69,10 @@ class HiggsAnalysis :public UsesEvent
 		void setCurrFileNameVec();
 		void setMCRunNumber();
 		void setDataPeriod();
-		void setTauSampleAndGenerator();
+		void setIsTauSampleAndMCGenerator();
+		void setRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupReweightingTool);
+		void setCurrElectron();
+		void setMCChannelNumber();
 		
 		void setOutputFilePath(string newFilePath);	
 
@@ -115,7 +119,7 @@ class HiggsAnalysis :public UsesEvent
 
 		// Variables describing each event
 		Bool_t m_isMC;
-		Bool_t m_tauSample;
+		Bool_t m_isTauSample;
 		Bool_t m_is2012;
 
 		Int_t m_mcChannelNumber;

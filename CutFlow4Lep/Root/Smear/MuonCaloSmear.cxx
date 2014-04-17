@@ -16,19 +16,19 @@ void MuonCaloSmear::executeSmear()
 	// Smear the calorimeter muons
 	for (Int_t i = 0; i < m_muon->n(); i++)
 	{
-		D3PDReader::MuonD3PDObjectElement currMuon = (*m_muon)[i];
+		D3PDReader::MuonD3PDObjectElement *currMuon = &(*m_muon)[i];
 
-		Int_t isCaloMuonId = currMuon.isCaloMuonId();
-		Double_t phi = currMuon.phi();
-		Double_t E = currMuon.E();
-		Double_t charge = currMuon.charge();
-		Double_t eta = currMuon.eta();
-		Double_t pT = currMuon.pt();
+		Int_t isCaloMuonId = currMuon->isCaloMuonId();
+		Double_t phi = currMuon->phi();
+		Double_t E = currMuon->E();
+		Double_t charge = currMuon->charge();
+		Double_t eta = currMuon->eta();
+		Double_t pT = currMuon->pt();
 		Double_t p = 0;
 
 		Double_t ptMs;
 		if (isCaloMuonId) ptMs = pT;
-		else ptMs = sin(currMuon.me_theta()) / fabs(currMuon.me_qoverp());
+		else ptMs = sin(currMuon->me_theta()) / fabs(currMuon->me_qoverp());
 
 		Double_t smear = 1.;
 		if (m_isMC)
@@ -44,11 +44,11 @@ void MuonCaloSmear::executeSmear()
 
 				smear = smearedpTID / pT;
 				pT = smearedpTID;
-				p = pT * sin(currMuon.id_theta());
+				p = pT * sin(currMuon->id_theta());
 				E = E * smear;
 
-				currMuon.id_pt = smearedpTID;
-				currMuon.me_pt = smearedpTID;
+				currMuon->id_pt = smearedpTID;
+				currMuon->me_pt = smearedpTID;
 			}
 			else cout << "MuonSmear4Lep::executeSmear(): Calo Type Mismatch" << endl;
 			
@@ -75,8 +75,8 @@ void MuonCaloSmear::executeSmear()
 			p = p * fabs(scaleFactor);
 			E = E * fabs(scaleFactor);
 		}
-		currMuon.pt() = pT;
-		currMuon.E() = E;
+		currMuon->pt() = pT;
+		currMuon->E() = E;
 
 		m_smear.push_back(smear);
 
@@ -91,18 +91,18 @@ void MuonCaloSmear::initializeMuonObj()
 
 	for (Int_t i = 0; i < m_muon->n(); i++)
 	{
-		D3PDReader::MuonD3PDObjectElement currMuon = (*m_muon)[i];
+		D3PDReader::MuonD3PDObjectElement *currMuon = &(*m_muon)[i];
 
-		currMuon.me_pt = currMuon.pt();
-		currMuon.me_phi() = currMuon.phi();
-		currMuon.me_eta = currMuon.eta();
+		currMuon->me_pt = currMuon->pt();
+		currMuon->me_phi() = currMuon->phi();
+		currMuon->me_eta = currMuon->eta();
 
-		currMuon.id_pt = sin(currMuon.id_theta()) / fabs(currMuon.id_qoverp());
-		currMuon.id_phi() = currMuon.id_phi();
-		currMuon.id_eta = -TMath::Log(tan(currMuon.id_theta()/2));
+		currMuon->id_pt = sin(currMuon->id_theta()) / fabs(currMuon->id_qoverp());
+		currMuon->id_phi() = currMuon->id_phi();
+		currMuon->id_eta = -TMath::Log(tan(currMuon->id_theta()/2));
 
-		currMuon.id_pt_unsmeared = currMuon.id_pt;
-		currMuon.me_pt_unsmeared = currMuon.me_pt;
-		currMuon.cb_pt_unsmeared = currMuon.pt();
+		currMuon->id_pt_unsmeared = currMuon->id_pt;
+		currMuon->me_pt_unsmeared = currMuon->me_pt;
+		currMuon->cb_pt_unsmeared = currMuon->pt();
 	}
 }
