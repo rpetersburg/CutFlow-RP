@@ -115,19 +115,6 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger()))
 		return;
 
-	// Setting the Particle Objects
-	vector<Muon*> muonStacoVec;
-	vector<Muon*> muonCaloVec;
-	vector<Electron*> electronVec;
-	vector<Jets*> jetsVec;
-	
-	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
-		muonStacoVec.push_back(new Muon(m_event, &(m_event->mu_staco[i])));
-	for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
-		muonCaloVec.push_back(new Muon(m_event, &(m_event->mu_calo[i])));
-	for (Int_t i = 0; i < m_event->el.n(); i++)
-		electronVec.push_back(new Electron(m_event, &(m_event->el[i])));
-
 	// Smearing
 
 	// D0Z0 Smearing (both electrons and muons)
@@ -187,6 +174,20 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Jet Calibration
 	JetCalibration *jetCalibrationObj = new JetCalibration(m_event, m_currMCCollection);
 	jetCalibrationObj->executeCorrection();
+
+	
+	// Setting the Particle Objects
+	vector<Muon*> muonStacoVec;
+	vector<Muon*> muonCaloVec;
+	vector<Electron*> electronVec;
+	vector<Jets*> jetsVec;
+	
+	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
+		muonStacoVec.push_back(new Muon(m_event, &(m_event->mu_staco[i])));
+	for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
+		muonCaloVec.push_back(new Muon(m_event, &(m_event->mu_calo[i])));
+	for (Int_t i = 0; i < m_event->el.n(); i++)
+		electronVec.push_back(new Electron(m_event, &(m_event->el[i])));
 
 
 	// Particle Specific Cuts
