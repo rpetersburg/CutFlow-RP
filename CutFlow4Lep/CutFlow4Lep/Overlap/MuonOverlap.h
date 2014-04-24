@@ -2,6 +2,7 @@
 #define MUONOVERLAP_H
 
 #include "CutFlow4Lep/Overlap/Overlap.h"
+#include "CutFlow4Lep/ParticleObjects/Muon.h"
 
 #include "D3PDReader/MuonD3PDObject.h"
 
@@ -10,12 +11,13 @@
 class MuonOverlap : public Overlap
 {
 	public:
-		MuonOverlap(vector<D3PDReader::MuonD3PDObjectElement*> tInitMuonVec);
+		MuonOverlap(vector<Muon*> tInitMuonVec);
+		MuonOverlap(vector<Muon*> tInitMuonVec);
 		~MuonOverlap();
 
 		void removeOverlap();
-		void setInitMuonVec(vector<D3PDReader::MuonD3PDObjectElement*> tInitMuonVec);
-		vector<D3PDReader::MuonD3PDObjectElement*> getGoodMuonVec() {return m_goodMuonVec;};
+		void setInitMuonVec(vector<Muon*> tInitMuonVec);
+		vector<Muon*> getGoodMuonVec() {return m_goodMuonVec;};
 
 
 	protected:
@@ -26,7 +28,7 @@ class MuonOverlap : public Overlap
 
 		Double_t deltaR(Double_t eta1, Double_t phi1, Double_t eta2, Double_t phi2);
 
-		vector<D3PDReader::MuonD3PDObjectElement*> m_initMuonVec;
-		vector<D3PDReader::MuonD3PDObjectElement*> m_goodMuonVec;
+		vector<Muon*> m_initMuonVec;
+		vector<Muon*> m_goodMuonVec;
 };
 #endif

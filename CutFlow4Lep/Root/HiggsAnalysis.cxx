@@ -115,6 +115,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger()))
 		return;
 
+
 	// Smearing
 
 	// D0Z0 Smearing (both electrons and muons)
@@ -125,22 +126,6 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	MuonStacoSmear *muonStacoSmearObj = new MuonStacoSmear(m_event, pileupReweightingTool);
 	muonStacoSmearObj->executeSmear();
 	muonCaloSmearObj->executeSmear();
-
-	// Setting the smear and efficiency values from smear object to muon vector
-	vector<Double_t> muonStacoEff, muonCaloEff;
-	for (vector<Muon*>::size_type i = 0; i != muonStacoVec.size(); i++)
-	{
-		muonStacoVec[i]->setSmear(muonStacoSmearObj->getSmear()[i]);
-		if (m_isMC)	muonStacoVec[i]->setEff(muonStacoSmearObj->getEff()[i]);
-		else muonStacoVec[i]->setEff(1); 
-
-	}
-	for (vector<Muon*>::size_type i = 0; i != muonCaloVec.size(); i++)
-	{
-		muonCaloVec[i]->setSmear(muonCaloSmearObj->getSmear()[i]);
-		if (m_isMC) muonCaloVec[i]->setEff(muonCaloSmearObj->getEff()[i]);
-		else muonCaloVec[i]->setEff(1);
-	}
 
 	// Electron Smearing
 	ElectronSmear *electronSmearObj = new ElectronSmear(m_event, m_currMCCollection, m_currDataCalibration, m_runNumber_sf);
@@ -177,10 +162,12 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 	
 	// Setting the Particle Objects
+
 	vector<Muon*> muonStacoVec;
 	vector<Muon*> muonCaloVec;
 	vector<Electron*> electronVec;
 	vector<Jets*> jetsVec;
+	vector<Jets*> jetsTruthVec;
 	
 	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
 		muonStacoVec.push_back(new Muon(m_event, &(m_event->mu_staco[i])));
@@ -188,13 +175,47 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		muonCaloVec.push_back(new Muon(m_event, &(m_event->mu_calo[i])));
 	for (Int_t i = 0; i < m_event->el.n(); i++)
 		electronVec.push_back(new Electron(m_event, &(m_event->el[i])));
+	for (Int_t i = 0; i < m_event->jet_akt4topoem.n(); i++)
+		jetsVec.push_back(new Jets(m_event, &(m_event->jet_akt4topoem[i])));
+	for (Int_t i = 0; i < m_event->jet_antikt4truth.n(); i++)
+		jetsTruthVec.push_back(new Jets(m_event, &(m_event->jet_antikt4truth[i])));
+
+	// Setting the smear and efficiency values from smear object to muon vector
+	vector<Double_t> muonStacoEff, muonCaloEff;
+	for (vector<Muon*>::size_type i = 0; i != muonStacoVec.size(); i++)
+	{
+		muonStacoVec[i]->setSmear(muonStacoSmearObj->getSmear()[i]);
+		if (m_isMC)	muonStacoVec[i]->setEff(muonStacoSmearObj->getEff()[i]);
+		else muonStacoVec[i]->setEff(1); 
+
+	}
+	for (vector<Muon*>::size_type i = 0; i != muonCaloVec.size(); i++)
+	{
+		muonCaloVec[i]->setSmear(muonCaloSmearObj->getSmear()[i]);
+		if (m_isMC) muonCaloVec[i]->setEff(muonCaloSmearObj->getEff()[i]);
+		else muonCaloVec[i]->setEff(1);
+	}
 
 
 	// Particle Specific Cuts
 
-	//Muon Cut
-	MuonCut *muonCutTool = new MuonCut(m_event);
-	if (!muonCutTool->passedCut()) return;
+	// Muon Cut
+	MuonCut *muonStacoCutTool = new MuonCut(m_event, &muonStacoVec);
+	MuonCut *muonCaloCutTool = new MuonCut(m_event, &muonCaloVec);
+	// passedCut() functions execute cuts and return true if valid
+	if (!muonStacoCutTool->passedCut() || !muonCaloCutTool->passedCut()) return;
+	muonStacoVec = muonStacoCutTool->getCutMuonVec();
+	muonCaloVec = muonCaloCutTool->getCutMuonVec();
+
+
+
+
+	// Particle Specific Overlap Removal
+
+	// Muon Overlap
+	MuonOverlap *muonOverlapTool = new MuonOverlap(muonStacoVec);
+	muonOverlapTool->removeOverlap();
+	if (!(muonOverlapTool->getGoodMuonVec().size() > 0)) return;
 
 
 	//cutPass[cutFlow::DataPreselection]++;

@@ -1,6 +1,6 @@
 #include "CutFlow4Lep/Overlap/MuonOverlap.h"
 
-MuonOverlap::MuonOverlap(vector<D3PDReader::MuonD3PDObjectElement*> tInitMuonVec)
+MuonOverlap::MuonOverlap(vector<Muon*> tInitMuonVec)
 	: m_initMuonVec(tInitMuonVec)
 {
 
@@ -11,7 +11,7 @@ MuonOverlap::~MuonOverlap()
 
 }
 
-void MuonOverlap::setInitMuonVec(vector<D3PDReader::MuonD3PDObjectElement*> tInitMuonVec)
+void MuonOverlap::setInitMuonVec(vector<Muon*> tInitMuonVec)
 {
 	m_initMuonVec = tInitMuonVec;
 }
@@ -20,23 +20,16 @@ void MuonOverlap::removeOverlap()
 {
 	D3PDReader::MuonD3PDObjectElement *currMuon;
 
-	vector<D3PDReader::MuonD3PDObjectElement*>::iterator itr = m_initMuonVec.begin();
-	for ( ; itr != m_initMuonVec.end(); ++itr)
+	vector<Muon*>::iterator currMuonObj = m_initMuonVec.begin();
+	for ( ; currMuonObj != m_initMuonVec.end(); ++currMuonObj)
 	{
-		currMuon = *itr;
+		currMuon = (*currMuonObj)->getMuon();
 
-		if (currMuon->isCaloMuonId())
-		{
-			if (isGoodCaloMuon(currMuon))
-				m_goodMuonVec.push_back(currMuon);
-		}
-		else if (currMuon->isStandAloneMuon())
-		{
-			if (isGoodStandAloneMuon(currMuon))
-				m_goodMuonVec.push_back(currMuon);
-		}
-		else
-			m_goodMuonVec.push_back(currMuon);
+		if (( currMuon->isCaloMuonId() && isGoodCaloMuon(currMuon) ) ||
+			  ( currMuon->isStandAloneMuon() && isGoodStandAloneMuon(currMuon) ) ||
+				( !currMuon->isCaloMuonId() && !currMuon->isStandAloneMuon()) )
+			m_goodMuonVec.push_back(*currMuonObj);
+
 	}
 }
 
@@ -44,10 +37,10 @@ Bool_t MuonOverlap::isGoodCaloMuon(D3PDReader::MuonD3PDObjectElement *currMuon)
 {
 	D3PDReader::MuonD3PDObjectElement *testMuon;
 
-	vector<D3PDReader::MuonD3PDObjectElement*>::iterator itr = m_initMuonVec.begin();
-	for ( ; itr != m_initMuonVec.end(); ++itr)
+	vector<Muon*>::iterator currMuonObj = m_initMuonVec.begin();
+	for ( ; currMuonObj != m_initMuonVec.end(); ++currMuonObj)
 	{
-		testMuon = *itr;
+		testMuon = (*currMuonObj)->getMuon();
 		if (currMuon == testMuon) continue;
 		else if (testMuon->isCaloMuonId())
 		{
@@ -68,10 +61,10 @@ Bool_t MuonOverlap::isGoodStandAloneMuon(D3PDReader::MuonD3PDObjectElement *curr
 {
 	D3PDReader::MuonD3PDObjectElement *testMuon;
 
-	vector<D3PDReader::MuonD3PDObjectElement*>::iterator itr = m_initMuonVec.begin();
-	for ( ; itr != m_initMuonVec.end(); ++itr)
+	vector<Muon*>::iterator currMuonObj = m_initMuonVec.begin();
+	for ( ; currMuonObj != m_initMuonVec.end(); ++currMuonObj)
 	{
-		testMuon = *itr;
+		testMuon = (*currMuonObj)->getMuon();
 		if (currMuon == testMuon) continue;
 		else if (!testMuon->isCaloMuonId() && testMuon->isSegmentTaggedMuon())
 		{

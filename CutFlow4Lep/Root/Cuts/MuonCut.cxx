@@ -1,8 +1,10 @@
 #include "CutFlow4Lep/Cuts/MuonCut.h"
 
-MuonCut::MuonCut(D3PDReader::Event *tEvent) : Cuts(tEvent)
+MuonCut::MuonCut(D3PDReader::Event *tEvent, vector<Muon*> *tInitMuonVec) 
+	: Cuts(tEvent), m_initMuonVec(tInitMuonVec)
 {
-	initializeMuonObj();
+	m_d0Cut = 1.;
+	m_z0Cut = 10.;
 }
 
 MuonCut::~MuonCut()
@@ -10,46 +12,23 @@ MuonCut::~MuonCut()
 
 }
 
-void MuonCut::initializeMuonObj()
-{
-	m_muonCalo = &(m_event->mu_calo);
-	m_muonStaco = &(m_event->mu_staco);
-	m_d0Cut = 1.;
-	m_z0Cut = 10.;
-}
-
 Bool_t MuonCut::passedCut()
 {
-	vector<D3PDReader::MuonD3PDObjectElement*> muonPassedCutWithOverlap;
-
-	// Use only muon elements that pass specific cuts
 	D3PDReader::MuonD3PDObjectElement *currMuon;
-	for (Int_t i = 0; i < m_muonCalo->n(); i++) // Loop through calo events
+
+	vector<Muon*>::iterator currMuonObj = m_initMuonVec->begin();
+	for ( ; currMuonObj != m_initMuonVec->end(); ++currMuonObj)
 	{
-		currMuon = &(*m_muonCalo)[i];
-		if (passedCaloCut(currMuon))
-			muonPassedCutWithOverlap.push_back(currMuon);
-	}
-	for (Int_t i = 0; i < m_muonStaco->n(); i++) // Loop through staco events
-	{
-		currMuon = &(*m_muonStaco)[i];
-		if (currMuon->isStandAloneMuon())
-		{
-			if (passedStandAloneCut(currMuon))
-				muonPassedCutWithOverlap.push_back(currMuon);
-		}
+		currMuon = (*currMuonObj)->getMuon();
+
+		if ( (currMuon->isCaloMuonId() && passedCaloCut(currMuon)) ||
+			   (currMuon->isStandAloneMuon() && passedStandAloneCut(currMuon)) ||
+				 passedStacoCut(currMuon) )
+			m_cutMuonVec.push_back(*currMuonObj);
+
 		else
-		{
-			if (passedStacoCut(currMuon))
-				muonPassedCutWithOverlap.push_back(currMuon);
-		}
-	}
-	// Use muon overlap tool to remove overlap of muons that passed the cuts
-	MuonOverlap *overlapTool = new MuonOverlap(muonPassedCutWithOverlap);
-	overlapTool->removeOverlap();
-	// Muons pass cut only if some remain after overlap removal
-	if (overlapTool->getGoodMuonVec().size() > 0) return true;
-	else return false;
+			cout << "Error: MuonCut::passedCut(): Muon type not recognized" << endl;
+	}	
 }
 
 Bool_t MuonCut::passedCaloCut(D3PDReader::MuonD3PDObjectElement *currMuon)
