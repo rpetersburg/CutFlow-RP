@@ -11,14 +11,12 @@
 class MuonOverlap : public Overlap
 {
 	public:
-		MuonOverlap(vector<Muon*> tInitMuonVec);
-		MuonOverlap(vector<Muon*> tInitMuonVec);
+		MuonOverlap(vector<Muon*> *tInitMuonVec);
 		~MuonOverlap();
 
 		void removeOverlap();
-		void setInitMuonVec(vector<Muon*> tInitMuonVec);
+		void setInitMuonVec(vector<Muon*> *tInitMuonVec) {m_initMuonVec = tInitMuonVec;};
 		vector<Muon*> getGoodMuonVec() {return m_goodMuonVec;};
-
 
 	protected:
 
@@ -28,7 +26,7 @@ class MuonOverlap : public Overlap
 
 		Double_t deltaR(Double_t eta1, Double_t phi1, Double_t eta2, Double_t phi2);
 
-		vector<Muon*> m_initMuonVec;
+		vector<Muon*> *m_initMuonVec;
 		vector<Muon*> m_goodMuonVec;
 };
 #endif

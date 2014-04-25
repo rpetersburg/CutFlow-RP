@@ -206,15 +206,26 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	muonStacoVec = muonStacoCutTool->getCutMuonVec();
 	muonCaloVec = muonCaloCutTool->getCutMuonVec();
 
+	// Electron Cut
+	ElectronCut *electronCutTool = new ElectronCut(m_event, &electronVec);
+	if (!electronCutTool->passedCut()) return;
+	electronVec = electronCutTool->getCutElectronVec();
+
+
 
 
 
 	// Particle Specific Overlap Removal
 
 	// Muon Overlap
-	MuonOverlap *muonOverlapTool = new MuonOverlap(muonStacoVec);
+	MuonOverlap *muonOverlapTool = new MuonOverlap(&muonStacoVec);
 	muonOverlapTool->removeOverlap();
 	if (!(muonOverlapTool->getGoodMuonVec().size() > 0)) return;
+
+	// ElectronOverlap
+	ElectronOverlap *electronOverlapTool = new ElectronOverlap(&electronVec);
+	electronOverlapTool->removeOverlap();
+	if (!(electronOverlapTool->getGoodElectronVec().size() > 0)) return;
 
 
 	//cutPass[cutFlow::DataPreselection]++;

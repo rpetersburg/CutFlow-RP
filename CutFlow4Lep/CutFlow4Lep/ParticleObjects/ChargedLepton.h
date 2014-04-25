@@ -15,16 +15,18 @@ class ChargedLepton : public UsesEvent
 		ChargedLepton(D3PDReader::Event *tEvent) : UsesEvent(tEvent) {};
 		~ChargedLepton();
 
-		Double_t getSmear() {return m_smear;}
-		Double_t getEff() {return m_eff;}
-		void setSmear(Double_t tSmear) {m_smear = tSmear;}
-		void setEff(Double_t tEff) {m_eff = tEff;}
+		Double_t getSmear() {return m_smear;};
+		Double_t getEff() {return m_eff;};
+		void setSmear(Double_t tSmear) {m_smear = tSmear;};
+		void setEff(Double_t tEff) {m_eff = tEff;};
 
-		TLorentzVector* getMomentum() {return m_momentum;}
-		TLorentzVector* getMomentumMain() {return m_momentumMain;}
-		TLorentzVector* getMomentumBDT() {return m_momentumBDT;}
-		TLorentzVector* getMomentumME() {return m_momentumME;}
-		TLorentzVector* getMomentumID() {return m_momentumID;}
+		TLorentzVector* getMomentum() {return m_momentum;};
+		TLorentzVector* getMomentumMain() {return m_momentumMain;};
+		TLorentzVector* getMomentumBDT() {return m_momentumBDT;};
+		TLorentzVector* getMomentumME() {return m_momentumME;};
+		TLorentzVector* getMomentumID() {return m_momentumID;};
+
+		Int_t getDataYear() {return m_dataYear;};
 
 	protected:
 		Int_t m_index;

@@ -34,5 +34,5 @@ class ElectronCut : public Cuts
 	  Root::TElectronMultiLeptonSelector *m_electronTool2013;
 
 		Double_t m_z0Cut;
-}
+};
 #endif
