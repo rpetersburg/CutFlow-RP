@@ -3,7 +3,6 @@
 
 #include "CutFlow4Lep/Cuts/Cuts.h"
 #include "CutFlow4Lep/ParticleObjects/Muon.h"
-#include "CutFlow4Lep/Overlap/MuonOverlap.h"
 
 class MuonCut : public Cuts
 {

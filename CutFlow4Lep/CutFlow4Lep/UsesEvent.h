@@ -31,6 +31,8 @@ class UsesEvent
 		void setIsMC();
 		void setElectronCollection();
 
+		Int_t getNumVertex(Int_t threshold);
+
 	private:
 
 };

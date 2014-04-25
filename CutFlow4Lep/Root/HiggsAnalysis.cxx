@@ -187,7 +187,6 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		muonStacoVec[i]->setSmear(muonStacoSmearObj->getSmear()[i]);
 		if (m_isMC)	muonStacoVec[i]->setEff(muonStacoSmearObj->getEff()[i]);
 		else muonStacoVec[i]->setEff(1); 
-
 	}
 	for (vector<Muon*>::size_type i = 0; i != muonCaloVec.size(); i++)
 	{

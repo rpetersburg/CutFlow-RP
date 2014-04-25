@@ -79,3 +79,11 @@ void UsesEvent::setElectronCollection()
 	//else if(m_dataYear == 2012 && !useLikelihood) m_electronCollection = ElectronCollection::MultiLepton;
 	//else if(m_dataYear == 2012 && useLikelihood) m_electronCollection = ElectronCollection::Likelihood;
 }
+
+Int_t UsesEvent::getNumVertex(Int_t threshold)
+{
+	Int_t nVertex = 0;
+	for (Int_t i = 0; i < m_event->vxp.n(); i++)
+		if (m_event->vxp[i].trk_n() >= threshold) nVertex++;
+	return nVertex;
+}

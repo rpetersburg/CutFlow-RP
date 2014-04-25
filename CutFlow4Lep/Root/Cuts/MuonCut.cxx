@@ -25,10 +25,9 @@ Bool_t MuonCut::passedCut()
 			   (currMuon->isStandAloneMuon() && passedStandAloneCut(currMuon)) ||
 				 passedStacoCut(currMuon) )
 			m_cutMuonVec.push_back(*currMuonObj);
-
-		else
-			cout << "Error: MuonCut::passedCut(): Muon type not recognized" << endl;
-	}	
+	}
+	if (m_cutMuonVec.size() > 0) return true;
+	return false;
 }
 
 Bool_t MuonCut::passedCaloCut(D3PDReader::MuonD3PDObjectElement *currMuon)
