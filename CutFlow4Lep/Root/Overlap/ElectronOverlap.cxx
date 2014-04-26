@@ -1,9 +1,9 @@
 #include "CutFlow4Lep/Overlap/ElectronOverlap.h"
 
 ElectronOverlap::ElectronOverlap(vector<Electron*> *tInitElectronVec)
-	: m_initElectronVec(tInitElectronVec)
+	: Overlap(tInitElectronVec)
 {
-
+	m_dataYear = (*m_initParticleVec)[0]->getDataYear();
 }
 
 ElectronOverlap::~ElectronOverlap()
@@ -15,8 +15,8 @@ void ElectronOverlap::removeOverlap()
 {
 	vector<Electron*> tempElectronVec;
 
-	vector<Electron*>::iterator currElectronObj = m_initElectronVec->begin();
-	for ( ; currElectronObj != m_initElectronVec->end(); ++currElectronObj)
+	vector<Electron*>::iterator currElectronObj = m_initParticleVec->begin();
+	for ( ; currElectronObj != m_initParticleVec->end(); ++currElectronObj)
 	{
 		if (!overlapsElectron(*currElectronObj))
 			tempElectronVec.push_back(*currElectronObj);
@@ -26,17 +26,16 @@ void ElectronOverlap::removeOverlap()
 	for ( ; currElectronObj != tempElectronVec.end(); ++currElectronObj)
 	{
 		if (!overlapsCluster(*currElectronObj))
-			m_goodElectronVec.push_back(*currElectronObj);
+			m_goodParticleVec.push_back(*currElectronObj);
 	}
 }
 
 Bool_t ElectronOverlap::overlapsElectron(Electron *currElectronObj)
 {
-	Int_t dataYear = currElectronObj->getDataYear();
 	D3PDReader::ElectronD3PDObjectElement *currElectron = currElectronObj->getElectron();
 
 	Double_t currD0, currZ0, currPhi, currQoverp, currEta;
-	if (dataYear == 2011)
+	if (m_dataYear == 2011)
 	{
 		currD0 = currElectron->trackd0();
 		currZ0 = currElectron->trackz0();
@@ -44,7 +43,7 @@ Bool_t ElectronOverlap::overlapsElectron(Electron *currElectronObj)
 		currQoverp = currElectron->trackqoverp();
 		currEta = currElectron->tracketa();
 	}
-	else if (dataYear == 2012)
+	else if (m_dataYear == 2012)
 	{
 		currD0 = currElectron->Unrefittedtrack_d0();
 		currZ0 = currElectron->Unrefittedtrack_z0();
@@ -56,14 +55,14 @@ Bool_t ElectronOverlap::overlapsElectron(Electron *currElectronObj)
 
 	D3PDReader::ElectronD3PDObjectElement *testElectron;
 
-	vector<Electron*>::iterator testElectronObj = m_initElectronVec->begin();
-	for ( ; testElectronObj != m_initElectronVec->end(); ++testElectronObj)
+	vector<Electron*>::iterator testElectronObj = m_initParticleVec->begin();
+	for ( ; testElectronObj != m_initParticleVec->end(); ++testElectronObj)
 	{
 		testElectron = (*testElectronObj)->getElectron();
 		if (currElectron == testElectron) continue;
 
 		Double_t testD0, testZ0, testPhi, testQoverp, testEta;
-		if (dataYear == 2011)
+		if (m_dataYear == 2011)
 		{
 			testD0 = testElectron->trackd0();
 			testZ0 = testElectron->trackz0();
@@ -71,7 +70,7 @@ Bool_t ElectronOverlap::overlapsElectron(Electron *currElectronObj)
 			testQoverp = testElectron->trackqoverp();
 			testEta = testElectron->tracketa();
 		}
-		else if (dataYear == 2011)
+		else if (m_dataYear == 2011)
 		{
 			testD0 = testElectron->Unrefittedtrack_d0();
 			testD0 = testElectron->Unrefittedtrack_z0();
@@ -91,16 +90,15 @@ Bool_t ElectronOverlap::overlapsElectron(Electron *currElectronObj)
 
 Bool_t ElectronOverlap::overlapsCluster(Electron *currElectronObj)
 {
-	Int_t dataYear = currElectronObj->getDataYear();
 	D3PDReader::ElectronD3PDObjectElement *currElectron = currElectronObj->getElectron();
 
 	Double_t cutPhi, cutEta;
-	if (dataYear == 2011)
+	if (m_dataYear == 2011)
 	{
 		cutPhi = 0;
 		cutEta = 0;
 	}
-	else if (dataYear == 2012)
+	else if (m_dataYear == 2012)
 	{
 		cutPhi = 5 * 0.025;
 		cutEta = 3 * 0.025;
@@ -112,8 +110,8 @@ Bool_t ElectronOverlap::overlapsCluster(Electron *currElectronObj)
 
 	D3PDReader::ElectronD3PDObjectElement *testElectron;
 
-	vector<Electron*>::iterator testElectronObj = m_initElectronVec->begin();
-	for ( ; testElectronObj != m_initElectronVec->end(); ++testElectronObj)
+	vector<Electron*>::iterator testElectronObj = m_initParticleVec->begin();
+	for ( ; testElectronObj != m_initParticleVec->end(); ++testElectronObj)
 	{
 		testElectron = (*testElectronObj)->getElectron();
 		if (currElectron == testElectron) continue;

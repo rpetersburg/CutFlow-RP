@@ -1,9 +1,9 @@
 #include "CutFlow4Lep/Overlap/MuonOverlap.h"
 
 MuonOverlap::MuonOverlap(vector<Muon*> *tInitMuonVec)
-	: m_initMuonVec(tInitMuonVec)
+	: Overlap(tInitMuonVec)
 {
-
+	m_dataYear = (*m_initParticleVec)[0]->getDataYear();
 }
 
 MuonOverlap::~MuonOverlap()
@@ -15,15 +15,15 @@ void MuonOverlap::removeOverlap()
 {
 	D3PDReader::MuonD3PDObjectElement *currMuon;
 
-	vector<Muon*>::iterator currMuonObj = m_initMuonVec->begin();
-	for ( ; currMuonObj != m_initMuonVec->end(); ++currMuonObj)
+	vector<Muon*>::iterator currMuonObj = m_initParticleVec->begin();
+	for ( ; currMuonObj != m_initParticleVec->end(); ++currMuonObj)
 	{
 		currMuon = (*currMuonObj)->getMuon();
 
 		if (( currMuon->isCaloMuonId() && isGoodCaloMuon(currMuon) ) ||
 			  ( currMuon->isStandAloneMuon() && isGoodStandAloneMuon(currMuon) ) ||
 				( !currMuon->isCaloMuonId() && !currMuon->isStandAloneMuon()) )
-			m_goodMuonVec.push_back(*currMuonObj);
+			m_goodParticleVec.push_back(*currMuonObj);
 	}
 }
 
@@ -31,8 +31,8 @@ Bool_t MuonOverlap::isGoodCaloMuon(D3PDReader::MuonD3PDObjectElement *currMuon)
 {
 	D3PDReader::MuonD3PDObjectElement *testMuon;
 
-	vector<Muon*>::iterator currMuonObj = m_initMuonVec->begin();
-	for ( ; currMuonObj != m_initMuonVec->end(); ++currMuonObj)
+	vector<Muon*>::iterator currMuonObj = m_initParticleVec->begin();
+	for ( ; currMuonObj != m_initParticleVec->end(); ++currMuonObj)
 	{
 		testMuon = (*currMuonObj)->getMuon();
 		if (currMuon == testMuon) continue;
@@ -55,8 +55,8 @@ Bool_t MuonOverlap::isGoodStandAloneMuon(D3PDReader::MuonD3PDObjectElement *curr
 {
 	D3PDReader::MuonD3PDObjectElement *testMuon;
 
-	vector<Muon*>::iterator currMuonObj = m_initMuonVec->begin();
-	for ( ; currMuonObj != m_initMuonVec->end(); ++currMuonObj)
+	vector<Muon*>::iterator currMuonObj = m_initParticleVec->begin();
+	for ( ; currMuonObj != m_initParticleVec->end(); ++currMuonObj)
 	{
 		testMuon = (*currMuonObj)->getMuon();
 		if (currMuon == testMuon) continue;
@@ -67,12 +67,4 @@ Bool_t MuonOverlap::isGoodStandAloneMuon(D3PDReader::MuonD3PDObjectElement *curr
 		}
 	}
 	return true; // None of the muons overlapped
-}
-
-Double_t MuonOverlap::deltaR(Double_t eta1, Double_t phi1, Double_t eta2, Double_t phi2)
-{
-	Double_t deltaEta = (eta1 - eta2);
-	Double_t deltaPhi = (fabs(phi1 - phi2) > TMath::Pi()) ? 2*TMath::Pi() - fabs(phi1-phi2) : fabs(phi1 - phi2);
-
-	return sqrt(deltaEta * deltaEta + deltaPhi * deltaPhi);
 }

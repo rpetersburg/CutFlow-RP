@@ -230,6 +230,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	ElectronCut *electronCutTool = new ElectronCut(m_event, &electronVec);
 	electronCutTool->executeCut();
 	electronVec = electronCutTool->getCutParticleVec();
+
 	electronCutTool->setInitParticleVec(&electronLooseVec);
 	electronCutTool->setIsLoose(true);
 	electronCutTool->executeCut();
@@ -255,211 +256,53 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	jetsTruthVec_Fid = jetsCutTool->getCutParticleVec();
 
 
-
-
-
-
 	// Particle Specific Overlap Removal
 
 	// Muon Overlap
 	MuonOverlap *muonOverlapTool = new MuonOverlap(&muonStacoVec);
 	muonOverlapTool->removeOverlap();
-	if (!(muonOverlapTool->getGoodMuonVec().size() > 0)) return;
+	muonStacoVec = muonOverlapTool->getGoodParticleVec();
 
-	// ElectronOverlap
+	muonOverlapTool->setInitParticleVec(&muonCaloVec);
+	muonOverlapTool->removeOverlap();
+	muonCaloVec = muonOverlapTool->getGoodParticleVec();
+
+	// Electron Overlap
 	ElectronOverlap *electronOverlapTool = new ElectronOverlap(&electronVec);
 	electronOverlapTool->removeOverlap();
-	if (!(electronOverlapTool->getGoodElectronVec().size() > 0)) return;
+	electronVec = electronOverlapTool->getGoodParticleVec();
+
+	electronOverlapTool->setInitParticleVec(&electronLooseVec);
+	electronOverlapTool->removeOverlap();
+	electronLooseVec = electronOverlapTool->getGoodParticleVec();
+
+	
+	// Multiple Particle Overlap Removal (first listed is primary particle)
+
+	// Electron Muon Overlap
+	ElectronMuonOverlap *electronMuonOverlapTool = new ElectronMuonOverlap(&electronVec, &muonCaloVec, &muonStacoVec);
+	electronMuonOverlapTool->removeOverlap();
+	electronVec = electronMuonOverlapTool->getGoodParticleVec();
+
+	electronMuonOverlapTool->setInitParticleVec(&electronLooseVec);
+	electronMuonOverlapTool->removeOverlap();
+	electronLooseVec = electronMuonOverlapTool->getGoodParticleVec();
+
+	// Muon Electron Overlap (only have to do for Calo Muons)
+	MuonElectronOverlap *muonElectronOverlapTool = new MuonElectronOverlap(&muonCaloVec, &electronVec);
+	muonElectronOverlapTool->removeOverlap();
+	muonCaloVec = muonElectronOverlapTool->getGoodParticleVec();
+
+	// Jets Electron Overlap
+	JetsElectronOverlap *jetsElectronOverlapTool = new JetsElectronOverlap(&jetsVec, &electronVec);
+	jetsElectronOverlapTool->removeOverlap();
+	jetsVec = jetsElectronOverlapTool->getGoodParticleVec();
+
+	jetsElectronOverlapTool->setInitParticleVec(&jetsVec_Fid);
+	jetsElectronOverlapTool->removeOverlap();
+	jetsVec_Fid = jetsElectronOverlapTool->getGoodParticleVec();
 
 
-	//cutPass[cutFlow::DataPreselection]++;
-	//cutMuPass[cutMuFlow::DataPreselection] += (event->mu_staco.n() + event->mu_calo.n());
-	//cutElPass[cutElFlow::DataPreselection] += (el_cur->n());
-	//cutJetsPass[cutJetsFlow::DataPreselection] += event->jet_akt4topoem.n();
-	//Hist->cutPassHistW->Fill(cutFlow::DataPreselection, eventWeight);	
-	//
-	//cutPass[cutFlow::Preselection]++;
-	//cutMuPass[cutMuFlow::Preselection] += (event->mu_staco.n() + event->mu_calo.n());
-	//cutElPass[cutElFlow::Preselection] += (el_cur->n());
-	//cutJetsPass[cutJetsFlow::Preselection] += event->jet_akt4topoem.n();
-	//Hist->cutPassHistW->Fill(cutFlow::Preselection, eventWeight);
-
-	//if(passCut4Mu) {cutPass[cutFlow::Trigger4Mu] ++; Hist->cutPassHistW->Fill(cutFlow::Trigger4Mu, eventWeight);}
-	//if(passCut4e) {cutPass[cutFlow::Trigger4e] ++;; Hist->cutPassHistW->Fill(cutFlow::Trigger4e, eventWeight);}
-	//
-	//// For Trig eff studies
-	//if(anaType == doAnalysis::trigeff4l) passCut = true;
-	//cutPass[cutFlow::Trigger]++;
-	//cutMuPass[cutMuFlow::Trigger] += (event->mu_staco.n() + event->mu_calo.n());
-	//cutElPass[cutElFlow::Trigger] += (el_cur->n());
-	//cutJetsPass[cutJetsFlow::Trigger] += event->jet_akt4topoem.n();
-	//Hist->cutPassHistW->Fill(cutFlow::Trigger, eventWeight);
-
-	//// Vars to store the efficiency
-	//vector<Double_t> muonStacoEff;
-	//vector<Double_t> muonCaloEff;
-
-	//// Performs the Cuts on Muon..
-	//// Clearing the vars
-	//muonObj->clearVars();	
-	//muonObj->SetHist(Hist);
-
-	//// Clearing the corr
-	//corr->ClearVars();
-	//
-	//fillMuonHelperVars();
-
-	//// Smearing
-	//if(isDebugCall) printMuonInfo();
-	//if(isDebugCall) corr->debugCall();
-	//if(doCorr && doSmearD0Z0 && isMC) corr->SmearD0Z0(&(event->mu_staco), event->eventinfo.EventNumber(), leptonType::MuonStaco);
-	//if(doCorr && doSmearD0Z0 && isMC) corr->SmearD0Z0(&(event->mu_calo), event->eventinfo.EventNumber(), leptonType::MuonCalo);
-	//if((doCorr && doSmearMC) || doScaleData) corr->SmearMuon(&(event->mu_calo), event->eventinfo.EventNumber(), leptonType::MuonCalo);
-	//if((doCorr && doSmearMC) || doScaleData) corr->SmearMuon(&(event->mu_staco), event->eventinfo.EventNumber(), leptonType::MuonStaco);
-	//if(isDebugCall) printMuonInfo();
-
-	//// getting the Eff values
-	//if(doWeight && doScaleEfficiency) 
-	//{
-	//	muonStacoEff = corr->muonStacoEff;
-	//	muonCaloEff = corr->muonCaloEff;
-	//}
-	//// Otherwise just fill them with 1
-	//else
-	//{
-	//	for(Int_t i = 0; i < event->mu_staco.n(); i++)
-	//		muonStacoEff.push_back(1);
-
-	//	for(Int_t i = 0; i < event->mu_calo.n(); i++)
-	//		muonCaloEff.push_back(1);
-	//}
-	//
-	//muonObj->FillMuon(&(event->mu_staco), leptonType::MuonStaco, muonStacoEff, isMC);
-	//muonObj->FillMuon(&(event->mu_calo), leptonType::MuonCalo, muonCaloEff, isMC);
-
-	//Bool_t passCutMu = muonObj->MuonCut(cutMuPass);
-	//if(!passCut) return passCut;
-
-	//// To Perform cut on electrons
-	//// Var to store the smearing
-	//vector<Double_t> elSmearVal;
-	//vector<Double_t> elEff;
-	//vector<Double_t> elResolution;
-
-	//// Clearing the vars
-	//electronObj->clearVars();	
-	//electronObj->SetHist(Hist);	
-	//electronObjLoose->clearVars();	
-	//electronObjLoose->SetHist(Hist);	
-	//// Smearing
-	//if(doCorr && doSmearD0Z0 && isMC) corr->SmearD0Z0(el_cur, event->eventinfo.EventNumber());
-	//if((doCorr && doSmearMC) || doScaleData || doEPcombination) 
-	//{
-	//	
-	//	// Don't want to correct Nom in this loop. This will create a double smearing
-	//	if(doSysTree)
-	//	{
-	//		for(Int_t i = 0; i < doSys::Nom; i++)
-	//		{
-	//			elSmearVal = corr->SmearElectron(el_cur, event->eventinfo.EventNumber(), runNumber_sf, i);
-	//			corr->ClearVars();
-	//		}
-	//	}
-	//	corr->ClearVars();	
-	//	elSmearVal.clear();		
-	//	elSmearVal = corr->SmearElectron(el_cur, event->eventinfo.EventNumber(), runNumber_sf);
-	//}
-	//// In cases where no smearing will be done
-	//if(!doCorr || !doSmearMC) 
-	//{
-	//	elSmearVal.clear();
-	//	for(Int_t i = 0; i < el_cur->n(); i++)
-	//		elSmearVal.push_back(1);
-	//}
-	//// getting the Eff values
-	//if(doWeight && doScaleEfficiency) elEff = corr->electronEff;
-	//// Otherwise just fill them with 1
-	//else 
-	//{
-	//	elEff.clear();
-	//	for(Int_t i = 0; i < el_cur->n(); i++)
-	//		elEff.push_back(1);
-	//}
-	//elResolution = corr->electronEpErr;
-	//if(elResolution.size() == 0)
-	//{
-	//	for(Int_t i = 0; i < el_cur->n(); i++)
-	//		elResolution.push_back(-1);
-	//}
-	//// Getting the clusterPt for getting the lepton ID
-	//vector<Double_t> el_bfEP_clPt;
-	//el_bfEP_clPt.clear();
-	//// Sanity check
- //	if( el_cur->n() != (Int_t) corr->bfEP_cl_pt.size() && doCorr) cout<<"Error: beforeEP_cl_pt has a different size than electron container"<<endl;
- //	for(Int_t i = 0; i < el_cur->n(); i++)
- //	{
- //		if(doCorr) el_bfEP_clPt.push_back(corr->bfEP_cl_pt[i]);
- //		else el_bfEP_clPt.push_back((*el_cur)[i].cl_pt());
- //	}
-
-	//electronObj->FillElectron(el_cur, leptonType::ElectronGSF, elSmearVal, elEff,elResolution, el_bfEP_clPt ,isMC);
-	//electronObjLoose->FillElectron(el_cur, leptonType::ElectronGSF, elSmearVal, elEff,elResolution, el_bfEP_clPt, isMC);
-
-	//Bool_t passCutEl = electronObj->ElectronCut(cutElPass, getNVertex(2));
-	//passCutEl = electronObjLoose->ElectronCut(cutElLoosePass, getNVertex(2), true);
-
-	//// Photon Smearing
-	//vector<Double_t> phSmearVal;
-	//if((doCorr && doSmearMC) || doScaleData) phSmearVal = corr->SmearPhoton(&(event->ph), event->eventinfo.EventNumber(), runNumber_sf);
-	//// In cases where no smearing will be done
-	//if(!doCorr || !doSmearMC) 
-	//{
-	//	phSmearVal.clear();
-	//	for(Int_t i = 0; i < el_cur->n(); i++)
-	//		phSmearVal.push_back(1);
-	//}
-
-	//// To Perform cut on jets 
-	//// Clearing the vars
-	//jetsObj->clearVars();
-	//jetsObjTruth->clearVars();
-	//jetsObj_Fid->clearVars();
-	//jetsObjTruth_Fid->clearVars();
-	//// Calibrate jets
-	//Double_t mu = -9999;
-	//mu = event->eventinfo.averageIntPerXing();
-	//if(isMC)
-	//{
-	//	if(dataYear == 2012)  mu = (event->eventinfo.lbn()==1&&int(mu+0.5)==1)?0.:mu;
-	//}
-	//Hist->muInteractionHist->Fill(mu);
-	//Hist->muInteractionHistPileupW->Fill(mu,getPileupWeight());
-
-	//Double_t rhoKt = -1;
-	//if(dataYear == 2012) rhoKt = event->Eventshape.rhoKt4EM();
-	//if(doCorr && doJetCal) corr->CalibrateJet(&(event->jet_akt4topoem), dataYear, rhoKt, mu, getNVertex(2));
-	//jetsObj->FillJets(&(event->jet_akt4topoem), jetsType::AntiKt4TopoEM, isMC, event->eventinfo.EventNumber());
-	//Bool_t passCutJets = jetsObj->JetsCut(cutJetsPass, event->eventinfo.RunNumber());
-	//// True jets
-	//jetsObjTruth->FillJetsTruth(&(event->jet_antikt4truth), jetsType::AntiKt4TopoEMTruth, isMC);
-	//Bool_t passCutJetsTruth = jetsObjTruth->JetsCut(cutJetsPass, event->eventinfo.RunNumber());
-
-	//// Jets for Fudical Cross-Section
-	//jetsObj_Fid->FillJets(&(event->jet_akt4topoem), jetsType::AntiKt4TopoEM_Fid, isMC, event->eventinfo.EventNumber());
-	//Bool_t passCutJets_Fid = jetsObj_Fid->JetsCut(cutJetsPass, event->eventinfo.RunNumber());
-	//// True jets
-	//jetsObjTruth_Fid->FillJetsTruth(&(event->jet_antikt4truth), jetsType::AntiKt4TopoEMTruth_Fid, isMC);
-	//Bool_t passCutJetsTruth_Fid = jetsObjTruth_Fid->JetsCut(cutJetsPass, event->eventinfo.RunNumber());
-
-	//// Reading the muon, electrons and jet events
-	//clearVar();
-	//jetsOverlap = jetsObj->getJetsVec();	
-	//muOverlap = muonObj->getMuonVec();
-	//elOverlap = electronObj->getElectronVec();
-	//elLooseOverlap = electronObjLoose->getElectronVec();
-	//jetsTruthEvent = jetsObjTruth->getJetsVec();
-	//jetsOverlap_Fid = jetsObj_Fid->getJetsVec();
-	//jetsTruthEvent_Fid = jetsObjTruth_Fid->getJetsVec();
 
 	//// Removing the overlap
 	//RemoveOverlap();

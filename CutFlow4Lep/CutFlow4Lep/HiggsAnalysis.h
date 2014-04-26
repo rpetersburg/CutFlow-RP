@@ -37,6 +37,9 @@
 
 #include "CutFlow4Lep/Overlap/MuonOverlap.h"
 #include "CutFlow4Lep/Overlap/ElectronOverlap.h"
+#include "CutFlow4Lep/Overlap/ElectronMuonOverlap.h"
+#include "CutFlow4Lep/Overlap/MuonElectronOverlap.h"
+#include "CutFlow4Lep/Overlap/JetsElectronOverlap.h"
 
 #include "CutFlow4Lep/Calculations/MCHiggsMass.h"
 #include "CutFlow4Lep/Output/OutputTree.h"
