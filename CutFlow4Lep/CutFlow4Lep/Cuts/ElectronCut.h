@@ -16,11 +16,12 @@ class ElectronCut : public ParticleCuts<Electron>
 
 		Bool_t passedCut();
 		void executeCut();
+		void setIsLoose(Bool_t tIsLoose) {m_isLoose = tIsLoose;};
 
 	protected:
 
 	private:
-		void init();
+		void initializeTools();
 		Bool_t passedElectronCut(Electron *currElectronObj);
 		Bool_t passedAuthorCut(Electron *currElectronObj);
 
@@ -29,5 +30,6 @@ class ElectronCut : public ParticleCuts<Electron>
 	  Root::TElectronMultiLeptonSelector *m_electronTool2013;
 
 		Double_t m_z0Cut;
+		Bool_t m_isLoose;
 };
 #endif

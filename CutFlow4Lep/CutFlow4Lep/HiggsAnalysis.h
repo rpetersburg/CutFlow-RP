@@ -81,14 +81,6 @@ class HiggsAnalysis :public UsesEvent
 		
 		void setOutputFilePath(string newFilePath);	
 
-		//Muon *muon;
-		//Electron *electron;
-		//Electron *electronLoose;
-		//Jets *jets;
-		//Jets *jetsTruth;
-		//Jets *jets_Fid;
-		//Jets *jetsTruth_Fid;
-
 		//QuadLepton *higgsCandidate4Mu;
 		//QuadLepton *higgsCandidate4El;
 		//QuadLepton *higgsCandidate2L2L;
@@ -96,22 +88,6 @@ class HiggsAnalysis :public UsesEvent
 		//OutputTree *outputTree;
 		//OutputTree *outputTreeCR;
 		//OutputTree *outputTreelleeCR;
-
-		//// Variables that store the final physics objects
-		//vector<ChargedLepton *> muEvent;
-		//vector<ChargedLepton *> elEvent;
-		//vector<ChargedLepton *> elLooseEvent;
-		//vector<ChargedLepton *> jetsEvent;
-		//vector<ChargedLepton *> jetsTruthEvent;
-		//vector<ChargedLepton *> jetsEvent_Fid;
-		//vector<ChargedLepton *> jetsTruthEvent_Fid;
-	
-		//// Physics objects before final overlap removal
-		//vector<ChargedLepton *> muOverlap;
-		//vector<ChargedLepton *> elOverlap;
-		//vector<ChargedLepton *> elLooseOverlap;
-		//vector<ChargedLepton *> jetsOverlap;
-		//vector<ChargedLepton *> jetsOverlap_Fid;
 
 	private:
 		// Constructor

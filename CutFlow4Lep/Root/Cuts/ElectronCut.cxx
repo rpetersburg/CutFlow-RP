@@ -3,7 +3,9 @@
 ElectronCut::ElectronCut(D3PDReader::Event *tEvent, vector<Electron*> *tInitElectronVec) 
 	: ParticleCuts(tEvent, tInitElectronVec)
 {
-	init();
+	m_z0Cut = 10.;
+	initializeTools();
+	setIsLoose(false);
 }
 
 ElectronCut::~ElectronCut()
@@ -233,7 +235,7 @@ Bool_t ElectronCut::passedAuthorCut(Electron *currElectronObj)
 		Double_t ip = Double_t(getNumVertex(2)); // From UsesEvent class
 	
 		// For background control regions
-		if(useRelaxed) m_electronTool2012->setOperatingPoint(LikeEnum::LooseRelaxed);
+		if(m_isLoose) m_electronTool2012->setOperatingPoint(LikeEnum::LooseRelaxed);
 		else m_electronTool2012->setOperatingPoint(LikeEnum::Loose);
 
 		Double_t discriminant = m_electronTool2012->calculate(Eta_cl_s2,				
@@ -281,10 +283,8 @@ Bool_t ElectronCut::passedAuthorCut(Electron *currElectronObj)
 	return PassElectronID;
 }
 
-void ElectronCut::init()
+void ElectronCut::initializeTools()
 {
-	m_z0Cut = 10.;
-
 	if (m_dataYear == 2011)
 	{
 		TString configH4l = "../../ElectronPhotonSelectorTools/python/ConfiguredTElectronIsEMSelectors.py";

@@ -164,7 +164,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Setting the Particle Objects
 
 	vector<Muon*> muonStacoVec, muonCaloVec;
-	vector<Electron*> electronVec;
+	vector<Electron*> electronVec, electronLooseVec;
 	vector<Jets*> jetsVec, jetsTruthVec, jetsVec_Fid, jetsTruthVec_Fid;
 	
 	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
@@ -173,8 +173,11 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
 		muonCaloVec.push_back(new Muon(m_event, &(m_event->mu_calo[i])));
 
-	for (Int_t i = 0; i < m_event->el.n(); i++)
-		electronVec.push_back(new Electron(m_event, &(m_event->el[i])));
+	for (Int_t i = 0; i < m_currElectron->n(); i++)
+	{
+		electronVec.push_back(new Electron(m_event, &(*m_currElectron)[i]));
+		electronLooseVec.push_back(new Electron(m_event, &(*m_currElectron)[i]));
+	}
 
 	for (Int_t i = 0; i < m_event->jet_akt4topoem.n(); i++)
 	{
@@ -227,6 +230,10 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	ElectronCut *electronCutTool = new ElectronCut(m_event, &electronVec);
 	electronCutTool->executeCut();
 	electronVec = electronCutTool->getCutParticleVec();
+	electronCutTool->setInitParticleVec(&electronLooseVec);
+	electronCutTool->setIsLoose(true);
+	electronCutTool->executeCut();
+	electronLooseVec = electronCutTool->getCutParticleVec();
 
 	// Jets Cut
 	JetsCut *jetsCutTool = new JetsCut(m_event, &jetsVec);
