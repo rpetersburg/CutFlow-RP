@@ -21,6 +21,7 @@ class ElectronSmear : public EGammaSmear
 		vector<Double_t> getEff() {return m_electronEff;};
 		vector<Double_t> getMomentumError() {return m_momentumErrorVec;};
 		vector<float> getbfEP_cl_ET() {return m_bfEP_cl_ET;};
+		vector<float> getbfEP_cl_pT() {return m_bfEP_cl_pT;};
 
 	protected:
 

@@ -33,6 +33,7 @@
 #include "CutFlow4Lep/Cuts/VertexCut.h"
 #include "CutFlow4Lep/Cuts/MuonCut.h"
 #include "CutFlow4Lep/Cuts/ElectronCut.h"
+#include "CutFlow4Lep/Cuts/JetsCut.h"
 
 #include "CutFlow4Lep/Overlap/MuonOverlap.h"
 #include "CutFlow4Lep/Overlap/ElectronOverlap.h"

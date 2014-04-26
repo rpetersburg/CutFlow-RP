@@ -14,9 +14,24 @@ Electron::Electron(D3PDReader::Event *tEvent, D3PDReader::ElectronD3PDObjectElem
 	init();
 }
 
+Electron::Electron(D3PDReader::Event *tEvent, D3PDReader::ElectronD3PDObjectElement *tElectron, Double_t tElectronEff, Double_t tElectronSmear, Double_t tElectronResolution, Double_t tElectronClusterpT)
+	: ChargedLepton(tEvent), m_electron(tElectron)
+{
+	fill(tElectronEff, tElectronSmear, tElectronResolution, tElectronClusterpT);
+	init();
+}
+
 Electron::~Electron()
 {
 
+}
+
+void Electron::fill(Double_t tElectronEff, Double_t tElectronSmear, Double_t tElectronResolution, Double_t tElectronClusterpT)
+{
+	m_eff = tElectronEff;
+	m_smear = tElectronSmear;
+	m_resolution = tElectronResolution;
+	m_clusterpT = tElectronClusterpT;
 }
 
 void Electron::init()

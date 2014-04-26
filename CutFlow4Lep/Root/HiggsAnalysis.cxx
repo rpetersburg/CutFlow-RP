@@ -163,11 +163,9 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	
 	// Setting the Particle Objects
 
-	vector<Muon*> muonStacoVec;
-	vector<Muon*> muonCaloVec;
+	vector<Muon*> muonStacoVec, muonCaloVec;
 	vector<Electron*> electronVec;
-	vector<Jets*> jetsVec;
-	vector<Jets*> jetsTruthVec;
+	vector<Jets*> jetsVec, jetsTruthVec, jetsVec_Fid, jetsTruthVec_Fid;
 	
 	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
 		muonStacoVec.push_back(new Muon(m_event, &(m_event->mu_staco[i])));
@@ -176,12 +174,17 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	for (Int_t i = 0; i < m_event->el.n(); i++)
 		electronVec.push_back(new Electron(m_event, &(m_event->el[i])));
 	for (Int_t i = 0; i < m_event->jet_akt4topoem.n(); i++)
-		jetsVec.push_back(new Jets(m_event, &(m_event->jet_akt4topoem[i])));
+	{
+		jetsVec.push_back(new Jets(m_event, &(m_event->jet_akt4topoem[i]), JetsType::AntiKt4TopoEM));
+		jetsVec_Fid.push_back(new Jets(m_event, &(m_event->jet_akt4topoem[i]), JetsType::AntiKt4TopoEM_Fid));
+	}
 	for (Int_t i = 0; i < m_event->jet_antikt4truth.n(); i++)
-		jetsTruthVec.push_back(new Jets(m_event, &(m_event->jet_antikt4truth[i])));
+	{
+		jetsTruthVec.push_back(new Jets(m_event, &(m_event->jet_antikt4truth[i]), JetsType::AntiKt4TopoEMTruth));
+		jetsTruthVec_Fid.push_back(new Jets(m_event, &(m_event->jet_antikt4truth[i]), JetsType::AntiKt4TopoEMTruth_Fid));
+	}
 
 	// Setting the smear and efficiency values from smear object to muon vector
-	vector<Double_t> muonStacoEff, muonCaloEff;
 	for (vector<Muon*>::size_type i = 0; i != muonStacoVec.size(); i++)
 	{
 		muonStacoVec[i]->setSmear(muonStacoSmearObj->getSmear()[i]);
@@ -193,6 +196,15 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 		muonCaloVec[i]->setSmear(muonCaloSmearObj->getSmear()[i]);
 		if (m_isMC) muonCaloVec[i]->setEff(muonCaloSmearObj->getEff()[i]);
 		else muonCaloVec[i]->setEff(1);
+	}
+	// Setting the smear, effiency, resolution, and cluster pT for electron vector
+	for (vector<Electron*>::size_type i = 0; i != electronVec.size(); i++)
+	{
+		if (m_isMC) electronVec[i]->setEff(electronSmearObj->getEff()[i]);
+		else electronVec[i]->setEff(1);
+		electronVec[i]->setSmear(electronSmearObj->getSmear()[i]);
+		electronVec[i]->setResolution(electronSmearObj->getMomentumError()[i]);
+		electronVec[i]->setClusterpT(electronSmearObj->getbfEP_cl_pT()[i]);
 	}
 
 
@@ -210,6 +222,11 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	ElectronCut *electronCutTool = new ElectronCut(m_event, &electronVec);
 	if (!electronCutTool->passedCut()) return;
 	electronVec = electronCutTool->getCutElectronVec();
+
+	// Jets Cut
+	JetsCut *jetsCutTool = new JetsCut(m_event, &jetsVec);
+	if (!jetsCutTool->passedCut()) return;
+
 
 
 

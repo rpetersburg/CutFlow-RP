@@ -11,7 +11,7 @@ class MuonCut : public Cuts
 		~MuonCut();
 
 		Bool_t passedCut();
-		
+		void executeCut();		
 		vector<Muon*> getCutMuonVec() {return m_cutMuonVec;};
 
 	protected:

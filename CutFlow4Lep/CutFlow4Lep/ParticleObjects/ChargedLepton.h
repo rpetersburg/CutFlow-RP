@@ -6,6 +6,7 @@
 #include <TLorentzVector.h>
 
 #include "CutFlow4Lep/UsesEvent.h"
+#include "CutFlow4Lep/StructDef.h"
 
 using namespace std;
 
@@ -41,6 +42,7 @@ class ChargedLepton : public UsesEvent
 		TLorentzVector *m_momentumME;
 		TLorentzVector *m_momentumID;
 
+		Double_t m_ptCone20;
 		Double_t m_ptCone20Correction;
 
 
