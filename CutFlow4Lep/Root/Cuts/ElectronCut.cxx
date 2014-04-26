@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Cuts/ElectronCut.h"
 
 ElectronCut::ElectronCut(D3PDReader::Event *tEvent, vector<Electron*> *tInitElectronVec) 
-	: Cuts(tEvent), m_initElectronVec(tInitElectronVec)
+	: ParticleCuts(tEvent, tInitElectronVec)
 {
 	init();
 }
@@ -11,15 +11,21 @@ ElectronCut::~ElectronCut()
 
 }
 
-Bool_t ElectronCut::passedCut()
+void ElectronCut::executeCut()
 {
-	vector<Electron*>::iterator currElectronObj = m_initElectronVec->begin();
-	for ( ; currElectronObj != m_initElectronVec->end(); ++currElectronObj)
+	vector<Electron*>::iterator currElectronObj = m_initParticleVec->begin();
+	for ( ; currElectronObj != m_initParticleVec->end(); ++currElectronObj)
 	{
 		if (passedElectronCut(*currElectronObj))
-			m_cutElectronVec.push_back(*currElectronObj);
+			m_cutParticleVec.push_back(*currElectronObj);
 	}
-	if (m_cutElectronVec.size() > 0) return true;
+}
+
+Bool_t ElectronCut::passedCut()
+{
+	executeCut();
+
+	if (m_cutParticleVec.size() > 0) return true;
 	return false;
 }
 

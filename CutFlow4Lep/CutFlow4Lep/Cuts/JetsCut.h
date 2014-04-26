@@ -1,25 +1,22 @@
 #ifndef JETSCUT_H
 #define JETSCUT_H
 
-#include "CutFlow4Lep/Cuts/Cuts.h"
+#include "CutFlow4Lep/Cuts/ParticleCuts.h"
 #include "CutFlow4Lep/ParticleObjects/Jets.h"
 
 using namespace std;
-class JetsCut : public Cuts
+class JetsCut : public ParticleCuts<Jets>
 {
 	public:
 		JetsCut(D3PDReader::Event *tEvent, vector<Jets*> *tInitJetsVec);
 		~JetsCut();
 
 		Bool_t passedCut();
-		void setInitJetsVec(vector<Jets*> *tInitJetsVec);
+		void executeCut();
 
 	protected:
 
 	private:
-		vector<Jets*> *m_initJetsVec;
-		vector<Jets*> m_cutJetsVec;
-
 		Bool_t passedEMCut(D3PDReader::JetD3PDObjectElement *currJets);
 		Bool_t passedEMTruthCut(D3PDReader::JetD3PDObjectElement *currJets);
 		Bool_t passedEMFidCut(D3PDReader::JetD3PDObjectElement *currJets);

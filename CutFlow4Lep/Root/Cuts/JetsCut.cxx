@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Cuts/JetsCut.h"
 
 JetsCut::JetsCut(D3PDReader::Event *tEvent, vector<Jets*> *tInitJetsVec)
-	: Cuts(tEvent), m_initJetsVec(tInitJetsVec)
+	: ParticleCuts(tEvent, tInitJetsVec)
 {
 
 }
@@ -11,19 +11,13 @@ JetsCut::~JetsCut()
 
 }
 
-void JetsCut::setInitJetsVec(vector<Jets*> *tInitJetsVec)
-{
-	m_initJetsVec = tInitJetsVec;
-	m_cutJetsVec.clear();
-}
-
-Bool_t JetsCut::passedCut()
+void JetsCut::executeCut()
 {
 	Int_t currType;
 	D3PDReader::JetD3PDObjectElement *currJets;
 
-	vector<Jets*>::iterator currJetsObj = m_initJetsVec->begin();
-	for ( ; currJetsObj != m_initJetsVec->end(); ++currJetsObj)
+	vector<Jets*>::iterator currJetsObj = m_initParticleVec->begin();
+	for ( ; currJetsObj != m_initParticleVec->end(); ++currJetsObj)
 	{
 		currType = (*currJetsObj)->getType();
 		currJets = (*currJetsObj)->getJets();
@@ -31,10 +25,15 @@ Bool_t JetsCut::passedCut()
 			   (currType == JetsType::AntiKt4TopoEMTruth && passedEMTruthCut(currJets)) ||
 				 (currType == JetsType::AntiKt4TopoEM_Fid && passedEMFidCut(currJets)) ||
 				 (currType == JetsType::AntiKt4TopoEMTruth_Fid && passedEMTruthFidCut(currJets)) )
-				m_cutJetsVec.push_back(*currJetsObj);
+				m_cutParticleVec.push_back(*currJetsObj);
 	}
+}
 
-	if (m_cutJetsVec.size() > 0) return true;
+Bool_t JetsCut::passedCut()
+{
+	executeCut();
+
+	if (m_cutParticleVec.size() > 0) return true;
 	return false;
 }
 

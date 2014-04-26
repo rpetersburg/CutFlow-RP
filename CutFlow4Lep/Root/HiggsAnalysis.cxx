@@ -169,22 +169,26 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	
 	for (Int_t i = 0; i < m_event->mu_staco.n(); i++)
 		muonStacoVec.push_back(new Muon(m_event, &(m_event->mu_staco[i])));
+
 	for (Int_t i = 0; i < m_event->mu_calo.n(); i++)
 		muonCaloVec.push_back(new Muon(m_event, &(m_event->mu_calo[i])));
+
 	for (Int_t i = 0; i < m_event->el.n(); i++)
 		electronVec.push_back(new Electron(m_event, &(m_event->el[i])));
+
 	for (Int_t i = 0; i < m_event->jet_akt4topoem.n(); i++)
 	{
 		jetsVec.push_back(new Jets(m_event, &(m_event->jet_akt4topoem[i]), JetsType::AntiKt4TopoEM));
 		jetsVec_Fid.push_back(new Jets(m_event, &(m_event->jet_akt4topoem[i]), JetsType::AntiKt4TopoEM_Fid));
 	}
+
 	for (Int_t i = 0; i < m_event->jet_antikt4truth.n(); i++)
 	{
 		jetsTruthVec.push_back(new Jets(m_event, &(m_event->jet_antikt4truth[i]), JetsType::AntiKt4TopoEMTruth));
 		jetsTruthVec_Fid.push_back(new Jets(m_event, &(m_event->jet_antikt4truth[i]), JetsType::AntiKt4TopoEMTruth_Fid));
 	}
 
-	// Setting the smear and efficiency values from smear object to muon vector
+	// Setting the smear and efficiency values from smear object to muon vectors
 	for (vector<Muon*>::size_type i = 0; i != muonStacoVec.size(); i++)
 	{
 		muonStacoVec[i]->setSmear(muonStacoSmearObj->getSmear()[i]);
@@ -214,18 +218,34 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	MuonCut *muonStacoCutTool = new MuonCut(m_event, &muonStacoVec);
 	MuonCut *muonCaloCutTool = new MuonCut(m_event, &muonCaloVec);
 	// passedCut() functions execute cuts and return true if valid
-	if (!muonStacoCutTool->passedCut() || !muonCaloCutTool->passedCut()) return;
-	muonStacoVec = muonStacoCutTool->getCutMuonVec();
-	muonCaloVec = muonCaloCutTool->getCutMuonVec();
+	muonStacoCutTool->executeCut();
+	muonCaloCutTool->executeCut();
+	muonStacoVec = muonStacoCutTool->getCutParticleVec();
+	muonCaloVec = muonCaloCutTool->getCutParticleVec();
 
 	// Electron Cut
 	ElectronCut *electronCutTool = new ElectronCut(m_event, &electronVec);
-	if (!electronCutTool->passedCut()) return;
-	electronVec = electronCutTool->getCutElectronVec();
+	electronCutTool->executeCut();
+	electronVec = electronCutTool->getCutParticleVec();
 
 	// Jets Cut
 	JetsCut *jetsCutTool = new JetsCut(m_event, &jetsVec);
-	if (!jetsCutTool->passedCut()) return;
+
+	jetsCutTool->setInitParticleVec(&jetsVec);
+	jetsCutTool->executeCut();
+	jetsVec = jetsCutTool->getCutParticleVec();
+
+	jetsCutTool->setInitParticleVec(&jetsTruthVec);
+	jetsCutTool->executeCut();
+	jetsTruthVec = jetsCutTool->getCutParticleVec();
+
+	jetsCutTool->setInitParticleVec(&jetsVec_Fid);
+	jetsCutTool->executeCut();
+	jetsVec_Fid = jetsCutTool->getCutParticleVec();
+
+	jetsCutTool->setInitParticleVec(&jetsTruthVec_Fid);
+	jetsCutTool->executeCut();
+	jetsTruthVec_Fid = jetsCutTool->getCutParticleVec();
 
 
 

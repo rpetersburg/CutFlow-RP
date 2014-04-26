@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Cuts/MuonCut.h"
 
 MuonCut::MuonCut(D3PDReader::Event *tEvent, vector<Muon*> *tInitMuonVec) 
-	: Cuts(tEvent), m_initMuonVec(tInitMuonVec)
+	: ParticleCuts(tEvent, tInitMuonVec)
 {
 	m_d0Cut = 1.;
 	m_z0Cut = 10.;
@@ -12,21 +12,27 @@ MuonCut::~MuonCut()
 
 }
 
-Bool_t MuonCut::passedCut()
+void MuonCut::executeCut()
 {
 	D3PDReader::MuonD3PDObjectElement *currMuon;
 
-	vector<Muon*>::iterator currMuonObj = m_initMuonVec->begin();
-	for ( ; currMuonObj != m_initMuonVec->end(); ++currMuonObj)
+	vector<Muon*>::iterator currMuonObj = m_initParticleVec->begin();
+	for ( ; currMuonObj != m_initParticleVec->end(); ++currMuonObj)
 	{
 		currMuon = (*currMuonObj)->getMuon();
 
 		if ( (currMuon->isCaloMuonId() && passedCaloCut(currMuon)) ||
 			   (currMuon->isStandAloneMuon() && passedStandAloneCut(currMuon)) ||
 				 passedStacoCut(currMuon) )
-			m_cutMuonVec.push_back(*currMuonObj);
+			m_cutParticleVec.push_back(*currMuonObj);
 	}
-	if (m_cutMuonVec.size() > 0) return true;
+}
+
+Bool_t MuonCut::passedCut()
+{
+	executeCut();
+
+	if (m_cutParticleVec.size() > 0) return true;
 	return false;
 }
 
