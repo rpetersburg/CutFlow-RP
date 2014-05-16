@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Triggers/ElectronMuonTrigger.h"
 
-ElectronMuonTrigger::ElectronMuonTrigger(D3PDReader::Event *tEvent, Int_t tDataPeriod, Int_t tRunNumber)
-	: Triggers(tEvent, tDataPeriod, tRunNumber)
+ElectronMuonTrigger::ElectronMuonTrigger(D3PDReader::Event *tEvent, Int_t tRunNumber)
+	: Triggers(tEvent, tRunNumber)
 {
 
 }

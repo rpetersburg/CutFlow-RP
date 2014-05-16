@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Triggers/DiElectronTrigger.h"
 
-DiElectronTrigger::DiElectronTrigger(D3PDReader::Event *tEvent, Int_t tDataPeriod, Int_t tRunNumber)
-	: Triggers(tEvent, tDataPeriod, tRunNumber)
+DiElectronTrigger::DiElectronTrigger(D3PDReader::Event *tEvent, Int_t tRunNumber)
+	: Triggers(tEvent, tRunNumber)
 {
 
 }

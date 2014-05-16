@@ -6,7 +6,7 @@
 class DiMuonTrigger : public Triggers
 {
 	public:
-		DiMuonTrigger(D3PDReader::Event *tEvent, Int_t tDataPeriod, Int_t tRunNumber);
+		DiMuonTrigger(D3PDReader::Event *tEvent, Int_t tRunNumber);
 		~DiMuonTrigger();
 
 		Bool_t passedTrigger();

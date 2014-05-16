@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/Triggers/ElectronTrigger.h"
 
-ElectronTrigger::ElectronTrigger(D3PDReader::Event *tEvent, Int_t tDataPeriod, Int_t tRunNumber)
-	: Triggers(tEvent, tDataPeriod, tRunNumber)
+ElectronTrigger::ElectronTrigger(D3PDReader::Event *tEvent, Int_t tRunNumber)
+	: Triggers(tEvent, tRunNumber)
 {
 
 }

@@ -6,7 +6,7 @@
 class DiElectronTrigger : public Triggers
 {
 	public:
-		DiElectronTrigger(D3PDReader::Event *tEvent, Int_t tDataPeriod, Int_t tRunNumber);
+		DiElectronTrigger(D3PDReader::Event *tEvent, Int_t tRunNumber);
 		~DiElectronTrigger();
 
 		Bool_t passedTrigger();

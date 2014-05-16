@@ -6,7 +6,7 @@
 class ElectronTrigger : public Triggers
 {
 	public:
-		ElectronTrigger(D3PDReader::Event *tEvent, Int_t tDataPeriod, Int_t tRunNumber);
+		ElectronTrigger(D3PDReader::Event *tEvent, Int_t tRunNumber);
 		~ElectronTrigger();
 
 		Bool_t passedTrigger();

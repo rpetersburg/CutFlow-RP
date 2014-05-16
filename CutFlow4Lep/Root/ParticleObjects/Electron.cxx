@@ -36,7 +36,10 @@ void Electron::fill(Double_t tElectronEff, Double_t tElectronSmear, Double_t tEl
 
 void Electron::init()
 {
+	m_flavor = Flavor::Muon;
+	m_charge = m_electron->charge();
 	m_mass = pdgElMass;
+
 	setMomentumLorentzVectors();
 	setptCone20Correction();
 	setSysEnergy();
@@ -69,6 +72,8 @@ void Electron::setSysEnergy()
 
 void Electron::setTypes()
 {
+	m_type = LeptonType::ElectronGSF;
+
 	if (m_electron->charge() > 0) m_vhLeptonType = VHLeptonType::electronPlus;
 	else m_vhLeptonType = VHLeptonType::electronMinus;
 	m_truthParentType = VHTruthType::unknown;

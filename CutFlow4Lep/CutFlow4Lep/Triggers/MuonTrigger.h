@@ -6,7 +6,7 @@
 class MuonTrigger : public Triggers
 {
 	public:
-		MuonTrigger(D3PDReader::Event *tEvent, Int_t tDataPeriod, Int_t tRunNumber);
+		MuonTrigger(D3PDReader::Event *tEvent, Int_t tRunNumber);
 		~MuonTrigger();
 
 		Bool_t passedTrigger();

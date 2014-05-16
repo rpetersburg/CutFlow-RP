@@ -15,6 +15,7 @@ Jets::~Jets()
 
 void Jets::init()
 {
+	m_flavor = Flavor::Jet;
 	m_ptCone20 = -1;
 	m_mass = -1;
 	setMomentumLorentzVectors();

@@ -1,32 +1,36 @@
 #ifndef QUADLEPTON_H
 #define QUADLEPTON_H
 
-#include <TTree.h>
-#include <TString.h>
 #include <TLorentzVector.h>
-
-#include "DiLepton.h"
+#include "CutFlow4Lep/ParticleObjects/ParticleObject.h"
+#include "CutFlow4Lep/ParticleObjects/ChargedLepton.h"
+#include "CutFlow4Lep/ParticleObjects/DiLepton.h"
 
 using namespace std;
-
-class QuadLepton
+class QuadLepton : public ParticleObject
 {
 	public:
-		QuadLepton();
+		QuadLepton(DiLepton *tZ1, DiLepton *tZ2);
 		~QuadLepton();
 
-		DiLepton getDiLepton1();
-		DiLepton getDiLepton2();
+		void setZBosons(DiLepton *tZ1, DiLepton *tZ2);
+		DiLepton* getZ1() {return m_z1;};
+		DiLepton* getZ2() {return m_z2;};
 
+		Int_t getType() {return m_type;};
 
 	protected:
-		DiLepton diLepton1;
-		DiLepton diLepton2;
-
 
 	private:
+		Int_t m_type;
 
+		DiLepton *m_z1;
+		DiLepton *m_z2;
+
+		vector<ChargedLepton*> m_leptonVec;
+		vector<TLorentzVector*> m_leptonLorentzVec;
+		vector<TLorentzVector*> m_leptonLorentzMEVec;
+		vector<TLorentzVector*> m_leptonLorentzIDVec;
 
 };
-
 #endif

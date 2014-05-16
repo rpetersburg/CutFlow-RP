@@ -21,6 +21,8 @@ Muon::~Muon()
 
 void Muon::init()
 {
+	m_flavor = Flavor::Electron;
+	m_charge = m_muon->charge();
 	m_mass = pdgMuMass;
 	setMomentumLorentzVectors();
 	setptCone20Correction();
@@ -55,6 +57,10 @@ void Muon::setptCone20Correction()
 
 void Muon::setTypes()
 {
+	if (m_muon->isCaloMuonId()) m_type = LeptonType::MuonCalo;
+	else if (m_muon->isStandAloneMuon()) m_type = LeptonType::MuonStandAlone;
+	else m_type = LeptonType::MuonStaco;
+
 	if (m_muon->charge() > 0) m_vhLeptonType = VHLeptonType::muonPlus;
 	else m_vhLeptonType = VHLeptonType::muonMinus;
 	m_truthParentType = VHTruthType::unknown;

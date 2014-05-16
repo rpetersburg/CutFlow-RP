@@ -108,11 +108,15 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	// Triggers
 
 	// Ends event analysis if no leptons pass the trigger
-	if (!((new ElectronTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
-				(new MuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
-				(new DiElectronTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
-				(new DiMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger() |
-				(new ElectronMuonTrigger(m_event, m_dataPeriod, m_runNumber_sf))->passedTrigger()))
+	ElectronTrigger *electronTriggerTool = new ElectronTrigger(m_event, m_runNumber_sf);
+	MuonTrigger *muonTriggerTool = new MuonTrigger(m_event, m_runNumber_sf);
+	DiElectronTrigger *diElectronTriggerTool = new DiElectronTrigger(m_event, m_runNumber_sf);
+	DiMuonTrigger *diMuonTriggerTool = new DiMuonTrigger(m_event, m_runNumber_sf);
+	ElectronMuonTrigger *electronMuonTriggerTool = new ElectronMuonTrigger(m_event, m_runNumber_sf);
+
+	if (!(electronTriggerTool->passedTrigger()   | muonTriggerTool->passedTrigger()   |
+				diElectronTriggerTool->passedTrigger() | diMuonTriggerTool->passedTrigger() |
+				electronMuonTriggerTool->passedTrigger()))
 		return;
 
 
@@ -303,9 +307,22 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	jetsVec_Fid = jetsElectronOverlapTool->getGoodParticleVec();
 
 
+	// Combine Muon Vectors
 
-	//// Removing the overlap
-	//RemoveOverlap();
+	vector<Muon*> muonVec;
+	for (vector<Muon*>::size_type i = 0; i != muonStacoVec.size(); i++)
+		muonVec.push_back(muonStacoVec[i]);
+	for (vector<Muon*>::size_type i = 0; i != muonCaloVec.size(); i++)
+		muonVec.push_back(muonCaloVec[i]);
+
+
+	// Quadlepton Cutflows
+	CutFlow4mu *cutFlow4mu = new CutFlow4mu(&muonVec);
+	CutFlow4e *cutFlow4e = new CutFlow4e(&electronVec);
+
+	if (muonTriggerTool->passedTrigger() | diMuonTriggerTool->passedTrigger())
+
+
 
 	//// Channel Specific Cuts
 	//Bool_t pass4MuCut = false;

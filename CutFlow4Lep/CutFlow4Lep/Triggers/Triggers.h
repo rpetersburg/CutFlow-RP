@@ -10,7 +10,10 @@ using namespace std;
 class Triggers : public UsesEvent
 {
 	public:
-		Triggers(D3PDReader::Event *tEvent) : UsesEvent(tEvent) {};
+		Triggers(D3PDReader::Event *tEvent, Int_t tRunNumber) : UsesEvent(tEvent)
+		{
+			m_runNumber = tRunNumber;
+		};
 		~Triggers() {};
 
 		virtual Bool_t passedTrigger() = 0;
