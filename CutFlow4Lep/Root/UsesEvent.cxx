@@ -1,5 +1,4 @@
 #include "CutFlow4Lep/UsesEvent.h"
-#include "CutFlow4Lep/StructDef.h"
 
 UsesEvent::UsesEvent()
 {
@@ -86,4 +85,10 @@ Int_t UsesEvent::getNumVertex(Int_t threshold)
 	for (Int_t i = 0; i < m_event->vxp.n(); i++)
 		if (m_event->vxp[i].trk_n() >= threshold) nVertex++;
 	return nVertex;
+}
+
+void UsesEvent::setDataCalibration()
+{
+	if (m_dataYear == 2011) m_dataCalibration = DataCalibType::y2011d;
+	else if (m_dataYear == 2012) m_dataCalibration = DataCalibType::y2012c;
 }

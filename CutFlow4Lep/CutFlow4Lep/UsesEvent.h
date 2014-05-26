@@ -5,6 +5,8 @@
 
 #include <D3PDReader/Event.h>
 
+#include "CutFlow4Lep/StructDef.h"
+
 using namespace std;
 class UsesEvent
 {
@@ -20,6 +22,7 @@ class UsesEvent
 		Int_t m_runNumber;
 		Int_t m_eventNumber;
 		Int_t m_electronCollection;
+		Int_t m_dataCalibration;
 		Bool_t m_isMC;
 
 		void initializeAll();
@@ -30,6 +33,7 @@ class UsesEvent
 		void setEventNumber();
 		void setIsMC();
 		void setElectronCollection();
+		void setDataCalibration();
 
 		Int_t getNumVertex(Int_t threshold);
 

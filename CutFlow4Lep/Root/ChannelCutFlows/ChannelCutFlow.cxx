@@ -118,6 +118,37 @@ vector<QuadLepton*> ChannelCutFlow::getQuadLeptons(vector<DiLepton*> *iDiLeptons
 	return quadLeptonVec;
 }
 
+QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec)
+{
+	QuadLepton *quadEvent;
+	Double_t diffZ1Mass = 99999999;
+	Double_t diffZ2Mass = 99999999;
+
+	// Cut Values
+	Double_t pTCut1 = 20 * 1000;
+	Double_t pTCut2 = 15 * 1000;
+	Double_t pTCut3 = 10 * 1000;
+
+	// Loop over all possible QuadLeptons to find best set
+	vector<QuadLepton*>::iterator quadLeptonItr = quadLeptonVec->begin();
+	for ( ; quadLeptonItr != quadLeptonVec->end(); ++quadLeptonItr)
+	{
+		int pTCount1, pTCount2, pTCount3;
+
+		QuadLepton *currQuadLepton = *quadLeptonItr;
+
+		vector<ChargedLepton*> currLeptonVec = currQuadLepton->getLeptons();
+		vector<ChargedLepton*>::iterator currLeptonItr = currLeptonVec.begin();
+		for ( ; currLeptonItr != currLeptonVec.end(); ++currLeptonItr)
+		{
+			ChargedLepton *currLepton = *currLeptonItr;
+			Double_t currpT = currLepton->getMomentumVec()->Pt();
+
+
+		}
+	}
+}
+
 Int_t ChannelCutFlow::getNumCaloAndStandAlone(DiLepton *diLepton)
 {
 	Int_t numCalo, numStandAlone;

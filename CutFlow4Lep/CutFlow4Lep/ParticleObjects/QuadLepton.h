@@ -16,6 +16,7 @@ class QuadLepton : public ParticleObject
 		void setZBosons(DiLepton *tZ1, DiLepton *tZ2);
 		DiLepton* getZ1() {return m_z1;};
 		DiLepton* getZ2() {return m_z2;};
+		vector<ChargedLepton*> getLeptons() {return m_leptonVec;};
 
 		Int_t getType() {return m_type;};
 

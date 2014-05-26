@@ -321,6 +321,10 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 	CutFlow4e *cutFlow4e = new CutFlow4e(&electronVec);
 
 	if (muonTriggerTool->passedTrigger() | diMuonTriggerTool->passedTrigger())
+	{
+
+	}
+
 
 
 
@@ -503,16 +507,18 @@ void HiggsAnalysis::setMCCollection()
 			Int_t nMC12ab =	(sizeof(mc12ab)/sizeof(*mc12ab));
 			Int_t nMC12c  =	(sizeof(mc12c)/sizeof(*mc12c));
 
-			if (find(mc11d, mc11d+nMC11d, prodTagNum) != mc11c + nMC11c) {m_currMCCollection = MCCollection::MC11c;}
-			else if (find(mc11d, mc11d+nMC11d, prodTagNum) != mc11d + nMC11d) {m_currMCCollection = MCCollection::MC11d;}
+			if (find(mc11d, mc11d+nMC11d, prodTagNum) != mc11c + nMC11c)
+				m_currMCCollection = MCCollection::MC11c;
+			else if (find(mc11d, mc11d+nMC11d, prodTagNum) != mc11d + nMC11d)
+				m_currMCCollection = MCCollection::MC11d;
 			else if (find(mc12ab, mc12ab + nMC12ab, prodTagNum) != mc12ab + nMC12ab)
 			{
 				if (runNumber == 195847) m_currMCCollection = MCCollection::MC12a;
 				else if (runNumber == 195848) m_currMCCollection = MCCollection::MC12b;
-				else cout << "Error: AnalyzeTreeEvent: Mc12ab run number not recognized" << endl;
+				else cout << "Error: HiggsAnalysis::setMCCollection(): Mc12ab run number not recognized" << endl;
 			}
-			else if (find(mc12c, mc12c + nMC12c, prodTagNum) != mc12c + nMC12c) {m_currMCCollection = MCCollection::MC12c;}
-			else {cout << "Error: HiggsAnalysis::setMCCollection(): " << endl;}
+			else if (find(mc12c, mc12c + nMC12c, prodTagNum) != mc12c + nMC12c) m_currMCCollection = MCCollection::MC12c;
+			else cout << "Error: HiggsAnalysis::setMCCollection(): No currMCCollection set" << endl;
 		}
 	}
 
