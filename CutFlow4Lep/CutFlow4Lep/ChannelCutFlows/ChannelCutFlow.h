@@ -19,7 +19,7 @@ class ChannelCutFlow
 		vector<QuadLepton*> getQuadLeptons(vector<DiLepton*> *diLeptons);
 		vector<QuadLepton*> getQuadLeptons(vector<DiLepton*> *iDiLeptons, vector<DiLepton*> *jDiLeptons);
 
-		QuadLepton* getQuadEvent(vector<QuadLepton*> *quadLeptonVec);
+		QuadLepton* getQuadEvent(vector<QuadLepton*> *quadLeptonVec, Bool_t doZ4lAnalysis);
 
 		Int_t getNumCaloAndStandAlone(DiLepton *diLepton);
 

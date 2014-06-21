@@ -14,15 +14,15 @@ DiMuonTriggerMatch::~DiMuonTriggerMatch()
 void DiMuonTriggerMatch::initTriggerString()
 {
 	for (Int_t i = 0; i < 2; i++) // Cleaning the String
-		triggerString[i] = "";
+		m_triggerString[i] = "";
 
 	if (m_dataPeriod == DataPeriod::run2011_BD || m_dataPeriod == DataPeriod::run2011_EH ||
 			m_dataPeriod == DataPeriod::run2011_IK || m_dataPeriod == DataPeriod::run2011_LM)
-		triggerString[0] = "EF_2mu10_loose";
+		m_triggerString[0] = "EF_2mu10_loose";
 	else if (m_dataPeriod == DataPeriod::run2012_All)
 	{
-		triggerString[0] = "EF_2mu13";
-		triggerString[1] = "EF_mu18_tight_mu8_EFFS";
+		m_triggerString[0] = "EF_2mu13";
+		m_triggerString[1] = "EF_mu18_tight_mu8_EFFS";
 	}
 }
 
@@ -39,27 +39,26 @@ Bool_t DiMuonTriggerMatch::passedCutThreshold()
 	if (!(new DiMuonTrigger(m_event, m_runNumber_sf))->passedTrigger())
 		return false;
 
-	vector<ChargedLepton*>::iterator iCurrLeptonItr = m_leptonVec->begin();
-	vector<ChargedLepton*>::iterator jCurrLeptonItr = m_leptonVec->begin();
+	vector<ChargedLepton*>::iterator iLeptonItr = m_leptonVec->begin();
 
 	//To store the result from the matching tool
 	pair<bool, bool> passT1, passT2;
 	pair<bool, bool> passT3, passT4;
 
-	for ( ; iCurrLeptonItr != m_leptonVec->end(); ++iCurrLeptonItr)
+	for ( ; iLeptonItr != m_leptonVec->end(); ++iLeptonItr)
 	{
-		ChargedLepton *iCurrLepton = *iCurrLeptonItr;
+		ChargedLepton *iCurrLepton = *iLeptonItr;
 
 		if (iCurrLepton->getFlavor() != Flavor::Muon) continue; // Don't want an electron...
 		if (iCurrLepton->getType() == LeptonType::MuonCalo) continue; // No trigger for Calo Muon
 
 		Muon *iCurrMuon = (Muon*)iCurrLepton; // Recasted for simplicity
 
-		for ( ; jCurrLeptonItr != m_leptonVec->end(); ++jCurrLeptonItr)
+		vector<ChargedLepton*>::iterator jLeptonItr = iLeptonItr + 1;
+		for ( ; jLeptonItr != m_leptonVec->end(); ++jLeptonItr)
 		{
-			ChargedLepton *jCurrLepton = *jCurrLeptonItr;
+			ChargedLepton *jCurrLepton = *jLeptonItr;
 
-			if (iCurrLepton == jCurrLepton) continue;
 			if (jCurrLepton->getFlavor() != Flavor::Muon) continue;
 			if (jCurrLepton->getType() == LeptonType::MuonCalo) continue;
 
@@ -67,19 +66,19 @@ Bool_t DiMuonTriggerMatch::passedCutThreshold()
 
 			for (Int_t triggerIndex = 0; triggerIndex < 2; triggerIndex++)
 			{
-				if (triggerString[triggerIndex] == "") continue;
+				if (m_triggerString[triggerIndex] == "") continue;
 
 				Bool_t trigMatch1 = m_muonTriggerMatchTool->matchDimuon(*(iCurrMuon->getMomentumVec()), 
             		                            		 	  						*(jCurrMuon->getMomentumVec()),
-                		                         			 							triggerString[triggerIndex].Data(), 
+                		                         			 							m_triggerString[triggerIndex].Data(), 
 																																passT1, passT2);
 				Bool_t trigMatch2 = m_muonTriggerMatchTool->matchDimuon(*(jCurrMuon->getMomentumVec()), 
             		                            		 	  						*(iCurrMuon->getMomentumVec()), 
-                		                         			 							triggerString[triggerIndex].Data(), 
+                		                         			 							m_triggerString[triggerIndex].Data(), 
 																																passT3, passT4);
 				if (!(trigMatch1 || trigMatch2))
 				{
-					cout << "Error: DiMuonTriggerMatch::passedCutThreshold(): Trigger not supported: " << triggerString[triggerIndex] << endl;
+					cout << "Error: DiMuonTriggerMatch::passedCutThreshold(): Trigger not supported: " << m_triggerString[triggerIndex] << endl;
 					continue;
 				}
 				else

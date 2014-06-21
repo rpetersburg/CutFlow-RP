@@ -2,6 +2,9 @@
 #define ELECTRONMUONTRIGGERMATCH_H
 
 #include "CutFlow4Lep/TriggerMatching/TriggerMatch.h"
+#include "CutFlow4Lep/Triggers/ElectronMuonTrigger.h"
+#include "CutFlow4Lep/ParticleObjects/Electron.h"
+#include "CutFlow4Lep/ParticleObjects/Muon.h"
 
 using namespace std;
 class ElectronMuonTriggerMatch : public TriggerMatch
@@ -16,5 +19,7 @@ class ElectronMuonTriggerMatch : public TriggerMatch
 
 	private:
 		void initTriggerString();
+		
+		const Double_t PTTHRESHOLD1, PTTHRESHOLD2;
 };
 #endif

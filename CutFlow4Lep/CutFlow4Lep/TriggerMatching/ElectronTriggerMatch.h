@@ -2,6 +2,8 @@
 #define ELECTRONTRIGGERMATCH_H
 
 #include "CutFlow4Lep/TriggerMatching/TriggerMatch.h"
+#include "CutFlow4Lep/Triggers/ElectronTrigger.h"
+#include "CutFlow4Lep/ParticleObjects/Electron.h"
 
 using namespace std;
 class ElectronTriggerMatch : public TriggerMatch
@@ -16,5 +18,7 @@ class ElectronTriggerMatch : public TriggerMatch
 
 	private:
 		void initTriggerString();
+		
+		const Double_t PTTHRESHOLD;
 };
 #endif

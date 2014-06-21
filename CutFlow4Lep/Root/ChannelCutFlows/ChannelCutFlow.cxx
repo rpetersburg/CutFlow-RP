@@ -118,7 +118,7 @@ vector<QuadLepton*> ChannelCutFlow::getQuadLeptons(vector<DiLepton*> *iDiLeptons
 	return quadLeptonVec;
 }
 
-QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec)
+QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec, Bool_t doZ4lAnalysis)
 {
 	QuadLepton *quadEvent;
 	Double_t diffZ1Mass = 99999999;
@@ -128,8 +128,14 @@ QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec)
 	Double_t pTCut1 = 20 * 1000;
 	Double_t pTCut2 = 15 * 1000;
 	Double_t pTCut3 = 10 * 1000;
+	Double_t pTCut3Electron = 10 * 1000;
+	Double_t pTCut3Muon = 8 * 1000;
 
-	// Loop over all possible QuadLeptons to find best set
+	// Counting variables
+	Int_t pTCount1, pTCount2, pTCount3;
+	Double_t pTStorage[4] = {0};
+
+	// Loop over all possible QuadLeptons to store pT values
 	vector<QuadLepton*>::iterator quadLeptonItr = quadLeptonVec->begin();
 	for ( ; quadLeptonItr != quadLeptonVec->end(); ++quadLeptonItr)
 	{
@@ -139,13 +145,27 @@ QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec)
 
 		vector<ChargedLepton*> currLeptonVec = currQuadLepton->getLeptons();
 		vector<ChargedLepton*>::iterator currLeptonItr = currLeptonVec.begin();
+		Int_t i = 0; // Simple counter for storage
 		for ( ; currLeptonItr != currLeptonVec.end(); ++currLeptonItr)
 		{
 			ChargedLepton *currLepton = *currLeptonItr;
 			Double_t currpT = currLepton->getMomentumVec()->Pt();
+			pTStorage[i] = currpT;
+			i++;
 
+			if (currpT > pTCut1) pTCount1++;
+			if (currpT > pTCut2) pTCount2++;
 
+			// For Z->4l analysis
+			if (doZ4lAnalysis && currLepton->getFlavor() == Flavor::Electron && currpT > pTCut3Electron)
+				pTCount3++;
+			else if (doZ4lAnalysis && currLepton->getFlavor() == Flavor::Muon && currpT > pTCut3Muon)
+				pTCount3++;
+			else if (currpT > pTCut3)
+				pTCount3++;
 		}
+		// Cuts
+		if (pTCount1 < 1 || pTCount2 < 2 || pTCount3 <3) continue;
 	}
 }
 

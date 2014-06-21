@@ -14,21 +14,21 @@ MuonTriggerMatch::~MuonTriggerMatch()
 void MuonTriggerMatch::initTriggerString()
 {
 	for (Int_t i = 0; i < 2; i++) // Cleaning the String
-		triggerString[i] = "";
+		m_triggerString[i] = "";
 
 	if (m_dataPeriod == DataPeriod::run2011_BD || m_dataPeriod == DataPeriod::run2011_EH)
-		triggerString[0] = "EF_mu18_MG";
+		m_triggerString[0] = "EF_mu18_MG";
 	else if (m_dataPeriod == DataPeriod::run2011_IK)
 	{
-		if (m_runNumber_sf < 186516) triggerString[0] = "EF_mu18_MG";
-		else triggerString[0] = "EF_mu18_MG_medium";
+		if (m_runNumber_sf < 186516) m_triggerString[0] = "EF_mu18_MG";
+		else m_triggerString[0] = "EF_mu18_MG_medium";
 	}
 	else if (m_dataPeriod == DataPeriod::run2011_LM)
-		triggerString[0] = "EF_mu18_MG_medium";
+		m_triggerString[0] = "EF_mu18_MG_medium";
 	else if (m_dataPeriod == DataPeriod::run2012_All)
 	{
-		triggerString[0] = "EF_mu24i_tight";
-		triggerString[1] = "EF_mu36_tight";
+		m_triggerString[0] = "EF_mu24i_tight";
+		m_triggerString[1] = "EF_mu36_tight";
 	}
 }
 
@@ -59,11 +59,11 @@ Bool_t MuonTriggerMatch::passedCutThreshold()
 		for (Int_t triggerIndex = 0; triggerIndex < 2; triggerIndex++)
 		{
 			// If the second trigger is not initialized
-			if (triggerString[triggerIndex] == "") continue;
+			if (m_triggerString[triggerIndex] == "") continue;
 
 			Bool_t triggerMatch = m_muonTriggerMatchTool->match(currMuon->getMuon()->eta(),
 																													currMuon->getMuon()->phi(),
-																													triggerString[triggerIndex].Data());
+																													m_triggerString[triggerIndex].Data());
 
 			if (triggerMatch && currMuon->getMuon()->pt() > PTTHRESHOLD) return true;
 		}

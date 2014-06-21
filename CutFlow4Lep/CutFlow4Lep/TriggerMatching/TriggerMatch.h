@@ -30,7 +30,7 @@ class TriggerMatch : public UsesEvent
 
 		vector<ChargedLepton*> *m_leptonVec;
 
-		TString triggerString[2];
+		TString m_triggerString[2];
 
 		TriggerNavigationVariables *m_triggerNavigationVariables;
 		MuonTriggerMatching *m_muonTriggerMatchTool;

@@ -2,6 +2,8 @@
 #define DIELECTRONTRIGGERMATCH_H
 
 #include "CutFlow4Lep/TriggerMatching/TriggerMatch.h"
+#include "CutFlow4Lep/Triggers/DiElectronTrigger.h"
+#include "CutFlow4Lep/ParticleObjects/Electron.h"
 
 using namespace std;
 class DiElectronTriggerMatch : public TriggerMatch
@@ -16,5 +18,7 @@ class DiElectronTriggerMatch : public TriggerMatch
 
 	private:
 		void initTriggerString();
+
+		const Double_t PTTHRESHOLD1, PTTHRESHOLD2;
 };
 #endif
