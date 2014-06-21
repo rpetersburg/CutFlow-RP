@@ -2,12 +2,16 @@
 #define MUONTRIGGERMATCH_H
 
 #include "CutFlow4Lep/TriggerMatching/TriggerMatch.h"
+#include "CutFlow4Lep/ParticleObjects/Muon.h"
+#include "CutFlow4Lep/Triggers/MuonTrigger.h"
 
 using namespace std;
 class MuonTriggerMatch : public TriggerMatch
 {
+	const Double_t PTTHRESHOLD;
+
 	public:
-		MuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, vector<ChargedLepton*> *tLeptonVec);
+		MuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, vector<ChargedLepton*> *tLeptonVec, Int_t tRunNumber_sf);
 		~MuonTriggerMatch();
 
 		Bool_t passedCutThreshold();
@@ -15,5 +19,6 @@ class MuonTriggerMatch : public TriggerMatch
 	protected:
 
 	private:
+		void initTriggerString();
 };
 #endif
