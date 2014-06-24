@@ -9,7 +9,8 @@ using namespace std;
 class DiMuonTriggerMatch : public TriggerMatch
 {
 	public:
-		DiMuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, vector<ChargedLepton*> *tLeptonVec, Int_t tRunNumber_sf);
+		DiMuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf, vector<ChargedLepton*> *tLeptonVec);
+		DiMuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf);
 		~DiMuonTriggerMatch();
 
 		Bool_t passedCutThreshold();

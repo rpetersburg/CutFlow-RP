@@ -11,7 +11,8 @@ class MuonTriggerMatch : public TriggerMatch
 	const Double_t PTTHRESHOLD;
 
 	public:
-		MuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, vector<ChargedLepton*> *tLeptonVec, Int_t tRunNumber_sf);
+		MuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf, vector<ChargedLepton*> *tLeptonVec);
+		MuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf);
 		~MuonTriggerMatch();
 
 		Bool_t passedCutThreshold();

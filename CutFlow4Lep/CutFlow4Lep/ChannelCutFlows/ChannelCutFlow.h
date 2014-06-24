@@ -5,11 +5,17 @@
 
 #include "CutFlow4Lep/ParticleObjects/QuadLepton.h"
 
+#include "CutFlow4Lep/TriggerMatching/MuonTriggerMatch.h"
+#include "CutFlow4Lep/TriggerMatching/DiMuonTriggerMatch.h"
+#include "CutFlow4Lep/TriggerMatching/ElectronTriggerMatch.h"
+#include "CutFlow4Lep/TriggerMatching/DiElectronTriggerMatch.h"
+#include "CutFlow4Lep/TriggerMatching/ElectronMuonTriggerMatch.h"
+
 using namespace std;
-class ChannelCutFlow
+class ChannelCutFlow : public UsesEvent
 {
 	public:
-		ChannelCutFlow();
+		ChannelCutFlow(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf);
 		~ChannelCutFlow();
 
 		virtual Bool_t passedCut() = 0;
@@ -23,6 +29,16 @@ class ChannelCutFlow
 
 		Int_t getNumCaloAndStandAlone(DiLepton *diLepton);
 
+		Int_t m_currMCCollection;
+		Int_t m_runNumber_sf;
+
+		MuonTriggerMatch *m_muonTriggerMatch;
+		DiMuonTriggerMatch *m_diMuonTriggerMatch;
+		ElectronTriggerMatch *m_electronTriggerMatch;
+		DiElectronTriggerMatch *m_diElectronTriggerMatch;
+		ElectronMuonTriggerMatch *m_electronMuonTriggerMatch;
+
 	private:
+		void setLeptonVecsForTriggerMatch(vector<ChargedLepton*> currLeptonVec);
 };
 #endif

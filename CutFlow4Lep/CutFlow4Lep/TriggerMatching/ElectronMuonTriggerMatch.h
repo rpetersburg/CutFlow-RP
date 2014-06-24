@@ -10,7 +10,8 @@ using namespace std;
 class ElectronMuonTriggerMatch : public TriggerMatch
 {
 	public:
-		ElectronMuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, vector<ChargedLepton*> *tLeptonVec, Int_t tRunNumber_sf);
+		ElectronMuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf, vector<ChargedLepton*> *tLeptonVec);
+		ElectronMuonTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf);
 		~ElectronMuonTriggerMatch();
 
 		Bool_t passedCutThreshold();

@@ -1,13 +1,22 @@
 #include "CutFlow4Lep/ChannelCutFlows/ChannelCutFlow.h"
 
-ChannelCutFlow::ChannelCutFlow()
+ChannelCutFlow::ChannelCutFlow(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf)
+	: UsesEvent(tEvent), m_currMCCollection(tCurrMCCollection), m_runNumber_sf(tRunNumber_sf)
 {
-
+	m_muonTriggerMatch = new MuonTriggerMatch(m_event, m_currMCCollection, m_runNumber_sf);
+	m_diMuonTriggerMatch = new DiMuonTriggerMatch(m_event, m_currMCCollection, m_runNumber_sf);
+	m_electronTriggerMatch = new ElectronTriggerMatch(m_event, m_currMCCollection, m_runNumber_sf);	
+	m_diElectronTriggerMatch = new DiElectronTriggerMatch(m_event, m_currMCCollection, m_runNumber_sf);
+	m_electronMuonTriggerMatch = new ElectronMuonTriggerMatch(m_event, m_currMCCollection, m_runNumber_sf);
 }
 
 ChannelCutFlow::~ChannelCutFlow()
 {
-
+	delete m_muonTriggerMatch;
+	delete m_diMuonTriggerMatch;
+	delete m_electronTriggerMatch;
+	delete m_diElectronTriggerMatch;
+	delete m_electronMuonTriggerMatch;
 }
 
 template<class Lepton>
@@ -145,7 +154,7 @@ QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec, Boo
 
 		vector<ChargedLepton*> currLeptonVec = currQuadLepton->getLeptons();
 		vector<ChargedLepton*>::iterator currLeptonItr = currLeptonVec.begin();
-		Int_t i = 0; // Simple counter for storage
+		Int_t i = 0; // Simple counter for pT storage
 		for ( ; currLeptonItr != currLeptonVec.end(); ++currLeptonItr)
 		{
 			ChargedLepton *currLepton = *currLeptonItr;
@@ -156,7 +165,7 @@ QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec, Boo
 			if (currpT > pTCut1) pTCount1++;
 			if (currpT > pTCut2) pTCount2++;
 
-			// For Z->4l analysis
+			// For Z->4l analysis and pTCount3
 			if (doZ4lAnalysis && currLepton->getFlavor() == Flavor::Electron && currpT > pTCut3Electron)
 				pTCount3++;
 			else if (doZ4lAnalysis && currLepton->getFlavor() == Flavor::Muon && currpT > pTCut3Muon)
@@ -164,9 +173,44 @@ QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec, Boo
 			else if (currpT > pTCut3)
 				pTCount3++;
 		}
+
 		// Cuts
 		if (pTCount1 < 1 || pTCount2 < 2 || pTCount3 <3) continue;
+
+		// Implement TriggerMatching
+		setLeptonVecsForTriggerMatch(currLeptonVec);
+		Bool_t muTrigger = (m_muonTriggerMatch->passedCutThreshold() || m_diMuonTriggerMatch->passedCutThreshold());
+		Bool_t elTrigger = (m_electronTriggerMatch->passedCutThreshold() || m_diElectronTriggerMatch->passedCutThreshold());
+		Bool_t elMuTrigger = (m_electronMuonTriggerMatch->passedCutThreshold());
+		// No need for analysis discrimination since each trigger match class confirms proper particle types
+		if (!(muTrigger || elTrigger || elMuTrigger)) continue;
+
+		// Find the QuadLepton with closest z mass
+		Double_t tempDiff1 = fabs(currQuadLepton->getZ1()->getMomentumVec()->M() - pdgZMass);
+		Double_t tempDiff2 = fabs(currQuadLepton->getZ1()->getMomentumVec()->M() - pdgZMass);
+
+		if (tempDiff1 < diffZ1Mass)
+		{
+			diffZ1Mass = tempDiff1;
+			diffZ2Mass = tempDiff2;
+			quadEvent = currQuadLepton;
+		}
+		else if (tempDiff1 == diffZ1Mass && tempDiff2 < diffZ2Mass)
+		{
+			diffZ2Mass == tempDiff2;
+			quadEvent = currQuadLepton;
+		}		
 	}
+	return quadEvent;
+}
+
+void ChannelCutFlow::setLeptonVecsForTriggerMatch(vector<ChargedLepton*> currLeptonVec)
+{
+	m_muonTriggerMatch->setLeptonVec(&currLeptonVec);
+	m_diMuonTriggerMatch->setLeptonVec(&currLeptonVec);
+	m_electronTriggerMatch->setLeptonVec(&currLeptonVec);
+	m_diElectronTriggerMatch->setLeptonVec(&currLeptonVec);
+	m_electronMuonTriggerMatch->setLeptonVec(&currLeptonVec);
 }
 
 Int_t ChannelCutFlow::getNumCaloAndStandAlone(DiLepton *diLepton)

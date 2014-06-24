@@ -13,9 +13,10 @@ using namespace std;
 class TriggerMatch : public UsesEvent
 {
 	public:
-		TriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, vector<ChargedLepton*> *tLeptonVec, Int_t tRunNumber_sf);
+		TriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf);
 		~TriggerMatch();
 
+		void setLeptonVec(vector<ChargedLepton*> *newLeptonVec) {m_leptonVec = newLeptonVec;}
 		virtual Bool_t passedCutThreshold() = 0;
 
 	protected:

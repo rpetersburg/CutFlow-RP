@@ -1,9 +1,15 @@
 #include "CutFlow4Lep/TriggerMatching/DiElectronTriggerMatch.h"
 
-DiElectronTriggerMatch::DiElectronTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, vector<ChargedLepton*> *tLeptonVec, Int_t tRunNumber_sf)
-	: TriggerMatch(tEvent, tCurrMCCollection, tLeptonVec, tRunNumber_sf), PTTHRESHOLD1(-1000), PTTHRESHOLD2(-1000)
+DiElectronTriggerMatch::DiElectronTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf)
+	: TriggerMatch(tEvent, tCurrMCCollection, tRunNumber_sf), PTTHRESHOLD1(-1000), PTTHRESHOLD2(-1000)
 {
 
+}
+
+DiElectronTriggerMatch::DiElectronTriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf, vector<ChargedLepton*> *tLeptonVec)
+	: TriggerMatch(tEvent, tCurrMCCollection, tRunNumber_sf), PTTHRESHOLD1(-1000), PTTHRESHOLD2(-1000)
+{
+	setLeptonVec(tLeptonVec);
 }
 
 DiElectronTriggerMatch::~DiElectronTriggerMatch()

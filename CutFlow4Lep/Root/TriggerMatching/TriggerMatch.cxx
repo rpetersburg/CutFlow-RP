@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/TriggerMatching/TriggerMatch.h"
 
-TriggerMatch::TriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, vector<ChargedLepton*> *tLeptonVec, Int_t tRunNumber_sf)
-	: UsesEvent(tEvent), m_currMCCollection(tCurrMCCollection), m_leptonVec(tLeptonVec), m_runNumber_sf(tRunNumber_sf)
+TriggerMatch::TriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf)
+	: UsesEvent(tEvent), m_currMCCollection(tCurrMCCollection), m_runNumber_sf(tRunNumber_sf)
 {
 	init();
 }
@@ -9,6 +9,9 @@ TriggerMatch::TriggerMatch(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, v
 TriggerMatch::~TriggerMatch()
 {
 	delete m_triggerNavigationVariables;
+	delete m_muonTriggerMatchTool;
+	delete m_electronTriggerMatchTool;
+	delete m_leptonTriggerSFTool;
 }
 
 void TriggerMatch::init()
