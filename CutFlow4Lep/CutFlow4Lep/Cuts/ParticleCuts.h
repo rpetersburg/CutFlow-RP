@@ -9,7 +9,7 @@ class ParticleCuts : public Cuts
 {
 	public:
 		ParticleCuts(D3PDReader::Event *tEvent, vector<Particle*> *tInitVec) 
-			: Cuts(tEVent), m_initVec(tInitVec) {};
+			: Cuts(tEvent), m_initParticleVec(tInitVec) {};
 		~ParticleCuts() {};
 
 		virtual void executeCut() = 0;
@@ -25,5 +25,5 @@ class ParticleCuts : public Cuts
 		vector<Particle*> m_cutParticleVec;
 
 	private:
-}
+};
 #endif

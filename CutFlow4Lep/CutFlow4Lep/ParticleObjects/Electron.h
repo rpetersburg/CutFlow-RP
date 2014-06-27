@@ -37,6 +37,6 @@ class Electron : public ChargedLepton
 		D3PDReader::ElectronD3PDObjectElement *m_electron;
 
 		Double_t m_resolution;
-		Double_t m_clusterpT
+		Double_t m_clusterpT;
 };
 #endif

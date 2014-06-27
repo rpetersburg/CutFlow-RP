@@ -24,5 +24,5 @@ class ParticleObject
 		TLorentzVector *m_momentumMain;
 
 	private:
-}
+};
 #endif

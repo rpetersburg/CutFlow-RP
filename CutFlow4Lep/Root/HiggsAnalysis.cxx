@@ -317,7 +317,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 
 	// Quadlepton Cutflows
-	CutFlow4mu *cutFlow4mu = new CutFlow4mu(&muonVec);
+	CutFlow4mu *cutFlow4mu = new CutFlow4mu(m_event, m_currMCCollection, m_runNumber_sf, &muonVec);
 	CutFlow4e *cutFlow4e = new CutFlow4e(&electronVec);
 
 	if (muonTriggerTool->passedTrigger() | diMuonTriggerTool->passedTrigger())
