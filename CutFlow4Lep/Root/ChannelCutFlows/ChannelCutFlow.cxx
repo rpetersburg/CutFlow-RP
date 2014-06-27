@@ -179,13 +179,16 @@ QuadLepton* ChannelCutFlow::getQuadEvent(vector<QuadLepton*> *quadLeptonVec, Boo
 
 		// Implement TriggerMatching
 		setLeptonVecsForTriggerMatch(currLeptonVec);
-		Bool_t muTrigger = (m_muonTriggerMatch->passedCutThreshold() || m_diMuonTriggerMatch->passedCutThreshold());
-		Bool_t elTrigger = (m_electronTriggerMatch->passedCutThreshold() || m_diElectronTriggerMatch->passedCutThreshold());
-		Bool_t elMuTrigger = (m_electronMuonTriggerMatch->passedCutThreshold());
-		// No need for analysis discrimination since each trigger match class confirms proper particle types
-		if (!(muTrigger || elTrigger || elMuTrigger)) continue;
+		Bool_t passedTriggerMatch = false;
+		if (currQuadLepton->getType() == QuadType::Mu4)
+			passedTriggerMatch = (m_muonTriggerMatch->passedCutThreshold() || m_diMuonTriggerMatch->passedCutThreshold());
+		else if (currQuadLepton->getType() == QuadType::El4)
+			passedTriggerMatch = (m_electronTriggerMatch->passedCutThreshold() || m_diElectronTriggerMatch->passedCutThreshold());
+		else
+			passedTriggerMatch = (m_electronMuonTriggerMatch->passedCutThreshold());
+		if (!passedTriggerMatch) continue;
 
-		// Find the QuadLepton with closest z mass
+		// Find the QuadLepton with closest Z mass
 		Double_t tempDiff1 = fabs(currQuadLepton->getZ1()->getMomentumVec()->M() - pdgZMass);
 		Double_t tempDiff2 = fabs(currQuadLepton->getZ1()->getMomentumVec()->M() - pdgZMass);
 

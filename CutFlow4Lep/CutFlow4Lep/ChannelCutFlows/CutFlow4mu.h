@@ -8,7 +8,7 @@ using namespace std;
 class CutFlow4mu : public ChannelCutFlow
 {
 	public:
-		CutFlow4mu(vector<Muon*> *tInitMuonVec);
+		CutFlow4mu(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf, vector<Muon*> *tInitMuonVec);
 		~CutFlow4mu();
 
 		Bool_t passedCut();

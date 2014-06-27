@@ -1,7 +1,7 @@
 #include "CutFlow4Lep/ChannelCutFlows/CutFlow4mu.h"
 
-CutFlow4mu::CutFlow4mu(vector<Muon*> *tInitMuonVec)
-	: m_initMuonVec(tInitMuonVec)
+CutFlow4mu::CutFlow4mu(D3PDReader::Event *tEvent, Int_t tCurrMCCollection, Int_t tRunNumber_sf, vector<Muon*> *tInitMuonVec)
+	: ChannelCutFlow(tEvent, tCurrMCCollection, tRunNumber_sf), m_initMuonVec(tInitMuonVec)
 {
 
 }
@@ -20,4 +20,11 @@ Bool_t CutFlow4mu::passedCut()
 
 	vector<QuadLepton*> quadMuonVec = getQuadLeptons(&diMuonVec);
 	if (quadMuonVec.size() < 1) return false;
+
+	Bool_t doZ4lAnalysis = true;
+	QuadLepton* higgsEvent = getQuadEvent(&quadMuonVec, doZ4lAnalysis);
+
+	// CutQuadLepton
+
+
 }
