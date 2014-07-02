@@ -12,6 +12,14 @@ class QuadLeptonCut
 		~QuadLeptonCut();
 
 		Bool_t passedCut();
+		Bool_t passedZ1MassCut();
+		Bool_t passedZ2MassCut();
+		Bool_t passedDeltaRCut();
+		Bool_t passedJPsiVeto();
+		Bool_t passedTrackIsoCut();
+		Bool_t passedCaloIsoCut();
+		Bool_t passedD0SigCut();
+		vector<Double_t> getTrackPT();
 		void setQuadLepton(QuadLepton *tQuadLepton) {m_quadLepton = tQuadLepton;};
 
 	protected:

@@ -2,6 +2,8 @@
 #define HIGGSANALYSIS_H
 
 #include "D3PDReader/Event.h"
+#include "xAODRootAccess/Init.h"
+
 #include "PileupReweighting/TPileupReweighting.h"
 
 #include "CutFlow4Lep/ParticleObjects/Jets.h"
@@ -63,27 +65,25 @@
 #include <TFile.h>
 
 using namespace std;
-class HiggsAnalysis :public UsesEvent
+class HiggsAnalysis : public UsesEvent
 {
 	public:
 		HiggsAnalysis();
 		HiggsAnalysis(TChain *tPhysicsTree);
+		HiggsAnalysis(TString tFileName_xAOD);
 		~HiggsAnalysis();
 		
 		void analyzeTree();
+		void analyzeTree_xAOD();
 		void analyzeTreeEvent(Long64_t eventNumber);
 
-		void setMCCollection();
-		void setDataCalibration();
-		void setEventYear();
-		void setSampleType();
-		void setCurrFileNameVec();
-		void setMCRunNumber();
-		void setDataPeriod();
-		void setIsTauSampleAndMCGenerator();
-		void setRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupReweightingTool);
-		void setCurrElectron();
-		void setMCChannelNumber();
+		void initMCCollection();
+		void initSampleType();
+		void initCurrFileNameVec();
+		void initMCRunNumber();
+		void initIsTauSampleAndMCGenerator();
+		void initRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupReweightingTool);
+		void initCurrElectron();
 		
 		void setOutputFilePath(string newFilePath);	
 
@@ -98,11 +98,13 @@ class HiggsAnalysis :public UsesEvent
 	private:
 		// Constructor
 		TTree *m_physicsTree;
-		D3PDReader::Event *m_event;
 		TString m_outputFilePath;
 		TString m_currFileName;
 		vector<TString> m_currFileNameVec;
 		TH1F *m_countingHist;
+
+		// Constructo xAOD
+		TString m_fileName_xAOD;
 
 		// Variables describing each event
 		Bool_t m_isMC;

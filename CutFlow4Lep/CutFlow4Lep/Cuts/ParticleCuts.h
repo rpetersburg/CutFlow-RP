@@ -4,7 +4,7 @@
 #include "CutFlow4Lep/Cuts/Cuts.h"
 
 using namespace std;
-template <class Particle>
+template <class Particle> // Electron, Muon, or Jets
 class ParticleCuts : public Cuts
 {
 	public:

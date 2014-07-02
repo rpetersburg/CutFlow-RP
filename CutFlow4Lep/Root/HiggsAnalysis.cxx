@@ -14,6 +14,15 @@ HiggsAnalysis::HiggsAnalysis(TChain *tPhysicsTree) : m_physicsTree(tPhysicsTree)
 	m_countingHist = new TH1F("CountingHist", "CountingHist", 10, 0, 10);
 }
 
+HiggsAnalysis::HiggsAnalysis(TString tFileName_xAOD) : m_fileName_xAOD(tFileName_xAOD)
+{
+	xAOD::Init( "CutFlow4Lep_xAOD" );
+
+	auto_ptr<TFile> ifile(TFile::Open(m_fileName_xAOD, "READ"));
+	m_event_xAOD = new xAOD::TEvent(xAOD::TEvent::kClassAccess);
+	m_event_xAOD->readFrom(ifile.get());
+}
+
 HiggsAnalysis::~HiggsAnalysis()
 {
 	delete m_physicsTree;
@@ -22,54 +31,70 @@ HiggsAnalysis::~HiggsAnalysis()
 
 void HiggsAnalysis::analyzeTree()
 {
-	Int_t totNumEvents = m_physicsTree->GetEntries();
+	Int_t entries = m_physicsTree->GetEntries();
 
-	for (Int_t iEvent = 0; iEvent < totNumEvents; iEvent++)
+	TChain* chain = dynamic_cast<TChain*> (m_physicsTree);
+	m_currFileName = chain->GetFile()->GetPath();
+	initCurrFileNameVec(); // Set m_currFileNameVec, a vector of the file name string
+
+	for (Int_t entry = 0; entry < entries; entry++)
 	{
-		Long64_t currEvent = iEvent;
-		TChain* chain = dynamic_cast<TChain*> (m_physicsTree);
+		Long64_t currEntry = entry;
 		if (chain)
 		{
-			currEvent = chain->LoadTree(currEvent);
+			currEntry = chain->LoadTree(currEntry);
 		}
-		m_currFileName = chain->GetFile()->GetPath();
-		setCurrFileNameVec(); // Set m_currFileNameVec a vector of the file name string
-		analyzeTreeEvent(currEvent);
+		analyzeTreeEvent(currEntry);
 	}
 
 	cout << "Tree was analyzed..." << endl;
 }
 
+void HiggsAnalysis::analyzeTree_xAOD()
+{
+	Int_t entries = m_event_xAOD->getEntries();
+
+	m_currFileName = m_fileName_xAOD;
+	initCurrFileNameVec(); // Set m_currFileNameVec, a vector of the file name string
+
+	for (Long64_t entry = 0; entry < entries; entry++)
+	{
+		analyzeTreeEvent(entry);
+	}
+}
+
 void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 {
 	// Initialize the D3PD event to get values for current event number
-	if(eventNumber >= 0) m_event->GetEntry(eventNumber);
+	if (eventNumber >= 0) 
+	{
+		m_event->GetEntry(eventNumber);
+		m_event_xAOD->getEntry(eventNumber);
+	}
 
-	// Checking if MC or Data
-	if(m_event->eventinfo.isSimulation()) m_isMC = true;
-	else m_isMC = false;
+	initIsMC(); // Checking if MC or Data
 
 	if (m_isMC)
 	{
 		m_currDataCalibration = -1;
-		setMCCollection();
+		initMCCollection();
 	}
 	else
 	{
 		m_currMCCollection = -1;
-		setDataCalibration();
+		initDataCalibration();
 	}
 	
 	// Instantiate the Pileup Reweighting Tool
 	Root::TPileupReweighting *pileupReweightingTool = (new PileupReweightTool(m_dataYear, m_currMCCollection, m_currDataCalibration))->getTool();
 
-	setEventYear(); // Set m_dataYear, m_cmEnergy, and m_is2012 for the event
-	setIsTauSampleAndMCGenerator(); // Set m_isTauSample and m_mcGenerator
-	setRunNumberSfAndLbnSf(pileupReweightingTool); // Set m_runNumber_sf and m_lbn_sf	
-	setCurrElectron(); // Set m_currElectron
-	setSampleType(); // Set m_sampleType
-	if (m_isMC) setMCChannelNumber(); // Set m_mcChannelNumber
-	if (m_isMC) setMCRunNumber(); // Set m_mcRunNumber
+	initDataYear(); // Set m_dataYear for the event
+	initIsTauSampleAndMCGenerator(); // Set m_isTauSample and m_mcGenerator
+	initRunNumberSfAndLbnSf(pileupReweightingTool); // Set m_runNumber_sf and m_lbn_sf	
+	initCurrElectron(); // Set m_currElectron
+	initSampleType(); // Set m_sampleType
+	if (m_isMC) initMCChannelNumber(); // Set m_mcChannelNumber
+	if (m_isMC) initMCRunNumber(); // Set m_mcRunNumber
 
 	// Getting the mass of MC Higgs using Calculation object
 	Double_t higgsMass = 0;
@@ -308,7 +333,6 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 
 	// Combine Muon Vectors
-
 	vector<Muon*> muonVec;
 	for (vector<Muon*>::size_type i = 0; i != muonStacoVec.size(); i++)
 		muonVec.push_back(muonStacoVec[i]);
@@ -322,7 +346,7 @@ void HiggsAnalysis::analyzeTreeEvent(Long64_t eventNumber)
 
 	if (muonTriggerTool->passedTrigger() | diMuonTriggerTool->passedTrigger())
 	{
-
+		
 	}
 
 
@@ -380,27 +404,8 @@ void HiggsAnalysis::setOutputFilePath(string newFilePath)
 	cout << "Output file set..." << endl;
 }
 
-void HiggsAnalysis::setEventYear()
-{
-	// Setting the event year and CM Energy of the data
-	Long64_t runNumber = m_event->eventinfo.RunNumber();
-	if ( (runNumber >= 177531) && (runNumber <= 191933) )
-	{
-		m_dataYear = 2011;
-		m_cmEnergy = 7.0;
-		m_is2012 = false;
-	}
-	else if ( runNumber > 191933 )
-	{
-		m_dataYear = 2012;
-		m_cmEnergy = 8.0;
-		m_is2012 = true;
-	}
-	else cout<<"Error: HiggsAnalysis::setOutputFilePath(): Event run number not recognized: "<< runNumber <<endl;
-}
-
 // For MC simulations, sets the type of higgs sample
-void HiggsAnalysis::setSampleType()
+void HiggsAnalysis::initSampleType()
 {
 	for (vector<Int_t>::size_type i = 0; i != m_currFileNameVec.size(); i++)
 	{
@@ -422,11 +427,10 @@ void HiggsAnalysis::setSampleType()
 			else																	m_sampleType = SampleType::Background;
 		}
 	}
-
 }
 
 // Finds the MC Run Number within the file name
-void HiggsAnalysis::setMCRunNumber()
+void HiggsAnalysis::initMCRunNumber()
 {
 	for (vector<Int_t>::size_type i = 0; i != m_currFileNameVec.size(); i++)
 	{
@@ -445,7 +449,7 @@ void HiggsAnalysis::setMCRunNumber()
 }
 
 // Splits the file name by '.' and adds parts to a vector
-void HiggsAnalysis::setCurrFileNameVec()
+void HiggsAnalysis::initCurrFileNameVec()
 {
 	// Splitting the file path
 	TObjArray *splitFileName = m_currFileName.Tokenize(".");
@@ -458,14 +462,8 @@ void HiggsAnalysis::setCurrFileNameVec()
 	}
 }
 
-void HiggsAnalysis::setDataCalibration()
-{
-	if (m_dataYear == 2011) m_currDataCalibration = DataCalibType::y2011d;
-	else if (m_dataYear == 2012) m_currDataCalibration = DataCalibType::y2012c;
-}
-
 // Needs good documentation and some self-alterations.... Not sure exactly what is going on
-void HiggsAnalysis::setMCCollection()
+void HiggsAnalysis::initMCCollection()
 {
 	Int_t mc11c[] 	= {1272,1273,1274,1299,1300,1309,1310,1349,1350,1351,1352,1353,1370,1372,1378,1571};
 	Int_t mc11d[] 	= {1786};
@@ -534,24 +532,8 @@ void HiggsAnalysis::setMCCollection()
 		}
 	}
 }
-
-void HiggsAnalysis::setDataPeriod()
-{
-	Int_t runNumber = m_event->eventinfo.RunNumber();
-
-	if (runNumber >= 177986 && runNumber <= 180481) 
-		m_dataPeriod = DataPeriod::run2011_BD;
-	else if (runNumber >= 180614 && runNumber <= 184169)
-		m_dataPeriod = DataPeriod::run2011_EH;
-	else if (runNumber >= 185353 && runNumber <= 187815)
-		m_dataPeriod = DataPeriod::run2011_IK;
-	else if (runNumber >= 188902 && runNumber <= 191933)
-		m_dataPeriod = DataPeriod::run2011_LM;
-	else if (runNumber >= 195847 && runNumber <= 999999)
-		m_dataPeriod = DataPeriod::run2012_All;
-}
 	
-void HiggsAnalysis::setIsTauSampleAndMCGenerator()
+void HiggsAnalysis::initIsTauSampleAndMCGenerator()
 {
 	// Checking if tau sample
 	if (m_currFileName.Contains("noTau")) m_isTauSample = false;
@@ -579,7 +561,7 @@ void HiggsAnalysis::setIsTauSampleAndMCGenerator()
 	} 
 }
 
-void HiggsAnalysis::setRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupReweightingTool)
+void HiggsAnalysis::initRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupReweightingTool)
 {
 	// Setting the run number (sf) and luminosity block number
 	if (m_isMC)
@@ -596,14 +578,9 @@ void HiggsAnalysis::setRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupRewei
 	}
 }
 
-void HiggsAnalysis::setCurrElectron()
+void HiggsAnalysis::initCurrElectron()
 {
 	// 2012 defaults to GSF electrons; 2011 does not
 	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
 	else if (m_dataYear == 2012) m_currElectron = &(m_event->el);
-}
-
-void HiggsAnalysis::setMCChannelNumber()
-{
-	m_mcChannelNumber = m_event->eventinfo.mc_channel_number();
 }
