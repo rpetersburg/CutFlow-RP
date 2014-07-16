@@ -15,6 +15,7 @@ class Muon : public ChargedLepton
 		~Muon();
 
 		D3PDReader::MuonD3PDObjectElement* getMuon() {return m_muon;};
+		Double_t getPTCone20() {return m_muon->ptcone20();};
 
 	protected:
 

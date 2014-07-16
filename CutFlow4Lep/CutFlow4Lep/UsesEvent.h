@@ -19,7 +19,10 @@ class UsesEvent
 		~UsesEvent();
 
 		void setEvent(D3PDReader::Event *tEvent);
-		void setEvent(xAOD::TEvent *tEvent);	
+		void setEvent(xAOD::TEvent *tEvent);
+
+		Int_t getNumVertex(Int_t threshold);
+		Bool_t getIsMC() {return m_isMC;};
 
 	protected:
 		D3PDReader::Event *m_event;
@@ -50,8 +53,6 @@ class UsesEvent
 		void initRunNumber_xAOD();
 		void initEventNumber_xAOD();
 		void initMCChannelNumber_xAOD();
-
-		Int_t getNumVertex(Int_t threshold);
 
 	private:
 };

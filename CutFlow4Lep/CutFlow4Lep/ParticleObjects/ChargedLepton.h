@@ -14,6 +14,10 @@ class ChargedLepton : public ParticleObject, public UsesEvent
 		ChargedLepton(D3PDReader::Event *tEvent) : UsesEvent(tEvent) {};
 		~ChargedLepton();
 
+		virtual D3PDReader::ElectronD3PDObjectElement* getElectron();
+		virtual D3PDReader::MuonD3PDObjectElement* getMuon();
+		virtual D3PDReader::JetD3PDObjectElement* getJets();
+
 		Int_t getDataYear() {return m_dataYear;};
 
 		Int_t getCharge() {return m_charge;};
@@ -24,9 +28,13 @@ class ChargedLepton : public ParticleObject, public UsesEvent
 		void setSmear(Double_t tSmear) {m_smear = tSmear;};
 		void setEff(Double_t tEff) {m_eff = tEff;};
 
+		virtual Double_t getPTCone20();
+
 		TLorentzVector* getMomentumBDTVec() {return m_momentumBDT;};
 		TLorentzVector* getMomentumMEVec() {return m_momentumME;};
 		TLorentzVector* getMomentumIDVec() {return m_momentumID;};
+
+		void setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale) {m_elRescale = telRescale;}
 
 	protected:
 		Int_t m_index;
@@ -37,13 +45,21 @@ class ChargedLepton : public ParticleObject, public UsesEvent
 		Double_t m_smear;
 		Double_t m_eff;
 
+		// Main TLorentz Vectors
 		TLorentzVector *m_momentumBDT;
 		TLorentzVector *m_momentumME;
 		TLorentzVector *m_momentumID;
 
+		// Error Matrices
+		TMatrixD covMatrix;
+		TMatrixD covMatrixME;
+		TMatrixD covMatrixID;
+		CLHEP::HepMatrix covMatrixHep;
+		CLHEP::HepMatrix covMatrixHepME;
+		CLHEP::HepMatrix covMatrixHepID;
+
 		Double_t m_ptCone20;
 		Double_t m_ptCone20Correction;
-
 
 		Float_t sysE[DoSys::Nom + 1];
 		Float_t nomE;

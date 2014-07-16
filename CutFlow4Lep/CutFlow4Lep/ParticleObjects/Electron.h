@@ -21,6 +21,7 @@ class Electron : public ChargedLepton
 		~Electron();
 
 		D3PDReader::ElectronD3PDObjectElement* getElectron() {return m_electron;};
+		Double_t getPTCone20() {return m_electron->ptcone20();};
 		void fill(Double_t tElectronEff, Double_t tElectronSmear, Double_t tElectronResolution, Double_t tElCLPt);
 		void setResolution(Double_t tResolution) {m_resolution = tResolution;};
 		void setClusterpT(Double_t tClusterpT) {m_clusterpT = tClusterpT;};

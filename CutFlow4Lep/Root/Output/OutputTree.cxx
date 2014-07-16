@@ -3,7 +3,7 @@
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////////////
-//				Constructor and Festructor
+//				Constructor and Destructor
 ////////////////////////////////////////////////////////////////////////////////////////
 OutputTree::OutputTree()
 {
@@ -299,8 +299,6 @@ void OutputTree::clearVars()
 	tBCHCutMedium = -999;
 	tBCHCutTight = -999;
 }
-
-
 
 void OutputTree::bookTree(TTree *tree)
 {

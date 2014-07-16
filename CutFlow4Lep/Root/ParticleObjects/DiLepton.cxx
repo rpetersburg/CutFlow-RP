@@ -38,3 +38,10 @@ Bool_t DiLepton::isEqual(DiLepton *testDiLepton)
 		return true;
 	return false;
 }
+
+void DiLepton::setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale)
+{
+	m_elRescale = telRescale;
+	m_posLepton->setElRescale(m_elRescale);
+	m_negLepton->setElRescale(m_elRescale);
+}

@@ -48,9 +48,42 @@ void QuadLepton::setZBosons(DiLepton *tZ1, DiLepton *tZ2)
 	vector<ChargedLepton*>::iterator currLepton = m_leptonVec.begin();
 	for ( ; currLepton != m_leptonVec.end(); ++currLepton)
 	{
-		m_leptonLorentzVec.push_back((*currLepton)->getMomentumVec());
-		m_leptonLorentzMEVec.push_back((*currLepton)->getMomentumMEVec());
-		m_leptonLorentzIDVec.push_back((*currLepton)->getMomentumIDVec());
+		m_leptonLorentzVec.push_back(*(*currLepton)->getMomentumVec());
+		m_leptonLorentzMEVec.push_back(*(*currLepton)->getMomentumMEVec());
+		m_leptonLorentzIDVec.push_back(*(*currLepton)->getMomentumIDVec());
 	}
+}
 
+void QuadLepton::fillFSRCorrection(TLorentzVector fsrMomentum, Bool_t isZ1, Bool_t isZ2, PATCore::ParticleType::Type particleType)
+{
+	m_fsrLorentzVec.push_back(fsrMomentum);
+	m_fsrLorentzIDVec.push_back(fsrMomentum);
+	m_fsrLorentzMEVec.push_back(fsrMomentum);
+
+	double energyResolution = 
+}
+
+void QuadLepton::clearTrackIsoVecs()
+{
+	m_trackIso.clear();
+	m_trackIsoVal.clear();
+}
+
+void QuadLepton::clearCaloIsoVecs()
+{
+	m_caloIso.clear();
+	m_caloIsoVal.clear();
+}
+
+void QuadLepton::clearD0SigVecs()
+{
+	m_d0Sig.clear();
+	m_d0SigVal.clear();
+}
+
+void QuadLepton::setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale)
+{
+	m_elRescale = telRescale;
+	m_z1->setElRescale(m_elRescale);
+	m_z2->setElRescale(m_elRescale);
 }
