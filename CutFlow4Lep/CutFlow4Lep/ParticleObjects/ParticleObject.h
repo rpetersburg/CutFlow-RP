@@ -7,6 +7,7 @@
 #include "ZMassConstraint/CovMatrixTools.h"
 
 #include "ElectronPhotonFourMomentumCorrection/egammaEnergyCorrectionTool.h"
+#include "Matrix/Matrix.h"
 
 using namespace std;
 class ParticleObject

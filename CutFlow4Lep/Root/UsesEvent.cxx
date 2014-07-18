@@ -42,6 +42,7 @@ void UsesEvent::init()
 	initElectronCollection();
 	initDataCalibration();
 	if (m_isMC) initMCChannelNumber();
+	initCurrElectron();
 }
 
 void UsesEvent::init_xAOD()
@@ -144,4 +145,11 @@ Int_t UsesEvent::getNumVertex(Int_t threshold)
 	for (Int_t i = 0; i < m_event->vxp.n(); i++)
 		if (m_event->vxp[i].trk_n() >= threshold) nVertex++;
 	return nVertex;
+}
+
+void UsesEvent::initCurrElectron()
+{
+	// 2012 defaults to GSF electrons; 2011 does not
+	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
+	else if (m_dataYear == 2012) m_currElectron = &(m_event->el);
 }

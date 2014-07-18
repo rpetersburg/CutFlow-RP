@@ -54,13 +54,61 @@ void QuadLepton::setZBosons(DiLepton *tZ1, DiLepton *tZ2)
 	}
 }
 
-void QuadLepton::fillFSRCorrection(TLorentzVector fsrMomentum, Bool_t isZ1, Bool_t isZ2, PATCore::ParticleType::Type particleType)
+void QuadLepton::fillFSRCorrection(TLorentzVector tFSRMomentum, Bool_t isZ1, Bool_t isZ2, PATCore::ParticleType::Type particleType)
 {
-	m_fsrLorentzVec.push_back(fsrMomentum);
-	m_fsrLorentzIDVec.push_back(fsrMomentum);
-	m_fsrLorentzMEVec.push_back(fsrMomentum);
+	m_fsrMomentum = tFSRMomentum;
+	m_fsrLorentzVec.push_back(m_fsrMomentum);
+	m_fsrLorentzIDVec.push_back(m_fsrMomentum);
+	m_fsrLorentzMEVec.push_back(m_fsrMomentum);
 
-	double energyResolution = 
+	double energyResolution = m_elRescale->resolution(m_fsrMomentum.E(), m_fsrMomentum.Eta(), particleType, true) * m_fsrMomentum.E();
+
+	TMatrixD photonCovarianceTMatrixD = ZMassConstraint::getCovarianceTMatrixDd0z0PhiThetaPElectron(energyResolution,
+																																																	0.000001,
+																																																	0.000001,
+																																																	0.000001,
+																																																	0.000001,
+																																																	0.0,
+																																																	0.0,
+																																																	0.0,
+																																																	0.0,
+																																																	0.0,
+																																																	0.0);
+
+	CLHEP::HepMatrix photonCovarianceHepTMatrixD = ZMassConstraint::getCovarianceMatrixd0z0PhiThetaPElectron(energyResolution,
+																																																					 0.000001,
+																																																					 0.000001,
+																																																					 0.000001,
+																																																					 0.000001,
+																																																					 0.0,
+																																																					 0.0,
+																																																					 0.0,
+																																																					 0.0,
+																																																					 0.0,
+																																																					 0.0);
+
+	m_fsrCovMatrixVec.push_back(photonCovarianceTMatrixD);
+	m_fsrCovMatrixIDVec.push_back(photonCovarianceTMatrixD);
+	m_fsrCovMatrixMEVec.push_back(photonCovarianceTMatrixD);
+
+	m_hepFSRCovMatrixVec.push_back(photonCovarianceHepTMatrixD);
+	m_hepFSRCovMatrixIDVec.push_back(photonCovarianceHepTMatrixD);
+	m_hepFSRCovMatrixMEVec.push_back(photonCovarianceHepTMatrixD);
+
+	if (isZ1)
+	{
+		m_z1->setHasFSR(true);
+		m_z1->setFSRMomentum(m_fsrMomentum);
+		m_z1->setFSRError(photonCovarianceTMatrixD);
+		m_z1->setHepFSRError(photonCovarianceHepTMatrixD);
+	}
+	if (isZ2)
+	{
+		m_z2->setHasFSR(true);
+		m_z2->setFSRMomentum(m_fsrMomentum);
+		m_z2->setFSRError(photonCovarianceTMatrixD);
+		m_z2->setHepFSRError(photonCovarianceHepTMatrixD);
+	}
 }
 
 void QuadLepton::clearTrackIsoVecs()

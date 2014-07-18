@@ -83,7 +83,6 @@ class HiggsAnalysis : public UsesEvent
 		void initMCRunNumber();
 		void initIsTauSampleAndMCGenerator();
 		void initRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupReweightingTool);
-		void initCurrElectron();
 		
 		void setOutputFilePath(string newFilePath);	
 

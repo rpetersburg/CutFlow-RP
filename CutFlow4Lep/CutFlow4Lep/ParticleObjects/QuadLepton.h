@@ -17,7 +17,17 @@ class QuadLepton : public ParticleObject
 
 		void setZBosons(DiLepton *tZ1, DiLepton *tZ2);
 		void setMass(Double_t tMass) {m_mass = tMass;};
+
 		void setFSRType(Int_t tFSRType) {m_fsrType = tFSRType;};
+		void setFSRMass(Double_t tFSRMass) {m_fsrMass = tFSRMass;};
+		void setFSRMassError(Double_t tFSRMassError) {m_fsrMassError = tFSRMassError;};
+		void setFSRZ1Mass(Double_t tFSRZ1Mass) {m_fsrZ1Mass = tFSRZ1Mass;};
+		void setFSRZ2Mass(Double_t tFSRZ2Mass) {m_fsrZ2Mass = tFSRZ2Mass;};
+		void setFSRSum(TLorentzVector tFSRSum) {m_fsrSum = tFSRSum;};
+
+		TLorentzVector getFSRMomentum() {return m_fsrMomentum;};
+		TLorentzVector getFSRSum() {return m_fsrSum;};
+
 		void setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale);
 
 		void fillFSRCorrection(TLorentzVector fsrMomentum, Bool_t isZ1, Bool_t isZ2, PATCore::ParticleType::Type particleType);
@@ -29,6 +39,18 @@ class QuadLepton : public ParticleObject
 		vector<TLorentzVector> getLeptonLorentzVec() {return m_leptonLorentzVec;};
 		vector<TLorentzVector> getLeptonLorentzMEVec() {return m_leptonLorentzMEVec;};
 		vector<TLorentzVector> getLeptonLorentzIDVec() {return m_leptonLorentzIDVec;};
+
+		vector<TLorentzVector> getFSRLorentzVec() {return m_fsrLorentzVec;};
+		vector<TLorentzVector> getFSRLorentzIDVec() {return m_fsrLorentzIDVec;};
+		vector<TLorentzVector> getFSRLorentzMEVec() {return m_fsrLorentzMEVec;};
+
+		vector<TMatrixD> getFSRCovMatrixVec() {return m_fsrCovMatrixVec;};
+		vector<TMatrixD> getFSRCovMatrixIDVec() {return m_fsrCovMatrixIDVec;};
+		vector<TMatrixD> getFSRCovMatrixMEVec() {return m_fsrCovMatrixMEVec;};
+
+		vector<CLHEP::HepMatrix> getHepFSRCovMatrixVec() {return m_hepFSRCovMatrixVec;};
+		vector<CLHEP::HepMatrix> getHepFSRCovMatrixIDVec() {return m_hepFSRCovMatrixIDVec;};
+		vector<CLHEP::HepMatrix> getHepFSRCovMatrixMEVec() {return m_hepFSRCovMatrixMEVec;};
 
 		Int_t getType() {return m_type;};
 		Int_t getDataYear() {return m_z1->getDataYear();};
@@ -50,12 +72,20 @@ class QuadLepton : public ParticleObject
 	private:
 		Int_t m_type;
 		Double_t m_mass;
+
+		TLorentzVector m_fsrMomentum;
+		TLorentzVector m_fsrSum;
 		Int_t m_fsrType;
+		Double_t m_fsrMass;
+		Double_t m_fsrMassError;
+		Double_t m_fsrZ1Mass;
+		Double_t m_fsrZ2Mass;
 
 		DiLepton *m_z1;
 		DiLepton *m_z2;
 
 		vector<ChargedLepton*> m_leptonVec;
+
 		vector<TLorentzVector> m_leptonLorentzVec;
 		vector<TLorentzVector> m_leptonLorentzMEVec;
 		vector<TLorentzVector> m_leptonLorentzIDVec;
@@ -63,6 +93,14 @@ class QuadLepton : public ParticleObject
 		vector<TLorentzVector> m_fsrLorentzVec;
 		vector<TLorentzVector> m_fsrLorentzMEVec;
 		vector<TLorentzVector> m_fsrLorentzIDVec;
+
+		vector<TMatrixD> m_fsrCovMatrixVec;
+		vector<TMatrixD> m_fsrCovMatrixIDVec;
+		vector<TMatrixD> m_fsrCovMatrixMEVec;
+
+		vector<CLHEP::HepMatrix> m_hepFSRCovMatrixVec;
+		vector<CLHEP::HepMatrix> m_hepFSRCovMatrixIDVec;
+		vector<CLHEP::HepMatrix> m_hepFSRCovMatrixMEVec;
 
 		vector<Bool_t> m_trackIso;
 		vector<Double_t> m_trackIsoVal;

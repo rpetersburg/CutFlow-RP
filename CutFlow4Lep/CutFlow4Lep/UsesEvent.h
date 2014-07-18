@@ -35,7 +35,8 @@ class UsesEvent
 		Int_t m_eventNumber;
 		Int_t m_electronCollection;
 		Int_t m_dataCalibration;
-		Int_t m_mcChannelNumber;		
+		Int_t m_mcChannelNumber;	
+		D3PDReader::ElectronD3PDObject *m_currElectron;
 
 		// Normal initialization functions for D3PD
 		void init();
@@ -47,6 +48,7 @@ class UsesEvent
 		void initElectronCollection();
 		void initDataCalibration();
 		void initMCChannelNumber();
+		void initCurrElectron();
 		// Added initialization functions for xAOD
 		void init_xAOD();
 		void initIsMC_xAOD();

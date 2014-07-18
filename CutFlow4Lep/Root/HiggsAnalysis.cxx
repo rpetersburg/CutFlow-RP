@@ -577,10 +577,3 @@ void HiggsAnalysis::initRunNumberSfAndLbnSf(Root::TPileupReweighting *pileupRewe
 		m_lbn_sf = m_event->eventinfo.lbn();
 	}
 }
-
-void HiggsAnalysis::initCurrElectron()
-{
-	// 2012 defaults to GSF electrons; 2011 does not
-	if (m_dataYear == 2011) m_currElectron = &(m_event->el_GSF);
-	else if (m_dataYear == 2012) m_currElectron = &(m_event->el);
-}

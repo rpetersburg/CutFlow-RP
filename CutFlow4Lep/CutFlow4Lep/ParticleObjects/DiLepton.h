@@ -20,12 +20,13 @@ class DiLepton : public ParticleObject
 		Int_t getFlavor() {return m_flavor;};
 		Int_t getDataYear() {return m_posLepton->getDataYear();};
 
-		TLorentzVector* getFSRMomentum() {return m_fsrMomentum;};
+		Bool_t getHasFSR() {return m_hasFSR;};
+		TLorentzVector getFSRMomentum() {return m_fsrMomentum;};
 		TMatrixD getFSRError() {return m_fsrError;};
 		CLHEP::HepMatrix getHepFSRError() {return m_hepFSRError;};
 
 		void setHasFSR(Bool_t tHasFSR) {m_hasFSR = tHasFSR;};
-		void setFSRMomentum(TLorentzVector* tFSRMomentum) {m_fsrMomentum = tFSRMomentum;};
+		void setFSRMomentum(TLorentzVector tFSRMomentum) {m_fsrMomentum = tFSRMomentum;};
 		void setFSRError(TMatrixD tFSRError) {m_fsrError = tFSRError;};
 		void setHepFSRError(CLHEP::HepMatrix tHepFSRError) {m_hepFSRError = tHepFSRError;};
 
@@ -40,7 +41,7 @@ class DiLepton : public ParticleObject
 		Int_t m_flavor;
 
 		Bool_t m_hasFSR;
-		TLorentzVector *m_fsrMomentum;
+		TLorentzVector m_fsrMomentum;
 		TMatrixD m_fsrError;
 		CLHEP::HepMatrix m_hepFSRError;
 };
