@@ -20,9 +20,10 @@ public:
 protected:
 
 private:
+	void fillCandidateVec(vector<FsrPhotons::FsrCandidate> candidateVec);
 	void fill_ph_EtCone40_corr(vector<float> *ph_EtCone40_corr);
 	void fill_el_bfEP_cl_pt(vector<float> *el_bfEP_cl_pt);
-	void fillCandidateVec(vector<FsrPhotons::FsrCandidate> candidateVec);
+	
 	Bool_t passedFSRCollinear(vector<FsrPhotons::FsrCandidate> candidateVec);
 	Bool_t passedFSRFar(vector<FsrPhotons::FsrCandidate> candidateVec);
 	PATCore::ParticleType::Type particleType(FsrPhotons::FsrCandidate candidate);

@@ -24,6 +24,8 @@ void QuadLeptonCut::init()
 	m_trackIsoCut = new TrackIsoCut(m_event, m_quadLepton);
 	m_caloIsoCut = new CaloIsoCut(m_event, m_quadLepton);
 	m_d0SigCut = new D0SigCut(m_event, m_quadLepton);
+
+	m_fsrCorrection = new FSRCorrection(m_event, m_quadLepton, m_electronSmearObj);
 }
 
 void QuadLeptonCut::setQuadLepton(QuadLepton *tQuadLepton)
@@ -44,7 +46,7 @@ Bool_t QuadLeptonCut::passedCut()
 
 	// fillEventVarInfo(quadEvent);
 	massCalc();
-	correctFSR();
+	m_fsrCorrection->executeCorrection();
 	correctZMassConstraint();
 
 

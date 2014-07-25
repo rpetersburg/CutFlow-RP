@@ -135,3 +135,27 @@ void QuadLepton::setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale)
 	m_z1->setElRescale(m_elRescale);
 	m_z2->setElRescale(m_elRescale);
 }
+
+void QuadLepton::setZMass(Double_t tZMass, Int_t muonType)
+{
+	if (muonType == MuonType::CB) m_zMass = tZMass;
+	else if (muonType == MuonType::MS) m_zMassME = tZMass;
+	else if (muonType == MuonType::ID) m_zMassID = tZMass;
+}
+
+void QuadLepton::setZMassErr(Double_t tZMassErr, Int_t muonType)
+{
+	if (muonType == MuonType::CB) m_zMassErr = tZMassErr;
+	else if (muonType == MuonType::MS) m_zMassErrME = tZMassErr;
+	else if (muonType == MuonType::ID) m_zMassErrID = tZMassErr;
+}
+
+void QuadLepton::setZ1Mass(Double_t tZ1Mass, Int_t muonType)
+{
+	if (muonType == MuonType::CB) m_z1Mass = tZ1Mass;
+}
+
+void QuadLepton::setZ2Mass(Double_t tZ2Mass, Int_t muonType)
+{
+	if (muonType == MuonType::CB) m_z2Mass = tZ2Mass;
+}

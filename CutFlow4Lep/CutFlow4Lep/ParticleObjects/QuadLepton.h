@@ -18,6 +18,7 @@ class QuadLepton : public ParticleObject
 		void setZBosons(DiLepton *tZ1, DiLepton *tZ2);
 		void setMass(Double_t tMass) {m_mass = tMass;};
 
+		// From FSR Correction
 		void setFSRType(Int_t tFSRType) {m_fsrType = tFSRType;};
 		void setFSRMass(Double_t tFSRMass) {m_fsrMass = tFSRMass;};
 		void setFSRMassError(Double_t tFSRMassError) {m_fsrMassError = tFSRMassError;};
@@ -27,6 +28,18 @@ class QuadLepton : public ParticleObject
 
 		TLorentzVector getFSRMomentum() {return m_fsrMomentum;};
 		TLorentzVector getFSRSum() {return m_fsrSum;};
+
+		// From Z Mass Constraint Correction
+		void setZMassLorentzVec(vector<TLorentzVector> tZMassLorentzVec) {m_zMassLorentzVec = tZMassLorentzVec;};
+		void setZMassCovMatrixVec(vector<TMatrixD> tZMassCovMatrixVec) {m_zMassCovMatrixVec = tZMassCovMatrixVec;};
+		void setZMass(Double_t tZMass, Int_t muonType);
+		void setZMassErr(Double_t tZMassErr, Int_t muonType);
+		void setZ1Mass(Double_t tZ1Mass, Int_t muonType);
+		void setZ2Mass(Double_t tZ2Mass, Int_t muonType);
+		void setZMassConstrainedSum(TLorentzVector tSum) {m_zMassConstrainedSum = tSum;};
+
+		vector<TLorentzVector> getZMassLorentzVec() {return m_zMassLorentzVec;};
+		TLorentzVecotr getZMassConstrainedSum() {return m_zMassConstrainedSum;};
 
 		void setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale);
 
@@ -73,6 +86,7 @@ class QuadLepton : public ParticleObject
 		Int_t m_type;
 		Double_t m_mass;
 
+		// From FSR Correction
 		TLorentzVector m_fsrMomentum;
 		TLorentzVector m_fsrSum;
 		Int_t m_fsrType;
@@ -80,6 +94,19 @@ class QuadLepton : public ParticleObject
 		Double_t m_fsrMassError;
 		Double_t m_fsrZ1Mass;
 		Double_t m_fsrZ2Mass;
+
+		// From Z Mass Constraint Correction
+		vector<TLorentzVector> m_zMassLorentzVec;
+		vector<TMatrixD> m_zMassCovMatrixVec;
+		Double_t m_zMass;
+		Double_t m_zMassID;
+		Double_t m_zMassME;
+		Double_t m_zMassErr;
+		Double_t m_zMassErrID;
+		Double_t m_zMassErrME;
+		Double_t m_z1Mass;
+		Double_t m_z2Mass;
+		TLorentzVector m_zMassConstrainedSum;
 
 		DiLepton *m_z1;
 		DiLepton *m_z2;

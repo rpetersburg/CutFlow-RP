@@ -14,6 +14,8 @@
 #include "CutFlow4Lep/Cuts/CaloIsoCut.h"
 #include "CutFlow4Lep/Cuts/D0SigCut.h"
 
+#include "CutFlow4Lep/Corrections/FSRCorrection.h"
+
 #include "egammaFourMomentumError/GeneralUtils.h"
 
 using namespace std;
@@ -44,6 +46,8 @@ class QuadLeptonCut : public QuadLeptonCuts
 		D0SigCut *m_d0SigCut;
 		ZMassCut *m_zMassCut;
 		DeltaRCut *m_deltaRCut;
+
+		FSRCorrection *m_fsrCorrection;
 }
 
 #endif
