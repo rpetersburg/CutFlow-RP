@@ -20,6 +20,8 @@ public:
 protected:
 
 private:
+	void initializeCorrectionTool() {};
+
 	void fillCandidateVec(vector<FsrPhotons::FsrCandidate> candidateVec);
 	void fill_ph_EtCone40_corr(vector<float> *ph_EtCone40_corr);
 	void fill_el_bfEP_cl_pt(vector<float> *el_bfEP_cl_pt);

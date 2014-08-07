@@ -21,7 +21,9 @@ class ParticleObject
 		TLorentzVector* getMomentumVec() {return m_momentum;};
 		TLorentzVector* getMomentumMainVec() {return m_momentumMain;};
 
-		virtual void setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale);
+		virtual void setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale) = 0;
+		
+		virtual void fillCovMatrix() = 0;
 
 		AtlasRoot::egammaEnergyCorrectionTool *m_elRescale;
 
@@ -30,6 +32,7 @@ class ParticleObject
 
 		TLorentzVector *m_momentum;
 		TLorentzVector *m_momentumMain;
+		
 	private:
 };
 #endif

@@ -65,3 +65,132 @@ void Muon::setTypes()
 	else m_vhLeptonType = VHLeptonType::muonMinus;
 	m_truthParentType = VHTruthType::unknown;
 }
+
+void Muon::fillCovMatrix()
+{
+	TMatrixD tmp1 = ZMassConstraint::getCovarianceTMatrixDd0z0PhiThetaPMuon(m_momentum->P(),
+																																					m_muon->cov_d0_exPV(),
+																																					m_muon->cov_z0_exPV(),
+																																					m_muon->cov_phi_exPV(),
+																																					m_muon->cov_theta_exPV(),
+																																					m_muon->cov_qoverp_exPV(),
+																																					m_muon->cov_d0_z0_exPV(),
+																																					m_muon->cov_d0_phi_exPV(),
+																																					m_muon->cov_d0_theta_exPV(),
+																																					m_muon->cov_d0_qoverp_exPV(),
+																																					m_muon->cov_z0_phi_exPV(),
+																																					m_muon->cov_z0_theta_exPV(),
+																																					m_muon->cov_z0_qoverp_exPV(),		
+																																					m_muon->cov_phi_theta_exPV(),
+																																					m_muon->cov_phi_qoverp_exPV(),
+																																					m_muon->cov_theta_qoverp_exPV());
+	m_covMatrix.ResizeTo(tmp1);
+	m_covMatrix = tmp1;
+
+	// Momentum Error Term
+	m_covMomErr = (m_muon->cov_qoverp_exPV()) * 1000 * 1000;
+
+	m_covMatrixHep = ZMassConstraint::getCovarianceMatrixd0z0PhiThetaPMuon(m_momentum->P(),
+																																				 m_muon->cov_d0_exPV(),
+																																				 m_muon->cov_z0_exPV(),
+																																				 m_muon->cov_phi_exPV(),
+																																				 m_muon->cov_theta_exPV(),
+																																				 m_muon->cov_qoverp_exPV(),
+																																				 m_muon->cov_d0_z0_exPV(),
+																																				 m_muon->cov_d0_phi_exPV(),
+																																				 m_muon->cov_d0_theta_exPV(),
+																																				 m_muon->cov_d0_qoverp_exPV(),
+																																				 m_muon->cov_z0_phi_exPV(),
+																																				 m_muon->cov_z0_theta_exPV(),
+																																				 m_muon->cov_z0_qoverp_exPV(),
+																																				 m_muon->cov_phi_theta_exPV(),
+																																				 m_muon->cov_phi_qoverp_exPV(),
+																																				 m_muon->cov_theta_qoverp_exPV());
+
+	// For MS
+	TMatrixD tmp1MS = ZMassConstraint::getCovarianceTMatrixDd0z0PhiThetaPMuon(m_momentumME->P(),
+																																						m_muon->me_cov_d0_exPV(),
+																																						m_muon->me_cov_z0_exPV(),
+																																						m_muon->me_cov_phi_exPV(),
+																																						m_muon->me_cov_theta_exPV(),
+																																						m_muon->me_cov_qoverp_exPV(),
+																																						m_muon->me_cov_d0_z0_exPV(),
+																																						m_muon->me_cov_d0_phi_exPV(),
+																																						m_muon->me_cov_d0_theta_exPV(),
+																																						m_muon->me_cov_d0_qoverp_exPV(),
+																																						m_muon->me_cov_z0_phi_exPV(),
+																																						m_muon->me_cov_z0_theta_exPV(),
+																																						m_muon->me_cov_z0_qoverp_exPV(),
+																																						m_muon->me_cov_phi_theta_exPV(),
+																																						m_muon->me_cov_phi_qoverp_exPV(),
+																																						m_muon->me_cov_theta_qoverp_exPV());
+	m_covMatrixME.ResizeTo(tmp1MS);
+	m_covMatrixME = tmp1MS;
+
+
+	m_covMatrixHepME = ZMassConstraint::getCovarianceMatrixd0z0PhiThetaPMuon(m_momentumME->P(),
+																																					 m_muon->me_cov_d0_exPV(),
+																																					 m_muon->me_cov_z0_exPV(),
+																																					 m_muon->me_cov_phi_exPV(),
+																																					 m_muon->me_cov_theta_exPV(),
+																																					 m_muon->me_cov_qoverp_exPV(),
+																																					 m_muon->me_cov_d0_z0_exPV(),
+																																					 m_muon->me_cov_d0_phi_exPV(),
+																																					 m_muon->me_cov_d0_theta_exPV(),
+																																					 m_muon->me_cov_d0_qoverp_exPV(),
+																																					 m_muon->me_cov_z0_phi_exPV(),
+																																					 m_muon->me_cov_z0_theta_exPV(),
+																																					 m_muon->me_cov_z0_qoverp_exPV(),
+																																					 m_muon->me_cov_phi_theta_exPV(),
+																																					 m_muon->me_cov_phi_qoverp_exPV(),
+																																					 m_muon->me_cov_theta_qoverp_exPV());
+
+	// For ID 
+	TMatrixD tmp1ID = ZMassConstraint::getCovarianceTMatrixDd0z0PhiThetaPMuon(m_momentumID->P(),
+																																						m_muon->id_cov_d0_exPV(),
+																																						m_muon->id_cov_z0_exPV(),
+																																						m_muon->id_cov_phi_exPV(),
+																																						m_muon->id_cov_theta_exPV(),
+																																						m_muon->id_cov_qoverp_exPV(),
+																																						m_muon->id_cov_d0_z0_exPV(),
+																																						m_muon->id_cov_d0_phi_exPV(),
+																																						m_muon->id_cov_d0_theta_exPV(),
+																																						m_muon->id_cov_d0_qoverp_exPV(),
+																																						m_muon->id_cov_z0_phi_exPV(),
+																																						m_muon->id_cov_z0_theta_exPV(),
+																																						m_muon->id_cov_z0_qoverp_exPV(),
+																																						m_muon->id_cov_phi_theta_exPV(),
+																																						m_muon->id_cov_phi_qoverp_exPV(),
+																																						m_muon->id_cov_theta_qoverp_exPV());
+	m_covMatrixID.ResizeTo(tmp1ID);
+	m_covMatrixID = tmp1ID;
+
+
+	m_covMatrixHepID = ZMassConstraint::getCovarianceMatrixd0z0PhiThetaPMuon(m_momentumID->P(),
+																																					 m_muon->id_cov_d0_exPV(),
+																																					 m_muon->id_cov_z0_exPV(),
+																																					 m_muon->id_cov_phi_exPV(),
+																																					 m_muon->id_cov_theta_exPV(),
+																																					 m_muon->id_cov_qoverp_exPV(),
+																																					 m_muon->id_cov_d0_z0_exPV(),
+																																					 m_muon->id_cov_d0_phi_exPV(),
+																																					 m_muon->id_cov_d0_theta_exPV(),
+																																					 m_muon->id_cov_d0_qoverp_exPV(),
+																																					 m_muon->id_cov_z0_phi_exPV(),
+																																					 m_muon->id_cov_z0_theta_exPV(),
+																																					 m_muon->id_cov_z0_qoverp_exPV(),
+																																					 m_muon->id_cov_phi_theta_exPV(),
+																																					 m_muon->id_cov_phi_qoverp_exPV(),
+																																					 m_muon->id_cov_theta_qoverp_exPV());
+
+	if (m_muon->isStandAloneMuon())
+	{
+		m_covMatrixHepID = m_covMatrixHep;
+		m_covMatrixID = m_covMatrix;
+	}
+	if (m_muon->isSegmentTaggedMuon() || m_muon->isCaloMuonId())
+	{
+		m_covMatrixHepME = m_covMatrixHep;
+		m_covMatrixME = m_covMatrix;
+	}
+}

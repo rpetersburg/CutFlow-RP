@@ -39,6 +39,7 @@ void Electron::init()
 	m_flavor = Flavor::Muon;
 	m_charge = m_electron->charge();
 	m_mass = pdgElMass;
+	m_covMomErr = -1;
 
 	setMomentumLorentzVectors();
 	setptCone20Correction();
@@ -82,4 +83,56 @@ void Electron::setTypes()
 void Electron::setptCone20Correction()
 {
 	m_ptCone20Correction = m_electron->trackpt();
+}
+
+void Electron::fillCovMatrix()
+{
+	if (m_elRescale == 0)
+	{
+		cout << "ChargedLepton: ERROR = Energy rescaler not set" << endl;
+		return;
+	}
+
+	Double_t E = m_electron->cl_E();
+	Double_t Eta = m_electron->cl_eta();
+	Double_t res_electron = m_elRescale->resolution(E, Eta, PATCore::ParticleType::Electron, true)*E;
+
+	// Overwrite it with the outside resolution if given
+	if (m_resolution != -1) res_electron = m_resolution;
+	// Momentum Error Term
+	m_covMomErr = pow((res_electron), 2) / (1000 * 1000);
+	//covMomErr = res_electron/1000;
+
+	TMatrixD tmp1 = ZMassConstraint::getCovarianceTMatrixDd0z0PhiThetaPElectron(res_electron,
+																																							m_electron->trackcov_d0(),
+																																							m_electron->trackcov_z0(),
+																																							m_electron->trackcov_phi(),
+																																							m_electron->trackcov_theta(),
+																																							m_electron->trackcov_d0_z0(),
+																																							m_electron->trackcov_d0_phi(),
+																																							m_electron->trackcov_d0_theta(),
+																																							m_electron->trackcov_z0_phi(),
+																																							m_electron->trackcov_z0_theta(),
+																																							m_electron->trackcov_phi_theta());
+	m_covMatrix.ResizeTo(tmp1);
+	m_covMatrix = tmp1;
+
+	m_covMatrixHep = ZMassConstraint::getCovarianceMatrixd0z0PhiThetaPElectron(res_electron,
+																																						 m_electron->trackcov_d0(),
+																																						 m_electron->trackcov_z0(),
+																																						 m_electron->trackcov_phi(),
+																																						 m_electron->trackcov_theta(),
+																																						 m_electron->trackcov_d0_z0(),
+																																						 m_electron->trackcov_d0_phi(),
+																																						 m_electron->trackcov_d0_theta(),
+																																						 m_electron->trackcov_z0_phi(),
+																																						 m_electron->trackcov_z0_theta(),
+																																						 m_electron->trackcov_phi_theta());
+	m_covMatrixME.ResizeTo(tmp1);
+	m_covMatrixME = m_covMatrix;
+	m_covMatrixHepME = m_covMatrixHep;
+
+	m_covMatrixID.ResizeTo(tmp1);
+	m_covMatrixID = m_covMatrix;
+	m_covMatrixHepID = m_covMatrixHep;
 }

@@ -15,6 +15,9 @@
 #include "CutFlow4Lep/Cuts/D0SigCut.h"
 
 #include "CutFlow4Lep/Corrections/FSRCorrection.h"
+#include "CutFlow4Lep/Corrections/ZMassConstraintCorrection.h"
+
+#include "CutFlow4Lep/Smear/ElectronSmear.h"
 
 #include "egammaFourMomentumError/GeneralUtils.h"
 
@@ -22,7 +25,7 @@ using namespace std;
 class QuadLeptonCut : public QuadLeptonCuts
 {
 	public:
-		QuadLeptonCut(D3PDReader::Event *tEvent, QuadLepton *tQuadLepton, Bool_t tDoZ4lAnalysis);
+		QuadLeptonCut(D3PDReader::Event *tEvent, QuadLepton *tQuadLepton, Bool_t tDoZ4lAnalysis, ElectronSmear *tElectronSmearObj);
 		~QuadLeptonCut();
 
 		void init();
@@ -38,6 +41,8 @@ class QuadLeptonCut : public QuadLeptonCuts
 	private:
 		void massCalc();
 
+		ElectronSmear *m_electronSmearObj;
+
 		QuadLepton *m_quadLepton;
 		Bool_t m_doZ4lAnalysis;
 		JPsiVetoCut *m_jPsiVetoCut;
@@ -48,6 +53,6 @@ class QuadLeptonCut : public QuadLeptonCuts
 		DeltaRCut *m_deltaRCut;
 
 		FSRCorrection *m_fsrCorrection;
-}
-
+		ZMassConstraintCorrection *m_zMassConstraintCorrection;
+};
 #endif

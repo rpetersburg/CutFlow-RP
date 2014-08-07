@@ -40,6 +40,7 @@ void QuadLepton::setZBosons(DiLepton *tZ1, DiLepton *tZ2)
 	m_leptonLorentzMEVec.clear();
 	m_leptonLorentzIDVec.clear();
 
+	// Order must be Z1+, Z1-, Z2+, Z2-
 	m_leptonVec.push_back(m_z1->getPosLepton());
 	m_leptonVec.push_back(m_z1->getNegLepton());
 	m_leptonVec.push_back(m_z2->getPosLepton());
@@ -91,9 +92,9 @@ void QuadLepton::fillFSRCorrection(TLorentzVector tFSRMomentum, Bool_t isZ1, Boo
 	m_fsrCovMatrixIDVec.push_back(photonCovarianceTMatrixD);
 	m_fsrCovMatrixMEVec.push_back(photonCovarianceTMatrixD);
 
-	m_hepFSRCovMatrixVec.push_back(photonCovarianceHepTMatrixD);
-	m_hepFSRCovMatrixIDVec.push_back(photonCovarianceHepTMatrixD);
-	m_hepFSRCovMatrixMEVec.push_back(photonCovarianceHepTMatrixD);
+	m_fsrCovMatrixHepVec.push_back(photonCovarianceHepTMatrixD);
+	m_fsrCovMatrixIDHepVec.push_back(photonCovarianceHepTMatrixD);
+	m_fsrCovMatrixMEHepVec.push_back(photonCovarianceHepTMatrixD);
 
 	if (isZ1)
 	{
@@ -158,4 +159,34 @@ void QuadLepton::setZ1Mass(Double_t tZ1Mass, Int_t muonType)
 void QuadLepton::setZ2Mass(Double_t tZ2Mass, Int_t muonType)
 {
 	if (muonType == MuonType::CB) m_z2Mass = tZ2Mass;
+}
+
+void QuadLepton::fillCovMatrix()
+{
+	// Order = Z1+, Z1-, Z2+, Z2-
+	vector<ChargedLepton*>::iterator leptonItr = m_leptonVec.begin();
+	for (; leptonItr != m_leptonVec.end(); ++leptonItr)
+	{
+		ChargedLepton *lepton = *leptonItr;
+
+		lepton->fillCovMatrix();
+
+		m_covMatrixVec.push_back(lepton->getCovMatrix());
+		m_covMatrixHepVec.push_back(lepton->getCovMatrixHep());
+
+		m_covMatrixMEVec.push_back(lepton->getCovMatrix(MuonType::MS));
+		m_covMatrixMEHepVec.push_back(lepton->getCovMatrixHep(MuonType::MS));
+
+		m_covMatrixIDVec.push_back(lepton->getCovMatrix(MuonType::ID));
+		m_covMatrixIDHepVec.push_back(lepton->getCovMatrixHep(MuonType::ID));
+
+		m_fsrCovMatrixVec = m_covMatrixVec;
+		m_fsrCovMatrixHepVec = m_covMatrixHepVec;
+
+		m_fsrCovMatrixMEVec = m_covMatrixMEVec;
+		m_fsrCovMatrixMEHepVec = m_covMatrixMEHepVec;
+
+		m_fsrCovMatrixIDVec = m_covMatrixIDVec;
+		m_fsrCovMatrixIDHepVec = m_covMatrixIDHepVec;
+	}
 }

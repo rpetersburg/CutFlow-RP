@@ -26,6 +26,8 @@ class Electron : public ChargedLepton
 		void setResolution(Double_t tResolution) {m_resolution = tResolution;};
 		void setClusterpT(Double_t tClusterpT) {m_clusterpT = tClusterpT;};
 
+		void fillCovMatrix();
+
 	protected:
 
 	private:

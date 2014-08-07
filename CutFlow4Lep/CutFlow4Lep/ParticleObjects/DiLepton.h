@@ -32,6 +32,8 @@ class DiLepton : public ParticleObject
 
 		void setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale);
 
+		void fillCovMatrix();
+
 	protected:
 
 	private:
@@ -44,5 +46,8 @@ class DiLepton : public ParticleObject
 		TLorentzVector m_fsrMomentum;
 		TMatrixD m_fsrError;
 		CLHEP::HepMatrix m_hepFSRError;
+
+		vector<TMatrixD> m_covMatrixVec;
+		vector<CLHEP::HepMatrix> m_covMatrixHepVec;
 };
 #endif

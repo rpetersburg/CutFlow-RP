@@ -45,3 +45,16 @@ void DiLepton::setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale)
 	m_posLepton->setElRescale(m_elRescale);
 	m_negLepton->setElRescale(m_elRescale);
 }
+
+void DiLepton::fillCovMatrix()
+{
+	m_posLepton->fillCovMatrix();
+	m_negLepton->fillCovMatrix();
+
+	// Order is Important!
+	m_covMatrixVec.push_back(m_posLepton->getCovMatrix());
+	m_covMatrixVec.push_back(m_negLepton->getCovMatrix());
+
+	m_covMatrixHepVec.push_back(m_posLepton->getCovMatrixHep());
+	m_covMatrixHepVec.push_back(m_negLepton->getCovMatrixHep());
+}

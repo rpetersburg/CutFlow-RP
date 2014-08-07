@@ -40,6 +40,8 @@ class ChargedLepton : public ParticleObject, public UsesEvent
 
 		void setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale) {m_elRescale = telRescale;}
 
+		virtual void fillCovMatrix();
+
 	protected:
 		Int_t m_index;
 		Double_t m_mass;
@@ -61,6 +63,8 @@ class ChargedLepton : public ParticleObject, public UsesEvent
 		CLHEP::HepMatrix m_covMatrixHep;
 		CLHEP::HepMatrix m_covMatrixHepME;
 		CLHEP::HepMatrix m_covMatrixHepID;
+
+		Double_t m_covMomErr;
 
 		Double_t m_ptCone20;
 		Double_t m_ptCone20Correction;

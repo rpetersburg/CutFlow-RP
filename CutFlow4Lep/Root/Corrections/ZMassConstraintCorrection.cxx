@@ -4,6 +4,7 @@ ZMassConstraintCorrection::ZMassConstraintCorrection(D3PDReader::Event *tEvent, 
 	: Correction(tEvent), m_quadLepton(tQuadLepton)
 {
 	initializeCorrectionTool();
+	m_muonType = MuonType::CB; // In case setMuonType() is not called
 }
 
 ZMassConstraintCorrection::~ZMassConstraintCorrection()

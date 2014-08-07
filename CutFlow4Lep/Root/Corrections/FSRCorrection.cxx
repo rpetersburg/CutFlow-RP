@@ -105,7 +105,7 @@ void FSRCorrection::fillCandidateVec(vector<FsrPhotons::FsrCandidate> candidateV
 																	 ph_EtCone40_corr,
 																	 m_event->ph.author(),
 																	 m_event->ph.tight(),
-																	 fsrCandidate)) // Fills FSRCandidate
+																	 fsrCandidate)) // Fills fsrCandidate
 			{
 				cout << "electron " << i << endl;
     		cout << "Found FSR index, dR, Et, f1, cont " << fsrCandidate.index << " " << fsrCandidate.deltaR
@@ -160,7 +160,7 @@ void FSRCorrection::fill_ph_EtCone40_corr(vector<float> *ph_EtCone40_corr)
 void FSRCorrection::fill_el_bfEP_cl_pt(vector<float> *el_bfEP_cl_pt)
 {
 	for (Int_t i = 0; i < m_currElectron->n(); i++)
-		el_bfEP_cl_pt->push_back(m_electronSmearObj->getbfEP_cl_pT[i]);
+		el_bfEP_cl_pt->push_back(m_electronSmearObj->getbfEP_cl_pT()[i]);
 }
 
 Bool_t FSRCorrection::passedFSRCollinear(vector<FsrPhotons::FsrCandidate> candidateVec)

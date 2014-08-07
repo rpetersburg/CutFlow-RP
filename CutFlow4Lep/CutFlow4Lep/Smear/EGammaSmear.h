@@ -14,6 +14,8 @@ class EGammaSmear : public Smear
 		~EGammaSmear();
 
 		virtual void executeSmear() = 0;
+		AtlasRoot::egammaEnergyCorrectionTool* getSmearTool() {return m_smearTool;};
+
 	protected:
 		void initializeSmearObj();
 		

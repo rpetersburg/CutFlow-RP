@@ -17,6 +17,8 @@ class Muon : public ChargedLepton
 		D3PDReader::MuonD3PDObjectElement* getMuon() {return m_muon;};
 		Double_t getPTCone20() {return m_muon->ptcone20();};
 
+		void fillCovMatrix();
+
 	protected:
 
 	private:
@@ -25,6 +27,7 @@ class Muon : public ChargedLepton
 		void setSysEnergy();
 		void setptCone20Correction();
 		void setTypes();
+		void fillCovMatrix(Int_t tRunNumber_sf);
 
 		D3PDReader::MuonD3PDObjectElement *m_muon;
 };
