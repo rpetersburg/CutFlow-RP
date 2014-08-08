@@ -19,8 +19,6 @@
 
 #include "CutFlow4Lep/Smear/ElectronSmear.h"
 
-#include "egammaFourMomentumError/GeneralUtils.h"
-
 using namespace std;
 class QuadLeptonCut : public QuadLeptonCuts
 {
@@ -32,15 +30,11 @@ class QuadLeptonCut : public QuadLeptonCuts
 
 		Bool_t passedCut();
 
-		void fillEventVarInfo(QuadLepton *quadLepton);
-
 		void setQuadLepton(QuadLepton *tQuadLepton);
 
 	protected:
 
 	private:
-		void massCalc();
-
 		ElectronSmear *m_electronSmearObj;
 
 		QuadLepton *m_quadLepton;

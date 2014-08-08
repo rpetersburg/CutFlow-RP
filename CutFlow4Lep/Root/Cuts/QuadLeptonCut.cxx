@@ -32,7 +32,16 @@ void QuadLeptonCut::init()
 void QuadLeptonCut::setQuadLepton(QuadLepton *tQuadLepton)
 {
 	m_quadLepton = tQuadLepton;
-	init();
+	
+	m_zMassCut->setQuadLepton(m_quadLepton);
+	m_deltaRCut->setQuadLepton(m_quadLepton);
+	m_jPsiVetoCut->setQuadLepton(m_quadLepton);
+	m_trackIsoCut->setQuadLepton(m_quadLepton);
+	m_caloIsoCut->setQuadLepton(m_quadLepton);
+	m_d0SigCut->setQuadLepton(m_quadLepton);
+
+	m_fsrCorrection->setQuadLepton(m_quadLepton);
+	m_zMassConstraintCorrection->setQuadLepton(m_quadLepton);
 }
 
 Bool_t QuadLeptonCut::passedCut()
@@ -46,7 +55,11 @@ Bool_t QuadLeptonCut::passedCut()
 	Bool_t passedD0Sig = m_d0SigCut->passedCut();
 
 	// fillEventVarInfo(quadEvent);
-	massCalc();
+	m_quadLepton->fillMasses();	
+	m_quadLepton->setElRescale(m_electronSmearObj->getSmearTool());
+	m_quadLepton->fillCovMatrix();
+	m_quadLepton->fillMassErrors();
+
 	m_fsrCorrection->executeCorrection();
 
 	m_zMassConstraintCorrection->setMuonType(MuonType::CB);
@@ -56,6 +69,8 @@ Bool_t QuadLeptonCut::passedCut()
 	m_zMassConstraintCorrection->setMuonType(MuonType::MS);
 	m_zMassConstraintCorrection->executeCorrection();
 
+	// fillProductionChannel(higgs, muEvent, elEvent, jetsEvent);
+
 
 
 	if (!(passedTrackIso && passedCaloIso && passedD0Sig))
@@ -63,21 +78,5 @@ Bool_t QuadLeptonCut::passedCut()
 
 
 
-}
-
-void QuadLeptonCut::massCalc()
-{
-	m_quadLepton->setMass(InvariantMass::invMassCalc(m_quadLepton->getLeptonLorentzVec()));
-	m_quadLepton->setElRescale(m_electronSmearObj->getSmearTool());
-	m_quadLepton->fillCovMatrix();
-
-	Double_t massErr = MassError::sigmaMassCalc_d0z0PhiThetaP(m_quadLepton->getLeptonLorentzVec(),
-																														m_quadLepton->getCovMatrixVec());
-	m_quadLepton->setMassErr(massErr);
-
-}
-
-void QuadLeptonCut::fillEventVarInfo(QuadLepton *quadLepton)
-{
-
+	return true;
 }

@@ -16,6 +16,7 @@ public:
 	~FSRCorrection();
 
 	void executeCorrection();
+	void setQuadLepton(QuadLepton *tQuadLepton) { m_quadLepton = tQuadLepton; };
 
 protected:
 

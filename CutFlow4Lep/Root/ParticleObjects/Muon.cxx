@@ -36,8 +36,8 @@ void Muon::setMomentumLorentzVectors()
 	m_momentumMain->SetPtEtaPhiM(m_muon->pt(), m_muon->eta(), m_muon->phi(), m_mass);
 	m_momentumBDT = new TLorentzVector();
 	m_momentumBDT->SetPtEtaPhiM(m_muon->pt()/1000, m_muon->eta(), m_muon->phi(), m_mass/1000);
-	m_momentumME = new TLorentzVector();
-	m_momentumME->SetPtEtaPhiM(m_muon->me_pt, m_muon->me_eta, m_muon->me_phi(), m_mass);
+	m_momentumMS = new TLorentzVector();
+	m_momentumMS->SetPtEtaPhiM(m_muon->me_pt, m_muon->me_eta, m_muon->me_phi(), m_mass);
 	m_momentumID = new TLorentzVector();
 	m_momentumID->SetPtEtaPhiM(m_muon->id_pt, m_muon->id_eta, m_muon->id_phi(), m_mass);
 }
@@ -108,7 +108,7 @@ void Muon::fillCovMatrix()
 																																				 m_muon->cov_theta_qoverp_exPV());
 
 	// For MS
-	TMatrixD tmp1MS = ZMassConstraint::getCovarianceTMatrixDd0z0PhiThetaPMuon(m_momentumME->P(),
+	TMatrixD tmp1MS = ZMassConstraint::getCovarianceTMatrixDd0z0PhiThetaPMuon(m_momentumMS->P(),
 																																						m_muon->me_cov_d0_exPV(),
 																																						m_muon->me_cov_z0_exPV(),
 																																						m_muon->me_cov_phi_exPV(),
@@ -125,10 +125,10 @@ void Muon::fillCovMatrix()
 																																						m_muon->me_cov_phi_qoverp_exPV(),
 																																						m_muon->me_cov_theta_qoverp_exPV());
 	m_covMatrixME.ResizeTo(tmp1MS);
-	m_covMatrixME = tmp1MS;
+	m_covMatrixMS = tmp1MS;
 
 
-	m_covMatrixHepME = ZMassConstraint::getCovarianceMatrixd0z0PhiThetaPMuon(m_momentumME->P(),
+	m_covMatrixHepMS = ZMassConstraint::getCovarianceMatrixd0z0PhiThetaPMuon(m_momentumMS->P(),
 																																					 m_muon->me_cov_d0_exPV(),
 																																					 m_muon->me_cov_z0_exPV(),
 																																					 m_muon->me_cov_phi_exPV(),
@@ -190,7 +190,7 @@ void Muon::fillCovMatrix()
 	}
 	if (m_muon->isSegmentTaggedMuon() || m_muon->isCaloMuonId())
 	{
-		m_covMatrixHepME = m_covMatrixHep;
-		m_covMatrixME = m_covMatrix;
+		m_covMatrixHepMS = m_covMatrixHep;
+		m_covMatrixMS = m_covMatrix;
 	}
 }

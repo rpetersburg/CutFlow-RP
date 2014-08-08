@@ -59,7 +59,7 @@ void Electron::setMomentumLorentzVectors()
 	m_momentum->SetPtEtaPhiM(pT, trackEta, trackPhi, m_mass);
 	m_momentumBDT = new TLorentzVector();
 	m_momentumBDT->SetPtEtaPhiM(pT/1000, trackEta, trackPhi, m_mass/1000);
-	m_momentumME = m_momentum;
+	m_momentumMS = m_momentum;
 	m_momentumID = m_momentum;
 }
 
@@ -128,9 +128,9 @@ void Electron::fillCovMatrix()
 																																						 m_electron->trackcov_z0_phi(),
 																																						 m_electron->trackcov_z0_theta(),
 																																						 m_electron->trackcov_phi_theta());
-	m_covMatrixME.ResizeTo(tmp1);
-	m_covMatrixME = m_covMatrix;
-	m_covMatrixHepME = m_covMatrixHep;
+	m_covMatrixMS.ResizeTo(tmp1);
+	m_covMatrixMS = m_covMatrix;
+	m_covMatrixHepMS = m_covMatrixHep;
 
 	m_covMatrixID.ResizeTo(tmp1);
 	m_covMatrixID = m_covMatrix;

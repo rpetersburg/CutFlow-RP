@@ -11,6 +11,8 @@
 #include "CutFlow4Lep/TriggerMatching/DiElectronTriggerMatch.h"
 #include "CutFlow4Lep/TriggerMatching/ElectronMuonTriggerMatch.h"
 
+#include "CutFlow4Lep/Cuts/QuadLeptonCut.h"
+
 using namespace std;
 class ChannelCutFlow : public UsesEvent
 {
@@ -31,6 +33,8 @@ class ChannelCutFlow : public UsesEvent
 
 		Int_t m_currMCCollection;
 		Int_t m_runNumber_sf;
+
+		QuadLeptonCut *m_quadLeptonCut;
 
 		MuonTriggerMatch *m_muonTriggerMatch;
 		DiMuonTriggerMatch *m_diMuonTriggerMatch;

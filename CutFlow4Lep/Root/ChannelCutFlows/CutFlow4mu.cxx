@@ -22,9 +22,10 @@ Bool_t CutFlow4mu::passedCut()
 	if (quadMuonVec.size() < 1) return false;
 
 	Bool_t doZ4lAnalysis = true;
-	QuadLepton* higgsEvent = getQuadEvent(&quadMuonVec, doZ4lAnalysis);
+	QuadLepton *higgsEvent = getQuadEvent(&quadMuonVec, doZ4lAnalysis);
 
 	// CutQuadLepton
-
+	m_quadLeptonCut = new QuadLeptonCut(m_event, higgsEvent, doZ4lAnalysis, m_electronSmearObj);
+	if (!m_quadLeptonCut->passedCut()) return false;
 
 }

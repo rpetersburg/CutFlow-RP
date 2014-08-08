@@ -17,6 +17,7 @@ public:
 
 	void executeCorrection();
 	void setMuonType(Int_t tMuonType) {m_muonType = tMuonType;};
+	void setQuadLepton(QuadLepton *tQuadLepton) { m_quadLepton = tQuadLepton; };
 
 protected:
 

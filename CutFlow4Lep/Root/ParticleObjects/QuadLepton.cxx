@@ -37,7 +37,7 @@ void QuadLepton::setZBosons(DiLepton *tZ1, DiLepton *tZ2)
 
 	m_leptonVec.clear();
 	m_leptonLorentzVec.clear();
-	m_leptonLorentzMEVec.clear();
+	m_leptonLorentzMSVec.clear();
 	m_leptonLorentzIDVec.clear();
 
 	// Order must be Z1+, Z1-, Z2+, Z2-
@@ -50,7 +50,7 @@ void QuadLepton::setZBosons(DiLepton *tZ1, DiLepton *tZ2)
 	for ( ; currLepton != m_leptonVec.end(); ++currLepton)
 	{
 		m_leptonLorentzVec.push_back(*(*currLepton)->getMomentumVec());
-		m_leptonLorentzMEVec.push_back(*(*currLepton)->getMomentumMEVec());
+		m_leptonLorentzMSVec.push_back(*(*currLepton)->getMomentumMSVec());
 		m_leptonLorentzIDVec.push_back(*(*currLepton)->getMomentumIDVec());
 	}
 }
@@ -60,7 +60,7 @@ void QuadLepton::fillFSRCorrection(TLorentzVector tFSRMomentum, Bool_t isZ1, Boo
 	m_fsrMomentum = tFSRMomentum;
 	m_fsrLorentzVec.push_back(m_fsrMomentum);
 	m_fsrLorentzIDVec.push_back(m_fsrMomentum);
-	m_fsrLorentzMEVec.push_back(m_fsrMomentum);
+	m_fsrLorentzMSVec.push_back(m_fsrMomentum);
 
 	double energyResolution = m_elRescale->resolution(m_fsrMomentum.E(), m_fsrMomentum.Eta(), particleType, true) * m_fsrMomentum.E();
 
@@ -90,11 +90,11 @@ void QuadLepton::fillFSRCorrection(TLorentzVector tFSRMomentum, Bool_t isZ1, Boo
 
 	m_fsrCovMatrixVec.push_back(photonCovarianceTMatrixD);
 	m_fsrCovMatrixIDVec.push_back(photonCovarianceTMatrixD);
-	m_fsrCovMatrixMEVec.push_back(photonCovarianceTMatrixD);
+	m_fsrCovMatrixMSVec.push_back(photonCovarianceTMatrixD);
 
 	m_fsrCovMatrixHepVec.push_back(photonCovarianceHepTMatrixD);
 	m_fsrCovMatrixIDHepVec.push_back(photonCovarianceHepTMatrixD);
-	m_fsrCovMatrixMEHepVec.push_back(photonCovarianceHepTMatrixD);
+	m_fsrCovMatrixMSHepVec.push_back(photonCovarianceHepTMatrixD);
 
 	if (isZ1)
 	{
@@ -140,14 +140,14 @@ void QuadLepton::setElRescale(AtlasRoot::egammaEnergyCorrectionTool *telRescale)
 void QuadLepton::setZMass(Double_t tZMass, Int_t muonType)
 {
 	if (muonType == MuonType::CB) m_zMass = tZMass;
-	else if (muonType == MuonType::MS) m_zMassME = tZMass;
+	else if (muonType == MuonType::MS) m_zMassMS = tZMass;
 	else if (muonType == MuonType::ID) m_zMassID = tZMass;
 }
 
 void QuadLepton::setZMassErr(Double_t tZMassErr, Int_t muonType)
 {
 	if (muonType == MuonType::CB) m_zMassErr = tZMassErr;
-	else if (muonType == MuonType::MS) m_zMassErrME = tZMassErr;
+	else if (muonType == MuonType::MS) m_zMassErrMS = tZMassErr;
 	else if (muonType == MuonType::ID) m_zMassErrID = tZMassErr;
 }
 
@@ -159,6 +159,16 @@ void QuadLepton::setZ1Mass(Double_t tZ1Mass, Int_t muonType)
 void QuadLepton::setZ2Mass(Double_t tZ2Mass, Int_t muonType)
 {
 	if (muonType == MuonType::CB) m_z2Mass = tZ2Mass;
+}
+
+void QuadLepton::fillMasses()
+{
+	m_mass = InvariantMass::invMassCalc(m_leptonLorentzVec);
+	m_massID = InvariantMass::invMassCalc(m_leptonLorentzIDVec);
+	m_massMS = InvariantMass::invMassCalc(m_leptonLorentzMSVec);	
+
+	for (Int_t i = 0; i < (Int_t)m_leptonLorentzVec.size(); i++)
+		m_massUnconstrainedSum = m_massUnconstrainedSum + m_leptonLorentzVec[i];
 }
 
 void QuadLepton::fillCovMatrix()
@@ -174,8 +184,8 @@ void QuadLepton::fillCovMatrix()
 		m_covMatrixVec.push_back(lepton->getCovMatrix());
 		m_covMatrixHepVec.push_back(lepton->getCovMatrixHep());
 
-		m_covMatrixMEVec.push_back(lepton->getCovMatrix(MuonType::MS));
-		m_covMatrixMEHepVec.push_back(lepton->getCovMatrixHep(MuonType::MS));
+		m_covMatrixMSVec.push_back(lepton->getCovMatrix(MuonType::MS));
+		m_covMatrixMSHepVec.push_back(lepton->getCovMatrixHep(MuonType::MS));
 
 		m_covMatrixIDVec.push_back(lepton->getCovMatrix(MuonType::ID));
 		m_covMatrixIDHepVec.push_back(lepton->getCovMatrixHep(MuonType::ID));
@@ -183,10 +193,183 @@ void QuadLepton::fillCovMatrix()
 		m_fsrCovMatrixVec = m_covMatrixVec;
 		m_fsrCovMatrixHepVec = m_covMatrixHepVec;
 
-		m_fsrCovMatrixMEVec = m_covMatrixMEVec;
-		m_fsrCovMatrixMEHepVec = m_covMatrixMEHepVec;
+		m_fsrCovMatrixMSVec = m_covMatrixMSVec;
+		m_fsrCovMatrixMSHepVec = m_covMatrixMSHepVec;
 
 		m_fsrCovMatrixIDVec = m_covMatrixIDVec;
 		m_fsrCovMatrixIDHepVec = m_covMatrixIDHepVec;
 	}
+}
+
+void QuadLepton::fillMassErrors()
+{
+	m_massErr = MassError::sigmaMassCalc_d0z0PhiThetaP(m_leptonLorentzVec, m_covMatrixVec);
+	m_massIDErr = MassError::sigmaMassCalc_d0z0PhiThetaP(m_leptonLorentzIDVec, m_covMatrixIDVec);
+	m_massMSErr = MassError::sigmaMassCalc_d0z0PhiThetaP(m_leptonLorentzMSVec, m_covMatrixMSVec);
+}
+
+void QuadLepton::fillProductionChannel(vector<Jets*> jetsVec, vector<Muon*> muonVec, vector<Electron*> electronVec)
+{
+	Bool_t nJets2 = false;
+	Bool_t Mjj40_130 = false;
+	Bool_t Mjj130 = false;
+	Bool_t isolatedLep = false;
+	Bool_t hadBDTCut = false;
+	Bool_t filledLeadingJet = false;
+	Bool_t filledSubleadingJet = false;
+
+	TLorentzVector sumJets;
+
+	// For Jet Information
+	if (jetsVec.size() >= 2)
+	{
+		// Fill the Leading Jet
+		Double_t leadingJetPt = -9999;
+		for (Int_t i = 0; i < (Int_t)jetsVec.size(); i++)
+		{
+			if (jetsVec[i]->getMomentumVec()->Pt() > leadingJetPt &&
+					jetsVec[i]->getMomentumVec()->Pt() > 25 * 1000)
+			{
+				m_leadingJet = jetsVec[i];
+				leadingJetPt = jetsVec[i]->getMomentumVec()->Pt();
+				filledLeadingJet = true;
+			}
+		}
+
+		if (filledLeadingJet) // Fill the subleading jet
+		{
+			Double_t subLeadingJetPt = -9999;
+			for (Int_t i = 0; i < (Int_t)jetsVec.size(); i++)
+			{
+				if (jetsVec[i] == m_leadingJet) continue;
+				if (jetsVec[i]->getMomentumVec()->Pt() > subLeadingJetPt)
+				{
+					m_subleadingJet = jetsVec[i];
+					subLeadingJetPt = jetsVec[i]->getMomentumVec()->Pt();
+					filledSubleadingJet = true;
+				}
+			}
+			// Combine the two leading jets' masses
+			sumJets = *m_leadingJet->getMomentumVec() + *m_subleadingJet->getMomentumVec();
+			if (sumJets.M() > 130 * 1000) Mjj130 = true;
+			else if (sumJets.M() > 40 * 1000 && sumJets.M() < 130 * 1000) Mjj40_130 = true;
+		}
+
+		if (filledSubleadingJet) // Fill a third jet
+		{
+			nJets2 = true; // Only becomes true if leading and subleading jets are found
+			Double_t thirdJetPt = -9999;
+			for (Int_t i = 0; i < (Int_t)jetsVec.size(); i++)
+			{
+				if (jetsVec[i] == m_leadingJet || jetsVec[i] == m_subleadingJet) continue;
+				if (jetsVec[i]->getMomentumVec()->Pt() > thirdJetPt)
+				{
+					m_thirdJet = jetsVec[i];
+					thirdJetPt = jetsVec[i]->getMomentumVec()->Pt();
+				}
+			}
+		}
+	}
+
+
+	// For BDT output
+	m_dijet_invmass = -999 * 1000;
+	m_dijet_deltaeta = -999;
+	m_leading_jet_pt = -999 * 1000;
+	m_leading_jet_eta = -999;
+	m_subleading_jet_pt = -999 * 1000;
+
+	m_BDT_discriminant_VBF = -999;
+	m_BDT_discriminant_HadVH = -999;
+
+	if (nJets2)
+	{
+		m_dijet_invmass = sumJets.M();
+		m_dijet_deltaeta = fabs(m_leadingJet->getMomentumVec()->Eta() - m_subleadingJet->getMomentumVec()->Eta());
+		m_leading_jet_pt = m_leadingJet->getMomentumVec()->Pt();
+		m_leading_jet_eta = m_leadingJet->getMomentumVec()->Eta();
+		m_subleading_jet_pt = m_subleadingJet->getMomentumVec()->Pt();
+
+		// computing HadVH and VBF BDT discriminant and filling the variables
+		BDT_discriminant_VBF = CategoriesDiscriminantTool->Get_VBFDiscriminant_Output();
+		BDT_discriminant_HadVH = CategoriesDiscriminantTool->Get_HadVHDiscriminant_Output();
+
+		if (CategoriesDiscriminantTool->Pass_HadVHDiscriminant())
+			hadBDTCut = true;
+	}
+	vector<ChargedLepton *> extraLep;
+	// For isolated Lepton
+	if ((muonVec.size() + electronVec.size()) > 4)
+	{
+		for (Int_t i = 0; i < (Int_t)muonVec.size(); i++)
+		{
+			if (isGoodExtraLepton(higgs, muonVec[i]))
+			{
+				//higgs->SetProductionChannel(productionChannel::VH);
+				//return;
+				isolatedLep = true;
+				fillExtraLepParent(muonVec[i]);
+				extraLep.push_back(muonVec[i]);
+			}
+		}
+		for (Int_t i = 0; i < (Int_t)electronVec.size(); i++)
+		{
+			if (isGoodExtraLepton(higgs, electronVec[i]))
+			{
+				//higgs->SetProductionChannel(productionChannel::VH);
+				//return;
+				isolatedLep = true;
+				fillExtraLepParent(electronVec[i]);
+				extraLep.push_back(electronVec[i]);
+			}
+		}
+
+	}
+
+	ChargedLepton *leadingExtraLep = 0;
+	ChargedLepton *subleadingExtraLep = 0;
+	Double_t lep_leadingPt = -999999;
+	Double_t sublep_leadingPt = -999999;
+	for (Int_t i = 0; i < (Int_t)extraLep.size(); i++)
+	{
+		if (extraLep[i]->getMomentumVec()->Pt() > lep_leadingPt)
+		{
+			sublep_leadingPt = lep_leadingPt;
+			subleadingExtraLep = leadingExtraLep;
+
+			leadingExtraLep = extraLep[i];
+			lep_leadingPt = extraLep[i]->getMomentumVec()->Pt();
+		}
+		else if (extraLep[i]->getMomentumVec()->Pt() > sublep_leadingPt)
+		{
+			subleadingExtraLep = extraLep[i];
+			sublep_leadingPt = extraLep[i]->getMomentumVec()->Pt();
+		}
+	}
+
+	// For ggF catergorization
+	//higgs->SetProductionChannel(productionChannel::ggF);
+
+	//Setting the categories
+	if (nJets2 && Mjj130) m_productionChannel = ProductionChannel::VBF;
+	else if (nJets2 && Mjj40_130 && hadBDTCut) m_productionChannel = ProductionChannel::VHHad;
+	else if (isolatedLep) m_productionChannel = ProductionChannel::VHLep;
+	else m_productionChannel = ProductionChannel::ggF;
+
+	//Filling variables for the tree
+	higgs->leadingJet = leadingJet;
+	higgs->subLeadingJet = subLeadingJet;
+	higgs->thirdJet = thirdJet;
+	higgs->n_jets = jetsVec.size();
+	higgs->dijet_invmass = dijet_invmass / 1000;
+	higgs->dijet_deltaeta = dijet_deltaeta;
+	higgs->leading_jet_pt = leading_jet_pt / 1000;
+	higgs->leading_jet_eta = leading_jet_eta;
+	higgs->subleading_jet_pt = subleading_jet_pt / 1000;
+	higgs->BDT_discriminant_VBF = BDT_discriminant_VBF;
+	higgs->BDT_discriminant_HadVH = BDT_discriminant_HadVH;
+	higgs->leadingExtraLep = leadingExtraLep;
+	higgs->subleadingExtraLep = subleadingExtraLep;
+
+	extraLep.clear();
 }

@@ -18,7 +18,7 @@ TLorentzVector* ChargedLepton::getMomentumVec(Int_t muonType = MuonType::CB)
 	else if (muonType == MuonType::ID)
 		return m_momentumID;
 	else if (muonType == MuonType::MS)
-		return m_momentumME;
+		return m_momentumMS;
 }
 
 CLHEP::HepMatrix ChargedLepton::getCovMatrixHep(Int_t muonType = MuonType::CB)
@@ -28,7 +28,7 @@ CLHEP::HepMatrix ChargedLepton::getCovMatrixHep(Int_t muonType = MuonType::CB)
 	else if (muonType == MuonType::ID)
 		return m_covMatrixHepID;
 	else if (muonType == MuonType::MS)
-		return m_covMatrixHepME;
+		return m_covMatrixHepMS;
 }
 
 TMatrixD ChargedLepton::getCovMatrix(Int_t muonType = MuonType::CB)
@@ -38,5 +38,5 @@ TMatrixD ChargedLepton::getCovMatrix(Int_t muonType = MuonType::CB)
 	else if (muonType == MuonType::ID)
 		return m_covMatrixID;
 	else if (muonType == MuonType::MS)
-		return m_covMatrixME;
+		return m_covMatrixMS;
 }

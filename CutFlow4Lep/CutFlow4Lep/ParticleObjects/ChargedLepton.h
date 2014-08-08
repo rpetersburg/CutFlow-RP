@@ -32,7 +32,7 @@ class ChargedLepton : public ParticleObject, public UsesEvent
 
 		TLorentzVector* getMomentumVec(Int_t muonType = MuonType::CB);
 		TLorentzVector* getMomentumBDTVec() {return m_momentumBDT;};
-		TLorentzVector* getMomentumMEVec() {return m_momentumME;};
+		TLorentzVector* getMomentumMSVec() {return m_momentumMS;};
 		TLorentzVector* getMomentumIDVec() {return m_momentumID;};
 
 		TMatrixD getCovMatrix(Int_t muonType = MuonType::CB);
@@ -53,15 +53,15 @@ class ChargedLepton : public ParticleObject, public UsesEvent
 
 		// Main TLorentz Vectors
 		TLorentzVector *m_momentumBDT;
-		TLorentzVector *m_momentumME;
+		TLorentzVector *m_momentumMS;
 		TLorentzVector *m_momentumID;
 
 		// Error Matrices
 		TMatrixD m_covMatrix;
-		TMatrixD m_covMatrixME;
+		TMatrixD m_covMatrixMS;
 		TMatrixD m_covMatrixID;
 		CLHEP::HepMatrix m_covMatrixHep;
-		CLHEP::HepMatrix m_covMatrixHepME;
+		CLHEP::HepMatrix m_covMatrixHepMS;
 		CLHEP::HepMatrix m_covMatrixHepID;
 
 		Double_t m_covMomErr;
